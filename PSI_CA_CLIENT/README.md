@@ -2,6 +2,16 @@
 
 This is the copy and modified version of the PSI Training Lessons. The original site is http://epics.web.psi.ch/training/caClientLessons/
 
+In order to integrate a latest EPICS building system, old source codes are only used. I created a generic caClient example as following command.
+
+```bash
+makeBaseApp.pl -t caClient caLessons
+```
+
+Then copy all `calessonX.c` file into `App`, and modify its Makefile to use as `PROD_HOST`.
+
+
+
 The original short introduction of each caLesson as follows:
 
 ## caLesson1
