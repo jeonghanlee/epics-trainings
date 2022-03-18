@@ -1,0 +1,3 @@
+# include "base.dbd"
+# local menu, record, device, driver, breakpoint definitions
+device(ai,CONSTANT,devAiSecond,"Second")

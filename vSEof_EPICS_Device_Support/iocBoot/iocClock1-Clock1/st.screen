@@ -1,0 +1,4 @@
+#!/bin/sh
+cd "/vxboot/Clock1/boot/iocBoot/iocClock1-Clock1"
+exec ./st.cmd
+

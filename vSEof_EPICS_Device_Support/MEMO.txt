@@ -1,0 +1,31 @@
+# Commands to build a very simple device support
+# k.furukawa <kazuro.furukawa@kek.jp>, dec.2006,jan.2009,mar.2010.
+
+# get second-devsup.tar.gz from
+#  http://www-linac.kek.jp/epics/second/second-devsup.tar.gz
+
+wget http://www-linac.kek.jp/epics/second/second-devsup.tar.gz
+(or copy second-devsup.tar.gz from somewhere else)
+mkdir second
+cd second
+makeBaseApp.pl -t ioc Clock1
+makeBaseApp.pl -t ioc -i -p Clock1 Clock1
+tar xzf ../second-devsup.tar.gz
+perl -i -pe s/CLOCK/{your-username}/ Clock1App/Db/aiSecond.db
+# example: perl -i -pe s/CLOCK/u7/ Clock1App/Db/aiSecond.db
+make clean install 2>&1 | tee make.log
+# (if your shell is csh : make clean install |& tee make.log)
+cd iocBoot/iocClock1
+chmod +x st.cmd
+./st.cmd
+
+# from another terminal
+
+camonitor {your-username}:SEC1 {your-username}:SEC10
+# example: camonitor u7:SEC1 u7:SEC10
+
+# Please look in the files 
+Clock1App/src/devAiSecond.c
+Clock1App/src/aiSecond.dbd
+Clock1App/Db/aiSecond.db
+

@@ -1,0 +1,162 @@
+
+    Very Simple Example of EPICS Device Support
+
+[Description] <#desc> [Building] <#buil> [Running] <#runn> [Using]
+<#usin> [More] <#more> [Bash] <#bash> [Bottom] <#bott>
+
+(K.Furukawa, Dec.14.2006-Nov.30.2007.)
+
+
+      Description
+
+    This is a very simple device support example.
+
+    This EPICS device support provides the "second" part (00 - 59) of
+    the realtime clock. The EPICS record database provides two records,
+    one-tenth and ten-times of the "second" value.
+
+
+      Building
+
+    (use of csh or tcsh is assumed, see below for bash)
+
+    invoke following commands to prepare the directory structure and
+    environment.
+
+        setenv EPICS_BASE {your-epics-base-directory}
+          (for example, setenv EPICS_BASE /proj/epics/R314/R3149/base)
+        setenv EPICS_HOST_ARCH `$EPICS_BASE/startup/EpicsHostArch.pl`
+          ("`" is a back-quote character)
+        echo $EPICS_HOST_ARCH
+          (your platform name is printed like linux-x86_64, darwin-ppc, etc)
+        $EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -t ioc Clock1
+        $EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -i -a $EPICS_HOST_ARCH -p Clock1 -t ioc Clock1
+
+    prepare following files copying from a tar file
+    <second-addition.tar.gz> or here <Clock1App>.
+
+        Clock1App/src/devAiSecond.c
+        Clock1App/src/devAiSecond.h
+        Clock1App/src/aiSecond.dbd
+        Clock1App/Db/aiSecond.db
+
+    modify following files, or copy from above tar file
+    <second-addition.tar.gz> or here <Clock1App> and here <iocBoot>.
+
+        Clock1App/src/Makefile
+        Clock1App/Db/Makefile
+        iocBoot/iocClock1/st.cmd
+
+    then, invoke following commands to build your application.
+
+        mkdir log
+        make |& tee log/clockapp.log
+        cd iocBoot/iocClock1/
+        chmod +x st.cmd
+
+
+      Running
+
+    invoke following commands to run and test your application.
+
+        ../../bin/$EPICS_HOST_ARCH/Clock1 st.cmd
+        epics> dbl
+        epics> dbpr CO_TEST:CLOCK1:SEC1 4
+
+
+      Using
+
+    then, use commands like caget or camonitor to read created records.
+    for example, invoke the following command on another terminal or on
+    another host.
+
+        camonitor CO_TEST:CLOCK1:SEC1 CO_TEST:CLOCK1:SEC10
+
+
+      More description
+
+    *devAiSecond.c* provides a device support using ai (analog input)
+    record support. It reads the system clock and extract the "second"
+    part. As it takes only a short time to get the information, the
+    device support is relatively simple. If it takes relatively long
+    time to process input/output, the later part of the process should
+    be postponed in order not to prevent the real-time processing of
+    other part of your ioc application. Such a device support is called
+    an asynchronous device support. The part of the process may be
+    performed in another thread or process, and that is called a driver
+    support. You may write your own asynchronous device support and the
+    corresponding driver support, or you may utilize AsynDriver
+    <http://www.aps.anl.gov/epics/modules/soft/asyn/>.
+
+    *aiSecond.db* database defines two process variables. One of them is
+    processed every second (SCAN: 1 second) and reads the realtime clock
+    through the devAiSecond device support. It specifies a linear
+    conversion (LINR: LINEAR, ASLO: 0.1, etc) to have one tenth of the
+    "second" value. It also specifies several alarm conditions (HIHI:
+    5.5, HHSV: MAJOR, etc), and a MAJOR alram is generated if the value
+    is equal or above 5.5.
+
+    *aiSecond.dbd* binds the record support "ai", the device support
+    name "Second" (used in the database, aiSecond.db), and the dset
+    structure "devAiSecond" (used in the device support, devAiSecond.c).
+
+    Further details how to develop EPICS IOC applications are described
+    in IOC Application Developer's Guide
+    <http://www.aps.anl.gov/epics/base/R3-14/9-docs/AppDevGuide.pdf>.
+
+
+        Building with bash
+
+    (use of bash is assumed instead of csh, see above for csh)
+
+    invoke following commands to prepare the directory structure and
+    environment.
+
+        export EPICS_BASE={your-epics-base-directory}
+          (for example, export EPICS_BASE=/proj/epics/R314/R3149/base)
+        export EPICS_HOST_ARCH=`$EPICS_BASE/startup/EpicsHostArch.pl`
+          ("`" is a back-quote character)
+        echo $EPICS_HOST_ARCH
+          (your platform name is printed like linux-x86_64, darwin-ppc, etc)
+        $EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -t ioc Clock1
+        $EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -i -a $EPICS_HOST_ARCH -p Clock1 -t ioc Clock1
+
+    prepare following files copying from a tar file
+    <second-addition.tar.gz> or here <Clock1App>.
+
+        Clock1App/src/devAiSecond.[ch]
+        Clock1App/src/aiSecond.dbd
+        Clock1App/Db/aiSecond.db
+
+    modify following files, or copy from above tar file
+    <second-addition.tar.gz> or here <Clock1App> and here <iocBoot>.
+
+        Clock1App/src/Makefile
+        Clock1App/Db/Makefile
+        iocBoot/iocClock1/st.cmd
+
+    then, invoke following commands to build your application.
+
+        mkdir log
+        make 2>&1 | tee log/clockapp.log
+        cd iocBoot/iocClock1/
+        chmod +x st.cmd
+
+[Top] <#top> [Description] <#desc> [Building] <#buil> [Running] <#runn>
+[Using] <#usin> [More] <#more> [Bash] <#bash>
+
+------------------------------------------------------------------------
+[Please Comment on This Page]
+<http://www-linac3.kek.jp/cgi-bin/general/comment.cgi>
+Kazuro Furukawa <webmaster@mail-linac.kek.jp>
+<http://www-linac3.kek.jp/webmaster.html>, Dec.14.2006-Nov.30.2007.
+[ Linux ] <../linux/>   [ Darwin ] <../darwin/>   [ Windows ]
+<../win32/>   [ Tru64unix ] <../osf/>   [ Main ] <../>   [ Other-Related
+] </jk>   [ Linac-Controls ] <http://www-linac.kek.jp/cont/>   [
+J-Parc-Controls ] <http://www-cont.j-parc.jp/>   [ J-PARC ]
+<http://www.j-parc.jp/>   [ e-Linac-Int ] <http://www-linac2.kek.jp/>  
+[ e-Linac-Ext ] <http://www-linac.kek.jp/>   [ Accelerator ]
+<http://www-acc.kek.jp/>   [ KEK ] <http://www.kek.jp/intra.html>   [
+JAERI ] <http://www.jaeri.go.jp/act/intro.html>   [ EPICS ]
+<http://www.aps.anl.gov/epics/>  
+

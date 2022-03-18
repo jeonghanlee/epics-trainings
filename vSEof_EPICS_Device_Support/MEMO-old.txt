@@ -1,0 +1,67 @@
+=====
+Nov.30.2007. furukawa
+
+(MEMO for /cont/epics314/app/TEST/second/)
+(application name was changed from Test1 to Clock1)
+
+This is a very simple device support example.  
+
+This EPICS device support provides the "second" part (00 - 59) of 
+the realtime clock.  The EPICS record database provides two 
+records, one tenth and ten times of the "second" value. 
+
+[The procedure to build]
+(use of csh or tcsh is assumed)
+
+setenv EPICS_BASE /proj/epics/R314/R3149/base
+setenv EPICS_HOST_ARCH `$EPICS_BASE/startup/EpicsHostArch.pl`
+echo $EPICS_HOST_ARCH
+(linux-x86_64,darwin-ppc)
+$EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -t ioc Clock1
+$EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -i -a $EPICS_HOST_ARCH -p Clock1 -t ioc Clock1
+(prepare these files copying from http://www-linac.kek.jp/epics/second/)
+ Clock1App/src/devAiSecond.[ch]
+ Clock1App/src/aiSecond.dbd
+ Clock1App/Db/aiSecond.db
+(modify these files, or copy from http://www-linac.kek.jp/epics/second/)
+ Clock1App/src/Makefile
+ Clock1App/Db/Makefile
+ iocBoot/iocClock1/st.cmd
+mkdir log
+make |& tee log/clockapp.log
+cd iocBoot/iocClock1/
+chmod +x st.cmd
+
+../../bin/$EPICS_HOST_ARCH/Clock1 st.cmd
+epics> dbl
+epics> dbpr CO_TEST:CLOCK1:SEC1 4
+
+then, use caget or camonitor to read created records
+camonitor CO_TEST:CLOCK1:SEC1 CO_TEST:CLOCK1:SEC10
+
+---
+
+tar czf second-addition.tar.gz second/{MEMO.txt,Clock1App/{src/{devAiSecond.[ch],aiSecond.dbd,Makefile},Db/{aiSecond.db,Makefile}},iocBoot/iocClock1/st.cmd}
+ 
+=====
+Oct.3.2007. furukawa
+
+This is a very simple device support example. 
+
+setenv EPICS_BASE /proj/epics/R314/R3149/base
+setenv EPICS_HOST_ARCH `$EPICS_BASE/startup/EpicsHostArch.pl`
+echo $EPICS_HOST_ARCH
+linux-x86_64
+$EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -t ioc Test1
+$EPICS_BASE/bin/$EPICS_HOST_ARCH/makeBaseApp.pl -i -a $EPICS_HOST_ARCH -p Test1 -t ioc Test1
+(prepare these)
+ Test1App/src/devAiSecond.[ch]
+ Test1App/src/aiSecond.dbd
+ Test1App/Db/aiSecond.db
+ Test1App/src/Makefile
+ Test1App/Db/Makefile
+ iocBoot/iocTemp/st.cmd
+mkdir log
+make | & tee log/testapp.log
+cd iocBoot/iocTest1/
+chmod +x st.cmd
