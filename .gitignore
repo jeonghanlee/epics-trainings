@@ -104,3 +104,4 @@ Payara-src
 *.swp
 /iocsh
 screenlog*
+*.pvlist
