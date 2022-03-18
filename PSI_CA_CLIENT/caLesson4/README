@@ -1,0 +1,13 @@
+The two files caLesson4a.c and caLesson4b.c do exactly
+the same.
+
+The difference is that caLesson4a.c uses EPICS 3.13-style
+functions which are deprecated in EPICS 3.14.
+
+caLesson4a.c compiles with 3.13 and 3.14,
+caLesson4b.c only compiles with 3.14.
+
+To see what has changed try
+diff caLesson4a.c caLesson4b.c
+or
+tkdiff caLesson4a.c caLesson4b.c

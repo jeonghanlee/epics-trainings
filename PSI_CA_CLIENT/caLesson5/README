@@ -1,0 +1,26 @@
+The two files caLesson5a.c and caLesson5b.c do the same.
+
+The difference is that caLesson5a.c uses a EPICS 3.13-compatible
+single-threaded model, whereas caLesson5a.c uses a multi-threaded
+model.
+
+caLesson5a.c compiles with 3.13 and 3.14,
+caLesson5b.c only compiles with 3.14.
+
+To see the differences try
+diff caLesson5a.c caLesson5b.c
+or
+tkdiff caLesson5a.c caLesson5b.c
+
+
+The caLesson5.db file provides a soft IOC to be used in this example.
+Start it with (choose a unique string for prefix):
+    xterm -e iocsh caLesson5.db P=prefix &
+    
+An medm panel is also provided:
+    medm -x -macro P=prefix caLesson5.adl &
+
+The programs caLesson5a and caLesson5b also need the prefix:
+    caLesson5a prefix
+    caLesson5b prefix
+
