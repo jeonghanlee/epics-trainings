@@ -1,0 +1,4 @@
+#!/bin/sh
+cd "/vxboot/prng/boot/iocBoot/iocprng-prng"
+exec ./st.cmd
+
