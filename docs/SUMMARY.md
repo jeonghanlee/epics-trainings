@@ -1,20 +1,24 @@
 # Summary
 
-* **1: Getting Started**
-    * [Install the EPICS Environment](installation.md)
-    * [Test the Environment Setup](testenv.md)
+# Getting Started
+- [Installation](CH1/installation.md)
+- [Test Environment](CH1/testenv.md)
 
-* **2: Your First IOC and Continuous Integration**
-    * [Create Your First IOC](yourfirstioc.md)
-    * [Expand Your First IOC](addioctofirst.md)
-    * [Use CI with GitLab](ciwithgitlab.md)
+# First EPICS IOC and Gitlab CI
+- [First EPICS IOC](CH2/yourfirstioc.md)
+- [Expand the First IOC](CH2/addioctofirst.md)
+- [Continous Integration](CH2/ciwithgitlab.md)
 
-* **3: IOC with Simulator**
-    * [Part 1: Configure the Second IOC](yoursecondioc.md)
-    * [Part 2: Create the TCP Simulator](iocsimulator.md)
-    * [Part 3: Test IOC-Simulator Communication](secondiocwithsim.md)
+# Second EPICS IOC and Serial Simulator
+- [Configure the Second IOC](CH3/yoursecondioc.md)
+- [Create the TCP Simulator](CH3/iocsimulator.md)
+- [Test IOC-Simulator Communication](CH3/secondiocwithsim.md)
 
-* **4: Maintenance**
-    * [Maintenance Overview](maintenance.md)
-    * [Initial Preparation](preparation.md)
-    * [Prepare a New Release](newrelease.md)
+# Maintenance
+- [Maintenance Overview](maintenance.md)
+- [Initial Preparation](preparation.md)
+- i[Prepare a New Release](newrelease.md)
+
+----------
+[EPICS environment](EPICSEnv.md)
+[Future Lessons](FutureLessonsList.md)
