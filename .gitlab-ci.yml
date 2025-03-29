@@ -3,7 +3,7 @@ stages:
 
 pages:
   stage: deploy
-  image: allfunc/mdbook
+  image: rust
   variables:
     CARGO_HOME: $CI_PROJECT_DIR/cargo
   before_script:
