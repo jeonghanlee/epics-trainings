@@ -1,18 +1,21 @@
-# The Docker image that will be used to build your app
-image: node:lts
-cache:
-  paths:
-    - node_modules/
-
-before_script:
-  - npm install hexo-cli -g
-  - npm install
+stages:
+    - deploy
 
 pages:
+  stage: deploy
+  image: rust
+  variables:
+    CARGO_HOME: $CI_PROJECT_DIR/cargo
+  before_script:
+    - export PATH="$PATH:$CARGO_HOME/bin"
+    - mdbook --version || cargo install mdbook
   script:
-    - npm run build
+    - mdbook build -d public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   artifacts:
     paths:
       - public
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  cache:
+    paths:
+      - $CARGO_HOME/bin
