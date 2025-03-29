@@ -17,7 +17,7 @@
 # Maintenance
 - [Maintenance Overview](maintenance.md)
 - [Initial Preparation](preparation.md)
-- i[Prepare a New Release](newrelease.md)
+- [Prepare a New Release](newrelease.md)
 
 ----------
 [EPICS environment](EPICSEnv.md)
