@@ -21,6 +21,7 @@ git-repository-url = "https://git.als.lbl.gov/jeonglee/epics-trainings"
 git-repository-icon = "fa-gitlab"
 edit-url-template = "https://git.als.lbl.gov/jeonglee/epics-trainings/edit/master/{path}"
 mathjax-support = true
+input-404="not-found.md"
 
 [output.html.print]
 enable = true     # include support for printable output
