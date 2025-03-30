@@ -20,7 +20,6 @@ extra-watch-dirs = []             # directories to watch for triggering buildsi
 default-theme = "light"
 preferred-dark-theme = "navy"
 smart-punctuation = true
-mathjax-support = false
 #additional-css = ["custom.css", "custom2.css"]
 #additional-js = ["custom.js"]
 no-section-label = true
