@@ -48,10 +48,25 @@ Add the following content. This script checks for `tcpsvd` first, then falls bac
 ```bash
 #!/usr/bin/env bash
 #
-# Simple TCP Echo Server Launcher
-# Tries tcpsvd first, then socat. Listens on localhost:PORT.
-# Executes connection_handler.sh for each connection.
+#  The program is free software: you can redistribute
+#  it and/or modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation, either version 2 of the
+#  License, or any newer version.
 #
+#  This program is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+#  more details.
+#
+#  You should have received a copy of the GNU General Public License along with
+#  this program. If not, see https://www.gnu.org/licenses/gpl-2.0.txt
+#
+#  Simple TCP Echo Server Launcher
+#  Tries tcpsvd first, then socat. Listens on localhost:PORT.
+#  Executes connection_handler.sh for each connection.
+# 
+#  - author : Jeong Han Lee, Dr.rer.nat.
+#  - email  : jeonglee@lbl.gov
 
 PORT=9399 # Port matching the IOC configuration in st.cmd
 
@@ -109,9 +124,24 @@ Add the following content. This script reads input line by line using `read -r` 
 ```bash
 #!/usr/bin/env bash
 #
-# Connection Handler for TCP Echo Server
-# Reads lines from client (stdin) and echoes them back (stdout).
+#  The program is free software: you can redistribute
+#  it and/or modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation, either version 2 of the
+#  License, or any newer version.
 #
+#  This program is distributed in the hope that it will be useful, but WITHOUT
+#  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+#  more details.
+#
+#  You should have received a copy of the GNU General Public License along with
+#  this program. If not, see https://www.gnu.org/licenses/gpl-2.0.txt
+#
+#  Connection Handler for TCP Echo Server
+#  Reads lines from client (stdin) and echoes them back (stdout).
+#
+#  - author : Jeong Han Lee, Dr.rer.nat.
+#  - email  : jeonglee@lbl.gov
 
 # Loop indefinitely while reading lines from the client connection (stdin)
 # 'IFS=' prevents stripping leading/trailing whitespace
