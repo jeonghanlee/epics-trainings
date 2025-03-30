@@ -13,14 +13,14 @@ In this lesson, you will learn how to:
 
 This is the most common and preferred case. We start with the step of cloning `tools` and `mouse` from scratch.
 
-```bash
+```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/sandbox/jeonglee-mouse.git mouse   # note that we have to use `mouse` folder name here, as this will be the `APPNAME` used in the subsequent `generate_ioc_structure.bash` command.
 ```
 
 Now we would like to create an IOC with `mouse` as the **APPNAME** and `park` as **LOCATION** with the same git folder or repository name `mouse`.
 
-```bash
+```shell
 $ bash tools/generate_ioc_structure.bash -l park -p mouse
 Your Location ---park--- was NOT defined in the predefined ALS/ALS-U locations
 ----> gtl ln ltb inj br bts lnrf brrf srrf arrf bl acc als cr ar01 ar02 ar03 ar04 ar05 ar06 ar07 ar08 ar09 ar10 ar11 ar12 sr01 sr02 sr03 sr04 sr05 sr06 sr07 sr08 sr09 sr10 sr11 sr12 bl01 bl02 bl03 bl04 bl05 bl06 bl07 bl08 bl09 bl10 bl11 bl12 fe01 fe02 fe03 fe04 fe05 fe06 fe07 fe08 fe09 fe10 fe11 fe12 alsu bta ats sta lab testlab
@@ -55,7 +55,7 @@ Exist : .gitattributes
 
 Please enter `mouse` folder, and execute `tree` command
 
-```bash
+```shell
 $ cd mouse/
 mouse $  tree --charset=ascii -L 2
 .
@@ -96,14 +96,14 @@ Now, you can see there are two folders, `iochome-mouse` and `iocpark-mouse`, in 
 This happens frequently when you work in the existing IOC application. We start with the step of cloning `tools` and `mouse` from scratch.
 
 
-```bash
+```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/sandbox/jeonglee-mouse.git mouse  # note that we have to use `mouse` folder name here, as this corresponds to the `APPNAME` we will use in the next step, even though the IOC application name will be different.
 ```
 
 Now we would like to create an IOC with `woodmouse` as the IOC application name (using the `-d` option), `park` as **LOCATION**, within the same Git repository named `mouse` based on the **APPNAME** as `mouse`.
 
-```bash
+```shell
 $ bash tools/generate_ioc_structure.bash -l park -p mouse -d woodmouse
 Your Location ---park--- was NOT defined in the predefined ALS/ALS-U locations
 ----> gtl ln ltb inj br bts lnrf brrf srrf arrf bl acc als cr ar01 ar02 ar03 ar04 ar05 ar06 ar07 ar08 ar09 ar10 ar11 ar12 sr01 sr02 sr03 sr04 sr05 sr06 sr07 sr08 sr09 sr10 sr11 sr12 bl01 bl02 bl03 bl04 bl05 bl06 bl07 bl08 bl09 bl10 bl11 bl12 fe01 fe02 fe03 fe04 fe05 fe06 fe07 fe08 fe09 fe10 fe11 fe12 alsu bta ats sta lab testlab
@@ -138,7 +138,7 @@ Exist : .gitattributes
 
 You can see the `iocBoot/iocpark-woodmouse` folder, and we also have the same `mouseApp` folder.
 
-```bash
+```shell
 $ tree --charset=ascii -L 2 mouse/
 mouse/
 |-- configure
@@ -173,7 +173,7 @@ mouse/
 
 Now, we can revisit the folders `iochome-mouse`, `iocpark-mouse`, and `iocpark-woodmouse` shortly. Please check the difference among `iochome-mouse`, `iocpark-mouse`, and `iocpark-woodmouse`. You can do this with a generic Linux command-line tool, such as `diff`.
 
-```bash
+```shell
 iocBoot $ diff iochome-mouse/st.cmd iocpark-mouse/st.cmd
 35,36c35,36
 < epicsEnvSet("IOCNAME", "home-mouse")
@@ -188,7 +188,7 @@ iocBoot $ diff iochome-mouse/st.cmd iocpark-mouse/st.cmd
 ```
 
 
-```bash
+```shell
 iocBoot $ diff iochome-mouse/st.cmd iocpark-woodmouse/st.cmd 
 35,36c35,36
 < epicsEnvSet("IOCNAME", "home-mouse")
@@ -209,13 +209,13 @@ Historically, the variables `IOC` and `IOCNAME` have been a source of confusion.
 
 In practice, developers may encounter situations where the name of the cloned Git repository folder differs from the IOC's `APPNAME` (device name). The recommended practice within the ALS-U EPICS environment is to ensure that the Git repository name matches the primary `APPNAME` (device name) of the IOC it contains, especially at the beginning of the development workflow. However, we also need to accommodate existing IOC applications and provide developers with a more flexible solution for their Git workflow (clone, branch, or fork).
 
-```bash
+```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/sandbox/jeonglee-mouse.git
 ```
 Here we use `bts`, which is case-sensitive and defined in our predefined location list, as **LOCATION**.
 
-```bash
+```shell
 $ bash tools/generate_ioc_structure.bash -l bts -p mouse -f jeonglee-mouse
 The following ALS / ALS-U locations are defined.
 ----> gtl ln ltb inj br bts lnrf brrf srrf arrf bl acc als cr ar01 ar02 ar03 ar04 ar05 ar06 ar07 ar08 ar09 ar10 ar11 ar12 sr01 sr02 sr03 sr04 sr05 sr06 sr07 sr08 sr09 sr10 sr11 sr12 bl01 bl02 bl03 bl04 bl05 bl06 bl07 bl08 bl09 bl10 bl11 bl12 fe01 fe02 fe03 fe04 fe05 fe06 fe07 fe08 fe09 fe10 fe11 fe12 alsu bta ats sta lab testlab
@@ -246,7 +246,7 @@ Exist : .gitattributes
 ```
 
 
-```bash
+```shell
 $ tree --charset=ascii -L 2 jeonglee-mouse/
 jeonglee-mouse/
 |-- configure
@@ -284,14 +284,14 @@ The `-f` option allows us to specify the existing top-level folder (jeonglee-mou
 ## Case 4: Your clone folder name does not match with the IOC `APPNAME` (directory) and you use the wrong application name.
 
 
-```bash
+```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/sandbox/jeonglee-mouse.git
 ```
 
 Here we use `ar05`, which is case-sensitive and defined in our predefined location list, as **LOCATION**. However, we use the wrong application name `mOuse` with incorrect casing.
 
-```bash
+```shell
 $ tools/generate_ioc_structure.bash -l ar05 -p mOuse -f jeonglee-mouse
 The following ALS / ALS-U locations are defined.
 ----> gtl ln ltb inj br bts lnrf brrf srrf arrf bl acc als cr ar01 ar02 ar03 ar04 ar05 ar06 ar07 ar08 ar09 ar10 ar11 ar12 sr01 sr02 sr03 sr04 sr05 sr06 sr07 sr08 sr09 sr10 sr11 sr12 bl01 bl02 bl03 bl04 bl05 bl06 bl07 bl08 bl09 bl10 bl11 bl12 fe01 fe02 fe03 fe04 fe05 fe06 fe07 fe08 fe09 fe10 fe11 fe12 alsu bta ats sta lab testlab

@@ -16,7 +16,7 @@ Clone the ALS-U EPICS repository using Git.
 
 Users may need to have SSH access to the ALS GitLab repository to clone the following repositories.
 
-```bash
+```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/epics/alsu-epics-environment.git ~/epics
 ```
 
@@ -27,13 +27,13 @@ By the cloning the repository, you have the environment at the `${HOME}/epics` f
 
 The ALS-U EPICS environment supports multiple versions. To select a version, source the appropriate `setEpicsEnv.bash` script:
 
-```bash
+```shell
 source ~/alsu-epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash  # For Debian 12
 # or
 source ~/alsu-epics/1.1.1/rocky-8.10/7.0.7/setEpicsEnv.bash # For Rocky 8.10
 ```
 The output should resemble this (user and paths will vary):
-```bash
+```shell
 Set the EPICS Environment as follows:
 THIS Source NAME    : setEpicsEnv.bash
 THIS Source PATH    : /home/jeonglee/epics/1.1.1/debian-12/7.0.7
@@ -44,17 +44,15 @@ PATH                : /home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pmac/bi
 LD_LIBRARY_PATH     : /home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pmac/lib/linux-x86_64:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pvxs/bundle/usr/linux-x86_64/lib:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pvxs/lib/linux-x86_64:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/base/lib/linux-x86_64:/home/jeonglee/programs/root_v6-28-04/lib/root
 
 Enjoy Everlasting EPICS!
-
 ```
 
 ## Testing the Environment
 
 Verify the installation by running the following commands:
 
-```bash
+```shell
 $ caput -h
 $ which caget
 ```
 
 Technically, you have now the ALS-U EPICS environment.
-

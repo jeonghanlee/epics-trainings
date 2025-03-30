@@ -31,7 +31,7 @@ First, start the echo server simulator. It needs to be running before the IOC st
 1. Open your first terminal window.
 2. Navigate (`cd`) to the directory containing `tcpserver.bash` and `connection_handler.sh` (e.g., the `simulator` subdirectory).
 3. Execute the server script:
-```bash
+```shell
 # In Terminal 1 (Simulator):
 simulator$ ./tcpserver.bash
 ```
@@ -45,13 +45,13 @@ Next, start the `jeonglee-Demo` IOC application.
 
 1. Open your second terminal window.
 2. Make sure your EPICS environment is sourced:
-```bash
+```shell
 # In Terminal 2 (IOC):
 $ source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash # Use your correct path
 ```
 3. Navigate (`cd`) to the IOC's top-level directory, optionally run make to ensure it's up-to-date, then navigate into the IOC's specific boot directory:
 
-```bash
+```shell
 # In Terminal 2 (IOC):
 $ cd /path/to/your/jeonglee-Demo
 # (Replace /path/to/your/ with the actual path)
@@ -59,7 +59,7 @@ $ make # Optional, but ensures the build is current
 $ cd iocBoot/iocB46-182-jeonglee-Demo # <-- CRITICAL: Must change into boot directory
 ```
 4. Execute the startup script (`st.cmd`) from within the boot directory:
-```bash
+```shell
 # In Terminal 2 (IOC):
 iocB46-182-jeonglee-Demo$ ./st.cmd
 ```
@@ -80,7 +80,7 @@ Recall the PVs created (using `P=jeonglee:` and `R=myoffice:` from `st.cmd`):
 
 You can list all available PVs directly from the running IOC's console using the `dbl` (database list) command:
 
-```bash
+```shell
 # In Terminal 2 (IOC)
 7.0.7> dbl
 jeonglee:myoffice:Cmd
@@ -93,12 +93,12 @@ Now, let's test using the CA clients:
 
 1. Open your third terminal window.
 2. Make sure your EPICS environment is sourced here as well, so `caput` and `caget` are available:
-```bash
+```shell
 # In Terminal 3 (CA Clients):
 $ source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash # Use your correct path
 ```
 3. Send a Query: Use `caput` to write a string to the command PV. Let's query for an ID.
-```bash
+```shell
 # In Terminal 3 (CA Clients):
 $ caput jeonglee:myoffice:Cmd "DEVICE_ID?"
 # Expected output:
@@ -106,7 +106,7 @@ Old : jeonglee:myoffice:Cmd
 New : jeonglee:myoffice:Cmd          DEVICE_ID?
 ```
 4. Read the Echoed Reply: The simulator echoes "DEVICE_ID?" back. StreamDevice (using the in "%(\$1)40c" part of the sendRawQuery protocol) should read this reply and write it to the `Cmd-RB` PV. Use `caget` to read this PV:
-```bash
+```shell
 # In Terminal 3 (CA Clients):
 $ caget jeonglee:myoffice:Cmd-RB
 # Expected output:
@@ -116,7 +116,7 @@ jeonglee:myoffice:Cmd-RB       DEVICE_ID?
 
 6. Try Another Query: Send a different string.
 
-```bash
+```shell
 # In Terminal 3 (CA Clients):
 $ caput jeonglee:myoffice:Cmd "STATUS?"
 
@@ -132,7 +132,7 @@ Success! You have verified end-to-end communication between your IOC and the TCP
 
 If your `caput` or `caget` commands fail with a message like Channel connect timed out: 'PVNAME' not found., it means the CA client tools cannot find your running IOC over the network.
 
-```bash
+```shell
 # Example Error:
 $ caget jeonglee:myoffice:Cmd-RB
 Channel connect timed out: 'jeonglee:myoffice:Cmd-RB' not found.
@@ -141,13 +141,13 @@ Channel connect timed out: 'jeonglee:myoffice:Cmd-RB' not found.
 When running the IOC and CA clients on the same machine (like localhost), this often happens because the default CA broadcast mechanism isn't sufficient or is blocked. You need to explicitly tell the CA clients where to find the IOC server using an environment variable:
 
 1. Set `EPICS_CA_ADDR_LIST`: In the terminal where you run `caput`/`caget` (Terminal 3), set this variable to point to the machine running the IOC (in this case, localhost).
-```bash
+```shell
 # In Terminal 3 (CA Clients):
 $ export EPICS_CA_ADDR_LIST=localhost
 ```
 
 Retry the command:
-```bash
+```shell
 # In Terminal 3 (CA Clients):
 $ caget jeonglee:myoffice:Cmd-RB
 # Expected output (should now work):
@@ -156,7 +156,7 @@ $ caget jeonglee:myoffice:Cmd-RB
 
 If you would like to evaluate the PVA protocol, you also have to define the following EPICS environment variable `EPICS_PVA_ADDR_LIST` for PVA (Process Variable Access) protocol. We will cover PVA protocol for more advanced lesson later.
 
-```bash
+```shell
 $ export EPICS_PVA_ADDR_LIST=localhost
 $ pvxget jeonglee:myoffice:Cmd-RB
 ```

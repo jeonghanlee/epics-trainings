@@ -4,7 +4,7 @@
 
 ## Required Vendor Library
 
-```bash
+```shell
 $ git clone https://github.com/jeonghanlee/uldaq-env
 $ cd uldaq-env
 uldaq-env (master)$ echo "INSTALL_LOCATION=${HOME}/epics/1.1.1-rc1" > configure/CONFIG_SITE.local
@@ -16,7 +16,7 @@ uldaq-env (master)$ make install
 
 ## Basis EPICS Enviornment
 
-```bash
+```shell
 $ git clone https://github.com/jeonghanlee/EPICS-env
 $ cd EPICS-env
 EPICS-env (master)$ echo "EPICS_TS_NTP_NET=2.debian.pool.ntp.org" > configure/RELEASE.local
@@ -31,7 +31,7 @@ EPICS-env (master)$ make symlinks
 
 ## Area Detector Support
 
-```bash
+```shell
 $ git clone https://github.com/jeonghanlee/EPICS-env-support.git
 EPICS-env-support (master)$ echo "INSTALL_LOCATION=${HOME}/epics/1.1.1-rc1/debian-12/7.0.7/base" > configure/CONFIG_SITE.local
 EPICS-env-support (master)$ make init
@@ -42,7 +42,7 @@ EPICS-env-support (master)$ make symlinks
 
 ## ALS-U Site Specific Modules
 
-```bash
+```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/epics/alsu-site-modules.git
 $ cd alsu-site-modules/
 alsu-site-modules (master)$ echo "INSTALL_LOCATION=${HOME}/epics/1.1.1-rc1/debian-12/7.0.7/base" > configure/CONFIG_SITE.local
@@ -53,12 +53,12 @@ alsu-site-modules (master)$ make build
 
 ## Useful git commands
 
-```bash
+```shell
 apt install git-lfs
 dnf install git-lfs
 git lfs install
 ```
-```bash
+```shell
 git add ...
 git commit -m "update ..."
 git lfs push origin master
