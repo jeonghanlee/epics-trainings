@@ -3,12 +3,7 @@ stages:
 
 pages:
   stage: deploy
-  image: rust
-  variables:
-    CARGO_HOME: $CI_PROJECT_DIR/cargo
-  before_script:
-    - export PATH="$PATH:$CARGO_HOME/bin"
-    - mdbook --version || cargo install mdbook
+  image: jeonghanlee/mdbook
   script:
     - mdbook build -d public
   rules:
@@ -16,6 +11,3 @@ pages:
   artifacts:
     paths:
       - public
-  cache:
-    paths:
-      - $CARGO_HOME/bin
