@@ -7,7 +7,7 @@ language = "en"
 multilingual = false
 
 [build]
-build-dir = "public"
+build-dir = "public"              # the directory where the output is placed
 create-missing = true             # whether or not to create missing pages
 use-default-preprocessors = true  # use the default preprocessors
 extra-watch-dirs = []             # directories to watch for triggering buildsi
@@ -15,9 +15,29 @@ extra-watch-dirs = []             # directories to watch for triggering buildsi
 [preprocessor.index]
 
 [preprocessor.links]
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+smart-punctuation = true
+mathjax-support = false
+#additional-css = ["custom.css", "custom2.css"]
+#additional-js = ["custom.js"]
+no-section-label = true
+git-repository-url = "https://git.als.lbl.gov/jeonglee/epics-trainings"
+git-repository-icon = "fa-github"
+#edit-url-template = "https://git.als.lbl.gov/jeonglee/epics-trainings/edit/master/guide/{path}"
+#site-url = "/example-book/"
+#cname = "myproject.rs"
+#input-404 = "not-found.md"
+mathjax-support = true
+
+
 [output.html.print]
-enable = true    # include support for printable output
+enable = true     # include support for printable output
 page-break = true # insert page-break after each chapter
+
+
 [output.html.fold]
 enable = false    # whether or not to enable section folding
 level = 0         # the depth to start folding
@@ -33,8 +53,4 @@ boost-paragraph = 1      # ranking boost factor for matches in text
 expand = true            # partial words will match longer terms
 heading-split-level = 3  # link results to heading levels
 copy-js = true           # include Javascript code for search
-
-[output.html]
-mathjax-support = true
-
 
