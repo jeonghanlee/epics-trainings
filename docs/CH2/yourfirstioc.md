@@ -19,7 +19,7 @@ Users may need to have SSH access to the ALS GitLab repository to clone the foll
 
 The following `clone` command one can download the latest version of `tools`
 
-```bash
+```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 ```
 
@@ -31,7 +31,7 @@ This script is developed to reduce the manual workflow in EPICS IOC Development 
 
 Now we would like to create an IOC with `mouse` as the **APPNAME** and `home` as **LOCATION**. Note that we use the following assumption that the `APPNAME` is the same as an IOC application name. However, in the reality, sometime, it is difficult to keep that assumption consistently. We will cover that case later. 
 
-```bash
+```shell
 $ source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash
 $ bash tools/generate_ioc_structure.bash -l home -p mouse
 $ cd mouse
@@ -178,11 +178,10 @@ However, in most cases, you don't need to understand this in great detail, as th
 
 Here are some useful commands for the EPICS IOC build make rules.
 
-```bash
+```shell
 $ make
 $ make clean
 $ make distclean
 ```
 
 You can see the difference in your IOC folder among `make`, `make clean`, and `make distclean` by using `tree` or `ls` commands.
-

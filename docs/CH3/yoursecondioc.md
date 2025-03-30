@@ -20,7 +20,7 @@ In this lesson, you will learn to:
 
 First, ensure your EPICS environment is set up, then use the template generator script to create a new IOC structure. We'll use `jeonglee-Demo` for the **APPNAME** and `B46-182` for the **LOCATION** in this example. Replace `jeonglee-Demo` with your preferred name if desired.
 
-```bash
+```shell
 # 1. Set up the EPICS environment
 $ source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash
 
@@ -49,7 +49,7 @@ jeonglee-Demo $ tree --charset=ascii -L 1
 
 We need to tell the build system that our IOC depends on `Asyn`, `Calc`, and `StreamDevice`. Edit the `configure/RELEASE` file using your preferred text editor. With the ALS-U EPICS Environment, `StreamDevice` was built with support for `sCalcout` record, so you need to add `Calc` module dependency in your IOC.
 
-```bash
+```shell
 jeonglee-Demo $ nano configure/RELEASE # Or vi configure/RELEASE
 ```
 
@@ -78,7 +78,7 @@ You can examine this file to see how standard dependencies, like the ones you ju
 
 Let's examine the `jeonglee-DemoApp/src/Makefile`:
 
-```bash
+```shell
 jeonglee-Demo $ less jeonglee-DemoApp/src/Makefile
 ```
 
@@ -129,13 +129,13 @@ Define the communication protocol and the EPICS records database:
 
 * Create the Protocol File (`training.proto`)
 
-```bash
+```shell
 jeonglee-Demo $ nano jeonglee-DemoApp/Db/training.proto
 ```
 
 Add the following content:
 
-```makefile
+```coffee
 # Protocol definition for basic command/query
 
 sendRawQuery {
@@ -149,7 +149,7 @@ Save and close the `training.proto` file.
 
 * Create the EPICS Database File (`training.db`)
 
-```bash
+```shell
 jeonglee-Demo $ emacs jeonglee-DemoApp/Db/training.db
 ```
 
@@ -190,7 +190,7 @@ Furthermore, the build process takes these source files found via the `Db/Makefi
 
 Let's examine the `jeonglee-DemoApp/Db/Makefile`:
 
-```bash
+```shell
 jeonglee-Demo $ less jeonglee-DemoApp/Db/Makefile # Use less or your editor
 ```
 
@@ -222,13 +222,13 @@ Now, we need to configure the IOC's startup script (`st.cmd`). This script runs 
 
 Navigate to the IOC boot directory and edit the `st.cmd` file using your preferred text editor (e.g., vi, nano, emacs):
 
-```bash
+```shell
 jeonglee-Demo $ cd iocBoot/iocB46-182-jeonglee-Demo
 iocB46-182-jeonglee-Demo $ vi st.cmd # Or nano st.cmd
 ```
 Modify the file to include the necessary configurations, similar to the example below. Pay close attention to the sections marked with comments like `#-- --- Define Macros ---` or `#-- --- Asyn IP Port Configuration ---`.
 
-```bash
+```shell
 #!../../bin/linux-x86_64/jeonglee-Demo
 
 #-- Load environment paths (sets TOP, EPICS_BASE etc.)
@@ -326,7 +326,7 @@ Key Points Reminder:
 
 After editing and saving the st.cmd file, return to the top-level IOC directory to prepare for the next steps:
 
-```bash
+```shell
 # Command executed from: iocBoot/iocB46-182-jeonglee-Demo
 iocB46-182-jeonglee-Demo $ cd ../..
 
@@ -346,7 +346,7 @@ The EPICS build system, invoked using the `make` command from the top-level IOC 
 ### Build the IOC:
 Ensure you are in the top-level directory of your IOC (e.g., `/path/to/your/jeonglee-Demo`) and execute the `make` command:
 
-```bash
+```shell
 # Prompt should show your top-level IOC directory
 jeonglee-Demo $ make
 ```
@@ -359,31 +359,31 @@ A successful build creates several important directories and files. It's crucial
 
 * Check Key Directories: After make finishes, list the contents of your top-level directory. You should now see `bin`, `db`, `dbd`, and lib directories alongside the source directories (`configure`, `jeonglee-DemoApp`, `iocBoot`, etc.). There is the `iocsh` folder, which we will cover that subject in a advanced lesson later.
 
-```bash
+```shell
 $ tree -L 1 --charset=ascii
 .
-|-- bin         <--- Executables installed here
+|-- bin         #<--- Executables installed here
 |-- configure
-|-- db          <--- Runtime DB/PROTO files installed here
-|-- dbd         <--- Runtime DBD files installed here
+|-- db          #<--- Runtime DB/PROTO files installed here
+|-- dbd         #<--- Runtime DBD files installed here
 |-- iocBoot     # Contains source st.cmd script (runtime copy might be elsewhere or same)
 |-- iocsh       # Source location for iocsh scripts (if any)
 |-- jeonglee-DemoApp
-|-- lib         <--- Libraries (if any) installed here
+|-- lib         #<--- Libraries (if any) installed here
 |-- Makefile    # Top-level makefile
 `-- README.md   # Basic readme
 ```
 
 * Explicitly check if the IOC executable was created:
 
-```bash
+```shell
 jeonglee-Demo $ ls -l bin/linux-x86_64/jeonglee-Demo 
 -r-xr-xr-x 1 jeonglee jeonglee ... ... bin/linux-x86_64/jeonglee-Demo
 ```
 
 * Check for Installed Runtime Files: Verify the files created in Step 4 were installed by the build system into the top-level db directory, and the application DBD was generated in dbd.
 
-```bash
+```shell
 # Check for .db and .proto files in the runtime 'db' directory
 jeonglee-Demo $ ls -l db/training.*
 # Expected output should list: db/training.db and db/training.proto
@@ -397,13 +397,13 @@ jeonglee-Demo $ ls -l dbd/jeonglee-Demo.dbd
 
 On Linux systems, the `ldd` command shows the shared libraries an executable is linked against. This is a good way to verify that the dependencies you uncommented in `configure/RELEASE` (Asyn, Calc, StreamDevice) were correctly linked into your IOC executable.
 
-```bash
+```shell
 jeonglee-Demo $ ldd bin/linux-x86_64/jeonglee-Demo
 ```
 
 Scan the output list for `libasyn.so`, `libcalc.so`, and `libstream.so` (along with Base and PVXS libraries):
 
-```bash
+```r
 ...
 libasyn.so => /path/to/epics/modules/asyn/lib/linux-x86_64/libasyn.so (...)
 libcalc.so => /path/to/epics/modules/calc/lib/linux-x86_64/libcalc.so (...)

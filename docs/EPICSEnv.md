@@ -11,7 +11,7 @@ This is a short reminder which we forget frequently.
 * The default of `EPICS_CA_ADDR_LIST` is broadcast addresses of all interfaces on the host: It works when IOC servers are on the same subnet as IOC clients.
 * Broadcast address goes to all servers on a subnet, for example, `123.45.1.255`
 
-```bash
+```shell
 ifconfig -a |grep broadcast
         inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
         inet 192.168.1.180  netmask 255.255.255.0  broadcast 192.168.1.255

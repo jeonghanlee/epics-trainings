@@ -9,7 +9,7 @@ In this lesson, you will learn how to do the following:
 
 ## Make an EPICS Database file
 
-Please create the following EPICS database (db) file with the name as `water.db` with the following content:
+Please create the following EPICS database (db) file with the name as `water.db`[^note] with the following content:
 
 ```c
 record(ai, "temperature:water")
@@ -72,6 +72,4 @@ The commands `caget`, `pvxget`, and `caput` are the simplest EPICS CA/PVA Client
 
 ## Reference 
 
-- [Files exist at the training Repository](https://git.als.lbl.gov/alsu/epics/training)
-- [DB file reference can be found at EPICS site](https://epics-controls.org/resources-and-support/documents/getting-started)
-
+[^note]:  [DB file reference can be found at EPICS site](https://epics-controls.org/resources-and-support/documents/getting-started)

@@ -5,7 +5,7 @@ this repository only cover the cloneable folder.
 
 For example, we have the ALS-U EPICS environment `1.1.1`.
 
-```bash
+```shell
 git clone ssh://git@git-local.als.lbl.gov:8022/alsu/epics/alsu-epics-environment.git ~/epics
 epics (master)$ git branch 1.1.1
 epics (1.1.1)$ ls

@@ -14,13 +14,12 @@
 - [Create the TCP Simulator](CH3/iocsimulator.md)
 - [Test IOC-Simulator Communication](CH3/secondiocwithsim.md)
 
-----------
-
 # Maintenance
 - [Maintenance Overview](maintenance.md)
 - [Initial Preparation](preparation.md)
 - [Prepare a New Release](newrelease.md)
 
+----------
 # Additional Resouces
 - [EPICS environment](EPICSEnv.md)
 - [Future Lessons](FutureLessonsList.md)
