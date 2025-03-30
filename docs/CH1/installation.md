@@ -1,7 +1,3 @@
----
-description: This is the short instruction how to setup the ALS-U EPICS environment
----
-
 # Installation
 
 ## Lesson Overview
