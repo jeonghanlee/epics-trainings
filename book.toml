@@ -1,6 +1,6 @@
 # https://rust-lang.github.io/mdBook/format/configuration/general.html
 [book]
-title = "ALS-U EPICS Envorinment Distribution Training"
+title = "ALS-U EPICS Envorinment Training"
 authors = ["Jeong Han Lee"]
 src = "docs"
 language = "en"
@@ -30,7 +30,6 @@ git-repository-icon = "fa-gitlab"
 #cname = "myproject.rs"
 #input-404 = "not-found.md"
 mathjax-support = true
-
 
 [output.html.print]
 enable = true     # include support for printable output
