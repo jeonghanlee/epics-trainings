@@ -15,7 +15,6 @@
 - [Test IOC-Simulator Communication](CH3/secondiocwithsim.md)
 
 ----------
-# Additional Resouces
 [EPICS environment](misc/EPICSEnv.md)
 [Future Lessons](misc/FutureLessonsList.md)
 [Contributors](misc/contributors.md)
