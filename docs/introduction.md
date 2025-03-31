@@ -43,15 +43,13 @@ This guide is organized into several chapters, reflecting a typical workflow:
 * **CHAPTER 1: Getting Started:** Covers this introduction, how to install the environment (`installation.md`), and how to run initial tests (`testenv.md`). **New users should start here.**
 * **CHAPTER 2: Basic IOC Development & CI:** Guides you through creating your first simple IOC (`yourfirstioc.md`), potentially expanding its structure (`addioctofirst.md`), and integrating with GitLab CI (`ciwithgitlab.md`). It also includes background on the build system (`build_overview.md` - *Note: This file was suggested, adjust link if different*).
 * **CHAPTER 3: Example - IOC with TCP Device Communication:** Provides a detailed walkthrough of creating an IOC for device communication using Asyn and StreamDevice over TCP/IP, including configuring the IOC (`yoursecondioc.md`), creating a simulator (`iocsimulator.md`), and testing the communication (`secondiocwithsim.md`).
-* **CHAPTER 4: Environment Maintenance:** Details the procedures for maintaining the core EPICS environment repository (`maintenance.md`, `preparation.md`, `newrelease.md`). This chapter is primarily for designated environment maintainers.
 
 ## How to Use This Documentation
 
 * **New Users:** Start with Chapter 1 (Installation, Testing) and proceed through Chapter 2 (First IOC).
 * **Experienced Users:** You may jump directly to relevant sections, such as the device communication example (Chapter 3) or CI integration (Chapter 2).
-* **Maintainers:** Refer to Chapter 4 for maintenance procedures.
-* **Online Version:** Remember that this documentation is built automatically via CI. The latest official version is always available online at:
-    **https://alsu.pages.als.lbl.gov/epics/alsu-epics-environment**
+
+* **Online Version:** Remember that this documentation is built automatically via CI. The latest official version is always available online at: https://alsu.pages.als.lbl.gov/epics/alsu-epics-environment
 
 ## General Prerequisites
 
