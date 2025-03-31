@@ -1,5 +1,7 @@
 # Summary
 
+[Introduction](introduction.md)
+
 # Getting Started
 - [Installation](CH1/installation.md)
 - [Test Environment](CH1/testenv.md)

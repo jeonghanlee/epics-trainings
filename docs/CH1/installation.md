@@ -1,10 +1,12 @@
-# Installation
+# ALS-U EPICS Environment Configuration and Installation
+
+This chapter covers the essential first steps for setting up the ALS-U EPICS environment locally. You will clone the central environment repository using git from the ALS GitLab server and then learn how to activate a specific version (e.g., for Debian 12 or Rocky 8) by sourcing the appropriate `setEpicsEnv.bash` script in your terminal session. Basic verification steps are also included.
 
 ## Lesson Overview
 
 In this lesson, you will learn how to do the following:
-* Clone the cloneable ALS-U EPICS Environment by using git
-* Configure the ALS-U EPICS Environment locally
+* Clone the cloneable ALS-U EPICS environment by using git
+* Configure the ALS-U EPICS environment locally
 * Test the cloned EPICS enivornment with a few EPICS command line tools
 * Switch the different version of the EPICS environment within a terminal
 
@@ -20,7 +22,7 @@ Users may need to have SSH access to the ALS GitLab repository to clone the foll
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/epics/alsu-epics-environment.git ~/epics
 ```
 
-By the cloning the repository, you have the environment at the `${HOME}/epics` folder. In most case, you are ready to use it.
+By cloning the repository, you have the environment at the `${HOME}/epics` folder. In most cases, you are ready to use it.
 
 
 ## Configure the ALS-U EPICS enviornment
@@ -28,9 +30,9 @@ By the cloning the repository, you have the environment at the `${HOME}/epics` f
 The ALS-U EPICS environment supports multiple versions. To select a version, source the appropriate `setEpicsEnv.bash` script:
 
 ```shell
-source ~/alsu-epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash  # For Debian 12
+source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash  # For Debian 12
 # or
-source ~/alsu-epics/1.1.1/rocky-8.10/7.0.7/setEpicsEnv.bash # For Rocky 8.10
+source ~/epics/1.1.1/rocky-8.10/7.0.7/setEpicsEnv.bash # For Rocky 8.10
 ```
 The output should resemble this (user and paths will vary):
 ```shell

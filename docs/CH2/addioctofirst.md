@@ -1,6 +1,6 @@
 # Expanding Your First IOC: Adding Another IOC
 
-The central subject of this chapter is to understand the role of the `APPNAME` (device name) in our strategy to centralize similar EPICS IOC application codes within a single repository. This approach offers significant benefits, including ensuring unified access to all relevant code and EPICS database files, simplifying long-term maintenance by preventing application divergence, and promoting efficient collaboration and knowledge sharing among engineers.
+Building upon your first IOC, this chapter demonstrates how the ALS-U environment facilitates managing multiple, related IOC instances from a single, centralized codebase repository (identified by a unique `APPNAME`). You will learn to use different options (`-l LOCATION`, `-d device name`, `-f FOLDER`) of the `generate_ioc_structure.bash` tool to add new IOC configurations (creating new subdirectories within `iocBoot`) while reusing the core application code found in `<APPNAME>App`. The script's validation logic (like enforcing case-sensitivity for `APPNAME`) and the benefits of this shared codebase approach for maintenance and collaboration are highlighted through practical examples.
 
 ## Lesson Overview
 

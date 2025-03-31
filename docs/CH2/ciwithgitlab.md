@@ -1,16 +1,14 @@
 # GitLab Continuous Integration for IOC Development
 
+This chapter details the Continuous Integration (CI) process implemented within the ALS-U GitLab environment, designed to standardize the building and testing of EPICS IOCs. You will learn how IOC projects include configuration from a central CI project (`alsu/ci`), understand the standard pipeline stages (like build and test), and crucially, discover how to conditionally incorporate necessary ALS-U site-specific modules into your CI builds using a simple `.sitmodules` trigger file. A hands-on walkthrough demonstrates pushing your IOC code to GitLab and observing the CI pipeline behavior both before and after enabling site module support.
 
 ## Lesson Overview
 
 In this documentation, you will learn how to do the following:
 
-* Integrate the ALS-U GitLab CI configuration into your IOC project.
-* Conditionally include site-specific modules using the `.sitmodules` file.
-
-
-This document outlines the Continuous Integration (CI) setup for developing and testing Input/Output Controllers (IOCs) at the Advanced Light Source Upgrade (ALS-U). The central CI project (`alsu/ci`) to provide standardized workflows and ensure code quality.
-
+* Understand how ALS-U GitLab CI configuration is applied to your IOC project. 
+* Conditionally add site-specific modules to CI builds using the `.sitmodules` file.
+* Create a GitLab repository for an IOC and observe the CI pipeline execution.
 
 ## Key Features
 
@@ -21,42 +19,48 @@ This document outlines the Continuous Integration (CI) setup for developing and 
 
 ## Quick Start: Integrating CI into Your IOC Project
 
-To enable this CI in your IOC project, simply include the following in your `.gitlab-ci.yml` file at the root of your repository. However, it is done automatically through the template generator `tools`. 
+The ALS-U IOC template generator (`tools/generate_ioc_structure.bash`) automatically creates a `.gitlab-ci.yml` file in your IOC's root directory. This file enables CI integration by referencing configurations from the central `alsu/ci` project. You typically do not need to create or manually edit the file, however understanding its components is helpful.
 
 ```yaml
 include:
+  # Reference files from the 'alsu/ci' project, using the 'master' branch
+  # A specific tag/commit could be used instead of 'master' for long-term stability
   - project: alsu/ci
-    ref: master # Or a specific tag/commit if needed for stability
+    ref: master
     file:
+      # Core workflow rules and variables
       - 'workflow.yml'
       - 'alsu-vars.yml'
+      # Defines jobs related to site module handling
       - 'env-sitemodules.yml'
+      # Defines EPICS build/test jobs for different OS targets
       - 'debian12-epics.yml'
       - 'rocky8-epics.yml'
       - 'rocky9-epics.yml'
-      # - 'debian12-analyzers.yml' # Uncomment if analyzer stage is needed
-      # - 'rocky8-analyzers.yml'  # Uncomment if analyzer stage is needed
-      # - 'rocky9-analyzers.yml'  # Uncomment if analyzer stage is needed
+      # --- Optional references (uncomment if needed) ---
+      # - 'debian12-analyzers.yml'
+      # - 'rocky8-analyzers.yml'
+      # - 'rocky9-analyzers.yml'
 
 stages:
   - build
   - test
-  # - analyzers # Uncomment if analyzer stage is needed
-  # - deploy  # Uncomment if deploy stage is needed (if implemented in alsu/ci)
+  # - analyzers # Uncomment if analyzer stage jobs are referenced above
+  # - deploy  # Uncomment if deploy stage jobs are referenced (if implemented in alsu/ci)
 ```
 
 ## Understanding the Included Files
 
-The include section pulls in several YAML files from the alsu/ci project. Here's a brief overview of their likely purpose:
+The `include:` section references several YAML files from the central `alsu/ci` project. Here's a brief overview of their purpose:
 
 * [`workflow.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/workflow.yml): Defines the simple rules for all CI workflow.
-* [`alsu-vars.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/alsu-vars.yml): Contains common variables and configurations.
+* [`alsu-vars.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/alsu-vars.yml): Contains common variables (like default EPICS versions, paths), configurations, and default settings used across various ALS-U CI jobs.
 * [`env-sitemodules.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/env-sitemodules.yml): Handles environment setup and site module inclusion via `.sitmodules`.
 * [`debian12-epics.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/debian12-epics.yml), [`rocky8-epics.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/rocky8-epics.yml), [`rocky9-epics.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/rocky9-epics.yml): Define build/test for EPICS IOCs on respective OS.
-* [`debian12-analyzers.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/debian12-analyzers.yml), [`rocky8-analyzers.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/rocky8-analyzers.yml), [`rocky9-analyzers.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/rocky9-analyzers.yml): (Commented out) Demo for static analysis; user implementation needed. Users must impletment how to use these tools.
+* [`debian12-analyzers.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/debian12-analyzers.yml), [`rocky8-analyzers.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/rocky8-analyzers.yml), [`rocky9-analyzers.yml`](https://git.als.lbl.gov/alsu/ci/-/blob/master/rocky9-analyzers.yml): (Commented out by default) Provide template jobs for running static code analysis; users must implement the actual tool invocation commands within their project's `.gitlab-ci.yml` if they uncomment these references.
 
-### Conditional Inclusion of Site Modules
-Our gitlab runners, which are dockerized OS with the default ALS-U EPICS environment, does not have the ALS-U Site Speicific EPICS modules such as
+### Conditional Inclusion of Site Modules using `.sitmodules`
+The standard GitLab runners (Docker images with an OS and the default ALS-U EPICS environment) do not contain pre-built ALS-U site-specific EPICS modules, such as:
 
 * Vacuum [`dev-mks-mv2`](https://git.als.lbl.gov/alsu/epics/modules/dev-mks-mv2)
 * Vacuum [`dev-mks937b-unidrv`](https://git.als.lbl.gov/alsu/epics/modules/dev-mks937b-unidrv)
@@ -65,28 +69,30 @@ Our gitlab runners, which are dockerized OS with the default ALS-U EPICS environ
 * Instrumentation [`dev-bpm-support`](https://git.als.lbl.gov/alsu/epics/modules/dev-bpm-support)
 * RF [`dev-feed-support`](https://git.als.lbl.gov/alsu/epics/modules/dev-feed-support)
 
-For IOCs needing specific site modules, create a `.sitmodules` file in the top level. The CI will detect it and include the modules during build.
+If your IOC requires one or more of these site-specific modules, you need to signal this to the CI pipeline. This is done by creating a file named `.sitmodules` in the top-level directory of your IOC repository.
 
+The CI pipeline (specifically jobs defined in `env-sitemodules.yml`) detects the presence of this file. If `.sitmodules` exists, the CI will automatically add a predefined set of common site modules to the build environment (by cloning them) before compiling your IOC. Based on the example walkthrough below, simply creating a `.sitmodules` file seems sufficient to trigger this. (Verify this mechanism if your requirements differ or if specific modules need to be listed within the file in some cases).
 
 ## CI Stages Explaned
 
 The stages section in your `.gitlab-ci.yml` defines the different phases of your CI pipeline. The current configuration includes:
 
-* `build`: This stage is responsible for compiling your IOC code, building any necessary dependencies, and preparing it for testing.
+* `build`: Compiles your IOC application code against the target EPICS environment (potentially augmented with site modules if `.sitmodules` is present). 
 
-* `test`: This stage is reserved for further tests to verify the functionality and stability of your IOC for the future. Currently it only executes existing code analyzer tools.
+* `test`: Intended for running automated tests. Currently, the default jobs referenced might only execute basic checks or serve as placeholders for user-defined tests. The following stages are often available via the central CI project but commented out by default in the template:
 
-The following stages are currently commented out but might be available or planned for future use in the alsu/ci project:
+* `analyzers`: Reserved for jobs that perform static code analysis. Users need to configure the specific tools and commands if they reference the corresponding analyzer files. 
 
-* `analyzers`: This stage would typically run static code analysis tools to identify potential issues and enforce coding standards.
+* `deploy`: Could contain jobs for deploying build artifacts, documentation, or tagging releases.
 
-* `deploy`: This stage contains the demonstration of how to publish the results of the previous stage `analyzers`. 
 
-## Let's do this!
+## Let's do this! (Hands-On Example)
 
-### Create your first repo at gitlab
+This walkthrough shows how to push the `mouse` IOC (created in a previous lesson) to a new GitLab repository and observe the CI pipeline.
 
-* Go to `alsu/sandbox` and hit `New project`
+### Create Your First Repository on GitLab
+
+* Go to the ALS-U GitLab instance and navigate to a suitable group, like your personal sandbox area or a project group (e.g., `alsu/sandbox`). Click `New project`.
 
 |![Step 1](images/step1.png)|
 | :---: |
@@ -151,7 +157,7 @@ mouse $ git push --set-upstream origin master
 | :---: |
 |**Figure 8** ALS-U GitLab Sandbox - debian12-builder|
 
-Conguration! Your IOC building is done sucessfully! Now before moving forward the next step, plase ccroll up `debian12-builder` screen to see the process of the beginning. Note that `Enjoy Everlasting EPICS!` line is the starting point.
+Congratulations! Your IOC building is done sucessfully! Now before moving forward the next step, please scroll up `debian12-builder` screen to see the process of the beginning. Note that `Enjoy Everlasting EPICS!` line is the starting point.
 
 
 |![Step 9](images/step9-debian12-CI-no-sitemodules.png)|
@@ -161,7 +167,7 @@ Conguration! Your IOC building is done sucessfully! Now before moving forward th
 
 ### Add `.sitmodules` dependency
 
-If your IOC requires the site speicific modules, you must add `.sitmodules` file into the top of your IOC.
+If your IOC requires the site specific modules, you must add `.sitmodules` file into the top of your IOC.
 Please go your IOC, and add `.sitemodules` file. 
 
 ```bash
