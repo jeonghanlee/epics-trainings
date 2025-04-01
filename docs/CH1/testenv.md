@@ -32,7 +32,6 @@ This file defines a record instance named `temperature:water`.
 
 Save this content as `water.db`.
 
-
 ## Run your first `softioc`
 
 Now we start the `softIocPVX` executable (a generic IOC program included with EPICS base) using the database file we just created.
