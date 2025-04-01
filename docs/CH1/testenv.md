@@ -60,7 +60,7 @@ iocRun: All initialization complete
 ```
 Leave this terminal running.
 
-4. At the IOC shell prompt (`7.0.7 >`), type `db`l (database list) and press Enter to see the PVs loaded:
+4. At the IOC shell prompt (`7.0.7 >`), type `dbl` (database list) and press Enter to see the PVs loaded:
 
 ```bash
 # In Terminal 1 (IOC)
