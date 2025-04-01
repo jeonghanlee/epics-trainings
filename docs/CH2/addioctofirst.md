@@ -1,23 +1,19 @@
 # Expanding Your First IOC: Adding Another IOC
-
 Building upon your first IOC, this chapter demonstrates how the ALS-U environment facilitates managing multiple, related IOC instances from a single, centralized codebase repository (identified by a unique `APPNAME`). You will learn to use different options (`-l LOCATION`, `-d device name`, `-f FOLDER`) of the `generate_ioc_structure.bash` tool to add new IOC configurations (creating new subdirectories within `iocBoot`) while reusing the core application code found in `<APPNAME>App`. The script's validation logic (like enforcing case-sensitivity for `APPNAME`) and the benefits of this shared codebase approach for maintenance and collaboration are highlighted through practical examples.
 
 ## Lesson Overview
-
 In this lesson, you will learn how to:
 * Add a new IOC application with a different `LOCATION` to the existing `APPNAME` (device name).
 * Add a new IOC application with a different "application name" (a unique identifier for this new IOC instance) and `LOCATION`, while still using the same `APPNAME` (device name).
 * Add a new IOC application with a different "application name", `LOCATION`, and a git clone folder name (repository name), while still using the same `APPNAME` (device name)
 
 ## Case 1: Your IOC Application name does match with the IOC repository `APPNAME`
-
 This is the most common and preferred case. We start with the step of cloning `tools` and `mouse` from scratch.
 
 ```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/sandbox/jeonglee-mouse.git mouse   # note that we have to use `mouse` folder name here, as this will be the `APPNAME` used in the subsequent `generate_ioc_structure.bash` command.
 ```
-
 Now we would like to create an IOC with `mouse` as the **APPNAME** and `park` as **LOCATION** with the same git folder or repository name `mouse`.
 
 ```shell
@@ -54,7 +50,6 @@ Exist : .gitattributes
 ```
 
 Please enter `mouse` folder, and execute `tree` command
-
 ```shell
 $ cd mouse/
 mouse $  tree --charset=ascii -L 2
@@ -90,17 +85,13 @@ mouse $  tree --charset=ascii -L 2
 
 Now, you can see there are two folders, `iochome-mouse` and `iocpark-mouse`, in the `iocBoot` folder.  These two folders represent your different IOC applications based on the same `mouse` EPICS IOC code repository.
 
-
 ## Case 2: Your IOC Application name does not match with the IOC `APPNAME`
-
 This happens frequently when you work in the existing IOC application. We start with the step of cloning `tools` and `mouse` from scratch.
-
 
 ```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/sandbox/jeonglee-mouse.git mouse  # note that we have to use `mouse` folder name here, as this corresponds to the `APPNAME` we will use in the next step, even though the IOC application name will be different.
 ```
-
 Now we would like to create an IOC with `woodmouse` as the IOC application name (using the `-d` option), `park` as **LOCATION**, within the same Git repository named `mouse` based on the **APPNAME** as `mouse`.
 
 ```shell
@@ -137,7 +128,6 @@ Exist : .gitattributes
 ```
 
 You can see the `iocBoot/iocpark-woodmouse` folder, and we also have the same `mouseApp` folder.
-
 ```shell
 $ tree --charset=ascii -L 2 mouse/
 mouse/
@@ -170,7 +160,6 @@ mouse/
 
 11 directories, 16 files
 ```
-
 Now, we can revisit the folders `iochome-mouse`, `iocpark-mouse`, and `iocpark-woodmouse` shortly. Please check the difference among `iochome-mouse`, `iocpark-mouse`, and `iocpark-woodmouse`. You can do this with a generic Linux command-line tool, such as `diff`.
 
 ```shell
@@ -186,7 +175,6 @@ iocBoot $ diff iochome-mouse/st.cmd iocpark-mouse/st.cmd
 ---
 > #--asSetFilename("$(DB_TOP)/access_securitypark-mouse.acf")
 ```
-
 
 ```shell
 iocBoot $ diff iochome-mouse/st.cmd iocpark-woodmouse/st.cmd 
@@ -204,9 +192,7 @@ iocBoot $ diff iochome-mouse/st.cmd iocpark-woodmouse/st.cmd
 
 Historically, the variables `IOC` and `IOCNAME` have been a source of confusion. Therefore, we want to define them clearly from the outset, as these variables are used extensively to identify your IOC in the production environment.
 
-
 ## Case 3: Your clone folder name does not match with the IOC `APPNAME` (directory)
-
 In practice, developers may encounter situations where the name of the cloned Git repository folder differs from the IOC's `APPNAME` (device name). The recommended practice within the ALS-U EPICS environment is to ensure that the Git repository name matches the primary `APPNAME` (device name) of the IOC it contains, especially at the beginning of the development workflow. However, we also need to accommodate existing IOC applications and provide developers with a more flexible solution for their Git workflow (clone, branch, or fork).
 
 ```shell
@@ -245,7 +231,6 @@ Exist : .gitattributes
 >> We are in /home/jeonglee/AAATemps/sandbox
 ```
 
-
 ```shell
 $ tree --charset=ascii -L 2 jeonglee-mouse/
 jeonglee-mouse/
@@ -280,10 +265,7 @@ jeonglee-mouse/
 
 The `-f` option allows us to specify the existing top-level folder (jeonglee-mouse in this case) where the IOC application structure should be created. This is useful when the cloned repository name does not match the desired **APPNAME** for the IOC.
 
-
 ## Case 4: Your clone folder name does not match with the IOC `APPNAME` (directory) and you use the wrong application name.
-
-
 ```shell
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/sandbox/jeonglee-mouse.git
@@ -320,7 +302,6 @@ Usage    : tools/generate_ioc_structure.bash [-l LOCATION] [-d DEVICE] [-p APPNA
 In this case, the template generator will provide an explanation and will not proceed with the creation of a new IOC application. This is to enforce consistency in the `APPNAME` casing within the repository, aligning with the principle of keeping similar IOC codes together for better maintenance and collaboration.
 
 ## Assignments
-
 * Compile and Run Your IOC Applications: Navigate into the top-level directory of your IOC repository (e.g., mouse or jeonglee-mouse). For each of the IOC applications you created (e.g., `iocpark-mouse`, `iocpark-woodmouse`, `iocbts-mouse`), compile the code using the make command in the top-level directory. Then, navigate into the respective iocBoot subdirectory (e.g., `iocBoot/iocpark-mouse`) and run the IOC using the `./st.cmd` command.
 
 * Push Your Local Changes: Ensure you have added all your changes using `git add .` and committed them with a descriptive message using `git commit -m "Your commit message"`. Then, push your local changes to your sandbox repository on **GitLab**.
