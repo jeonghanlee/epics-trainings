@@ -45,7 +45,6 @@ Now we start the `softIocPVX` executable (a generic IOC program included with EP
 $ source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash
 ```
 3. Run `softIocPVX`, telling it to load (`-d`) your database file (`water.db`). Make sure you run this in the same directory where you saved `water.db`.
-
 ```bash
 # In Terminal 1 (IOC)
 $ softIocPVX -d water.db
@@ -61,6 +60,7 @@ iocRun: All initialization complete
 7.0.7 >
 ```
 Leave this terminal running.
+
 4. At the IOC shell prompt (`7.0.7 >`), type `db`l (database list) and press Enter to see the PVs loaded:
 
 ```bash
