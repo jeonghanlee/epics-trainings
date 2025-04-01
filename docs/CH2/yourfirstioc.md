@@ -3,7 +3,6 @@
 This chapter provides your first hands-on experience creating an Input/Output Controller (IOC) using the standardized ALS-U EPICS environment tools. You will clone the template generator repository, use the `generate_ioc_structure.bash` script to create a basic IOC skeleton based on a name and location, explore the fundamental configuration files found in the configure and mouseApp directories (specifically `RELEASE` and `Makefile`), and learn the essential commands (`make`, `./st.cmd`) to build and execute your first simple IOC instance.
 
 ## Lesson Overview
-
 In this lesson, you will learn how to:
 * Generate and execute the IOC using the ALS-U IOC template generator
 * Understand the purpose of key generated folders (`configure`, `iocBoot`, `mouseApp`).
@@ -16,14 +15,12 @@ To build an EPICS Input Output Controller (IOC), there are plenty of ways to do 
 Remembering all the necessary database definition (`.dbd`) files and dependent library links required to build even a simple IOC can be cumbersome and error-prone. To address this, we use the ALS-U EPICS template generator (found in the tools repository on the ALS GitLab server), which automates the creation of a standard IOC structure with correctly configured Makefiles.
 
 ## Prerequisites
-
 * SSH Access: Users need SSH access to the ALS GitLab repository to clone the tools repository. Contact the controls group if you need access.
 * EPICS Environment: A working ALS-U EPICS environment (as set up in Chapter 1) must be available and sourced in your terminal.
 * Basic Linux Skills: Familiarity with basic commands like `cd`, `ls`, `mkdir`, `source`, `bash`.
 * Text Editor: Access to a text editor (nano, vi, emacs, etc.) for examining files.
 
 ## Download the `tools` into your local machine
-
 First, ensure you have the template generator tools. Clone the tools repository from the ALS GitLab server into a suitable location (e.g., your home directory or a development workspace). You only need to do this once.
 
 ```shell
@@ -34,18 +31,14 @@ $ git clone ssh://git@git-local.als.lbl.gov:8022/alsu/tools.git
 This will create a tools directory containing the generator script.
 
 ## The `generate_ioc_structure.bash` Script
-
 Located within the tools repository, this script automates the creation of the standard ALS-U IOC directory structure, significantly reducing the manual workflow potentially outlined in older development guides.
 
 It requires two mandatory options:
-
 * `-p` <**APPNAME**>: The Device Name or primary application name for your IOC (e.g., `mouse`).
 * `-l` <**LOCATION**>: The location identifier for your IOC (e.g., `home`).
-
 These names **must** be chosen according to the official IOC Name Naming Convention document to maintain consistency across ALS-U.
 
 ## First example: Creating, Building, and Running the `mouse` IOC
-
 Let's create a very simple example IOC using the generator. We will use `mouse` as the **APPNAME** and `home` as **LOCATION**. Note that we use the following assumption that the **APPNAME** is the same as an IOC application name. However, in the reality, sometime, it is difficult to keep that assumption consistently. We will cover that case later. 
 
 1. Ensure Environment is Active: Open a terminal and source the desired ALS-U EPICS environment setup script:
@@ -70,7 +63,6 @@ mouse $ make
 Watch for any error messages during the build.
 
 5. Navigate to the Boot Directory: The runnable IOC instance files are placed in a specific subdirectory within iocBoot. The naming convention is typically `ioc<LOCATION>-<APPNAME>`.
-
 ```shell
 mouse $ cd iocBoot/iochome-mouse
 ```
@@ -85,11 +77,9 @@ You should see EPICS startup messages, version information, and finally the IOC 
 (The tools script supports more complex scenarios, but this covers the fundamental generate-build-run cycle.)
 
 ## Exploring the Generated Folders
-
 After running the generator and make, several directories are created. Let's examine the three most important ones for developers:`configure`, `iocBoot`, and `mouseApp`.
 
 ### A Configuration Files Folder (`configure`)
-
 This folder contains several predefined configuration files that work well within the standard EPICS building system.
 
 In `configure`, `RELEASE` and `CONFIG_SITE` are the files most often opened and updated. Please open `configure/CONFIG_SITE` first to review its contents.
@@ -98,7 +88,6 @@ With the ALS-U EPICS environment and how to deploy the EPICS IOC within the ALS-
 In this folder, you will primarily care about the `RELEASE` file, as the template-generated configuration files will likely not need modification.
 
 Please open the `RELEASE` file. You will see the following templated generated content:
-
 ```makefile
 ...
 # Variables and paths to dependent modules:
@@ -160,10 +149,8 @@ PVXS=$(MODULES)/pvxs
 
 # EPICS_BASE should appear last so earlier modules can override stuff:
 EPICS_BASE = /home/jeonglee/epics/1.1.1/debian-12/7.0.7/base
-
 ...
 ```
-
 This file contains EPICS module dependencies. You only need to remove the `#` symbol before the required modules for your own IOC application. The `EPICS_BASE` environment variable (set when you sourced the environment) takes precedence over the value in this file during the generation of your ioc structure by a template generator. Therefore, for this workflow, you typically don't need to modify the `EPICS_BASE` line here. We will revisit this file with a practical exercise later in the guidebook.
 
 ### IOC Startup Folder (`iocBoot/iochome-mouse`)
@@ -178,7 +165,6 @@ This directory contains the files required to run a specific configured instance
     * Performing final initialization and starting IOC processing (`iocInit`). The template generator creates a basic `st.cmd` file that handles the essentials for starting a simple IOC. You will modify this file frequently as you add databases and hardware support.
 
 ### Application Source Folder (`mouseApp/src`)
-
 This directory and its subdirectories (`Db`, `src`) contain the source code specific to your IOC application (`mouse` in this case).
 
 * `mouseApp/Db/`: The conventional location for your database files (`.db`, `.proto`, `.template`, `.substitutions`). (We will add files here in later lessons).
@@ -230,7 +216,6 @@ endif
 * Automatic Dependencies: Similar to the overview step, these `ifneq ($(MODULE),)` blocks automatically include the necessary database definition files (`.dbd`) and link the required module libraries only if you have uncommented the corresponding `MODULE` variable in `configure/RELEASE`. This significantly simplifies managing build dependencies. For this first basic IOC, you don't need to modify this file because you haven't added any dependencies in `RELEASE` or any custom C code in `Common_SRCs`.
 
 ## A Few Useful Build Commands
-
 Here are essential make commands used for building and cleaning EPICS IOCs, typically run from the top-level IOC directory (e.g., `mouse`):
 
 * `make`: (Default target) Compiles changed source files, processes database definitions, links libraries, and installs the executable and runtime files into `bin/`, `lib/`, `dbd/`, `db/`. This is the command you use most often to build or update your IOC.
