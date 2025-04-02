@@ -8,7 +8,6 @@ In the previous lesson, you created a basic IOC structure. Now, we'll add functi
 We will later simulate the serial device using a TCP listening utility (like socat, or tcpsvd), allowing you to test the IOC without needing physical hardware that speaks TCP/IP.
 
 ## Lesson Overview
-
 In this lesson, you will learn to:
 
 * Add and configure EPICS modules for device communication (e.g., `Asyn`, `StreamDevice`).
@@ -17,7 +16,6 @@ In this lesson, you will learn to:
 * Build the IOC and examine its results.
 
 ## Step 1: Generate the IOC Structure
-
 First, ensure your EPICS environment is set up, then use the template generator script to create a new IOC structure. We'll use `jeonglee-Demo` for the **APPNAME** and `B46-182` for the **LOCATION** in this example. Replace `jeonglee-Demo` with your preferred name if desired.
 
 ```shell
@@ -46,7 +44,6 @@ jeonglee-Demo $ tree --charset=ascii -L 1
 ```
 
 ## Step 2: Configure Dependencies (`configure/RELEASE`)
-
 We need to tell the build system that our IOC depends on `Asyn`, `Calc`, and `StreamDevice`. Edit the `configure/RELEASE` file using your preferred text editor. With the ALS-U EPICS Environment, `StreamDevice` was built with support for `sCalcout` record, so you need to add `Calc` module dependency in your IOC.
 
 ```shell
@@ -69,9 +66,7 @@ STREAM = $(MODULES)/StreamDevice   # <-- UNCOMMENTED
 
 Save and close the `configure/RELEASE` file.
 
-
 ## Step 3: Understanding Dependency Handling in `jeonglee-DemoApp/src/Makefile`
-
 After defining module dependencies in `configure/RELEASE` (Step 2), the EPICS build system uses `Makefiles` like `<APPNAME>App/src/Makefile` to determine which components to include when building the final IOC application.
 
 You can examine this file to see how standard dependencies, like the ones you just uncommented, are typically handled automatically by the template generator.
@@ -122,9 +117,7 @@ Because of these standard `ifneq` blocks within `Makefile`, the necessary databa
 
 Therefore, **no manual editing** of `jeonglee-DemoApp/src/Makefile` is required just to include these standard module dependencies configured in Step 2. You would typically only edit this file if you were adding your own C/C++ source code files to `Common_SRCs` or needed to link other non-standard libraries manually.
 
-
 ## Step 4: Create StreamDevice and EPICS Database Files (`jeonglee-DemoApp/Db`)
-
 Define the communication protocol and the EPICS records database:
 
 * Create the Protocol File (`training.proto`)
@@ -141,7 +134,7 @@ Add the following content:
 sendRawQuery {
   ExtraInput = Ignore; # Standard setting for processing record output
   out "%s";            # Format to send: output the string from the record's OUT field
-  in  "%(\$1)40c";     # Format to read: read up to 40 chars (%40c) into the PV name passed as argument $1
+  in "%(\$1)40c";     # Format to read: read up to 40 chars (%40c) into the PV name passed as argument $1
 }
 ```
 
@@ -179,7 +172,6 @@ record(stringin, "$(P)$(R)Cmd-RB")
 Save and close the `training.db` file.
 
 ## Step 5: Check the Makefile (`jeonglee-DemoApp/Db/Makefile`)
-
 Now that you've placed your StreamDevice source files (`training.proto`, `training.db`) in the `jeonglee-DemoApp/Db` directory (Step 4), let's look at how the build system includes them. Following EPICS conventions, the Makefile located within this same directory (`jeonglee-DemoApp/Db/Makefile`) is usually responsible for handling these types of files.
 
 Often, this `Db/Makefile` is set up to automatically find and include any database (`.db`) and protocol (`.proto`) files placed within the `jeonglee-DemoApp/Db` directory. This means you usually don't need to manually edit this `Makefile` every time you add a new `.db` or `.proto` file. We will cover the different scenario in a more advanced topic for a separate lesson.
@@ -209,9 +201,7 @@ DB += $(patsubst ../%, %, $(wildcard ../*.proto))
 
 Because the template's `Db/Makefile` is designed to automatically find `.db` and `.proto` files in the `jeonglee-DemoApp/Db` directory, **no changes are needed in this `Makefile`** for the `training.db` and `training.proto` files you created in Step 4. The build system automatically incorporates these files into the build process and handles their installation (by default to `$(TOP)/db`). This automation significantly simplifies the development workflow, especially for developers newer to EPICS or when creating less complex IOCs.
 
-
 ## Step 6: Configure Startup Script (iocBoot/iocB46-182-jeonglee-Demo/st.cmd)
-
 Now, we need to configure the IOC's startup script (`st.cmd`). This script runs when the IOC starts and is responsible for setting up communication, loading database records, and initializing the system. We will modify it to:
 
 * Define the macros (`$(P)`, `$(R)`, `$(PORT)`) used in our database (`training.db`).
@@ -316,7 +306,6 @@ ClockTime_Report # Example site-specific utility
 ```
 
 Key Points Reminder:
-
 * Variables: Using `epicsEnvSet` makes the script easier to read and modify.
 * Paths: `DB_TOP` and `STREAM_PROTOCOL_PATH` point to the runtime location of database/protocol files.
 * Macros: `PREFIX_MACRO $(P)` and `DEVICE_MACRO $(R)` are defined and passed to dbLoadRecords.
@@ -324,7 +313,7 @@ Key Points Reminder:
 * iocInit: Must be called after configuration and record loading.
 * Comments: Lines starting with `#--` are comments ignored by the IOC shell during the runtime; they are used in `st.cmd` for explanation.
 
-After editing and saving the st.cmd file, return to the top-level IOC directory to prepare for the next steps:
+After editing and saving the `st.cmd` file, return to the top-level IOC directory to prepare for the next steps:
 
 ```shell
 # Command executed from: iocBoot/iocB46-182-jeonglee-Demo
@@ -335,13 +324,10 @@ jeonglee-Demo $ pwd
 /path/to/your/jeonglee-Demo # Should show the top-level directory
 ```
 
-
 ## Step 7: Build the IOC and Check Structure
-
 With the source files (`.proto`, `.db`) created and the configuration files (`RELEASE`, `st.cmd`, `Makefiles` checked/understood) in place, you can now build the IOC application executable.
 
 The EPICS build system, invoked using the `make` command from the top-level IOC directory, orchestrates this process. It compiles necessary code, processes database definitions (`.dbd`), links required libraries (EPICS Base, Asyn, Calc, StreamDevice, PVXS, etc. based on your `RELEASE` file), and installs the resulting executable and related runtime files into standard subdirectories (`bin`, `lib`, `dbd`, `db`) respect to the runtime `${TOP}` path.
-
 
 ### Build the IOC:
 Ensure you are in the top-level directory of your IOC (e.g., `/path/to/your/jeonglee-Demo`) and execute the `make` command:
@@ -354,7 +340,6 @@ jeonglee-Demo $ make
 You will see various compilation and linking messages scroll by. This might take a moment, especially the first time you build or after significant changes. Pay close attention to the end of the output to ensure there are no error messages.
 
 ### Verify Build Output and Directory Structure:
-
 A successful build creates several important directories and files. It's crucial to verify they exist as expected.
 
 * Check Key Directories: After make finishes, list the contents of your top-level directory. You should now see `bin`, `db`, `dbd`, and lib directories alongside the source directories (`configure`, `jeonglee-DemoApp`, `iocBoot`, etc.). There is the `iocsh` folder, which we will cover that subject in a advanced lesson later.
@@ -415,9 +400,7 @@ libstream.so => /path/to/epics/modules/StreamDevice/lib/linux-x86_64/libstream.s
 
 Seeing these libraries confirms that Step 2 (editing `RELEASE`) and the Makefiles worked correctly to include the necessary code.
 
-
 ### Troubleshooting: If make fails with errors:
-
 * Read the error messages carefully. They often point to the specific file and line number causing the issue.
 * Common errors include:
   * Typos in `configure/RELEASE` or `Makefiles`.
