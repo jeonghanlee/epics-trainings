@@ -3,7 +3,6 @@
 We will simulate the serial device using the simulator scripts created in the previous lesson, allowing you to test the IOC without needing physical hardware that speaks TCP/IP. This final step involves running both the IOC and the simulator concurrently and using EPICS Channel Access tools to verify communication.
 
 ## Lesson Overview
-
 In this lesson, you will learn to:
 
 * Start the TCP echo server simulator.
@@ -14,7 +13,6 @@ In this lesson, you will learn to:
 * Confirm end-to-end communication via Asyn and StreamDevice.
 
 ## Prerequisites
-
 Before starting this lesson, ensure you have:
 
 * Successfully Built IOC: The `jeonglee-Demo` IOC application from the previous lesson must be built successfully (result of Step 7 in that lesson).
@@ -25,7 +23,6 @@ Before starting this lesson, ensure you have:
 * Terminal Windows: You will need **three separate terminal windows** for this lesson: one for the simulator, one for the IOC, and one for running CA client commands.
 
 ## Step 1: Run the TCP Simulator
-
 First, start the echo server simulator. It needs to be running before the IOC starts so the IOC can connect to it.
 
 1. Open your first terminal window.
@@ -40,7 +37,6 @@ simulator$ ./tcpserver.bash
 
 
 ## Step 2: Run the EPICS IOC
-
 Next, start the `jeonglee-Demo` IOC application.
 
 1. Open your second terminal window.
@@ -70,7 +66,6 @@ iocB46-182-jeonglee-Demo$ ./st.cmd
 7. The IOC terminal should eventually show a prompt indicating the EPICS base version (e.g., 7.0.7>), signifying the IOC is running and ready. Leave this terminal running.
 
 ## Step 3: Test Communication with Channel Access
-
 Now, with both the simulator and the IOC running and connected, we can use Channel Access (CA) client tools (`caput`, `caget`) to interact with the PVs defined in training.db and test the communication loop.
 
 Recall the PVs created (using `P=jeonglee:` and `R=myoffice:` from `st.cmd`):
@@ -90,7 +85,6 @@ jeonglee:myoffice:Cmd-RB
 ```
 
 Now, let's test using the CA clients:
-
 1. Open your third terminal window.
 2. Make sure your EPICS environment is sourced here as well, so `caput` and `caget` are available:
 ```shell
@@ -129,7 +123,6 @@ $ caget jeonglee:myoffice:Cmd-RB
 Success! You have verified end-to-end communication between your IOC and the TCP simulator using Asyn and StreamDevice.
 
 ### Troubleshooting
-
 If your `caput` or `caget` commands fail with a message like Channel connect timed out: 'PVNAME' not found., it means the CA client tools cannot find your running IOC over the network.
 
 ```shell
@@ -162,7 +155,6 @@ $ pvxget jeonglee:myoffice:Cmd-RB
 ```
 
 ## Summary
-
 In this lesson, you successfully:
 
 * Ran the TCP echo server simulator.

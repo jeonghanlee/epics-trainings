@@ -1,6 +1,5 @@
 # Your First ALS-U EPICS IOC
-
-This chapter provides your first hands-on experience creating an Input/Output Controller (IOC) using the standardized ALS-U EPICS environment tools. You will clone the template generator repository, use the `generate_ioc_structure.bash` script to create a basic IOC skeleton based on a name and location, explore the fundamental configuration files found in the configure and mouseApp directories (specifically `RELEASE` and `Makefile`), and learn the essential commands (`make`, `./st.cmd`) to build and execute your first simple IOC instance.
+This section provides your first hands-on experience creating an Input/Output Controller (IOC) using the standardized ALS-U EPICS environment tools. You will clone the template generator repository, use the `generate_ioc_structure.bash` script to create a basic IOC skeleton based on a name and location, explore the fundamental configuration files found in the configure and mouseApp directories (specifically `RELEASE` and `Makefile`), and learn the essential commands (`make`, `./st.cmd`) to build and execute your first simple IOC instance.
 
 ## Lesson Overview
 In this lesson, you will learn how to:
