@@ -2,7 +2,7 @@
 
 Here is the future lessons list, which I would like to develop.
 
-* `iocsh`
+* `iocsh`: explain how it works within the ALS-U EPICS IOC template generator, and a simple handon excise based on the existing simulator
 * `st.cmd` for multiple same devices after `iocsh`
 * `st.cmd` after and before iocInit
 * autosave
