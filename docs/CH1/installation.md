@@ -1,6 +1,6 @@
 # ALS-U EPICS Environment Configuration and Installation
 
-This chapter covers the essential first steps for setting up the ALS-U EPICS environment locally. You will clone the central environment repository using git from the ALS GitLab server and then learn how to activate a specific version (e.g., for Debian 12 or Rocky 8) by sourcing the appropriate `setEpicsEnv.bash` script in your terminal session. Basic verification steps are also included.
+This section covers the essential first steps for setting up the ALS-U EPICS environment locally. You will clone the central environment repository using git from the ALS GitLab server and then learn how to activate a specific version (e.g., for Debian 12 or Rocky 8) by sourcing the appropriate `setEpicsEnv.bash` script in your terminal session. Basic verification steps are also included.
 
 ## Lesson Overview
 
