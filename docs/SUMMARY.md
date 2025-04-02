@@ -14,7 +14,7 @@
     - [Continous Integration](CH2/ciwithgitlab.md)
 
 # Chapter 3
-- [SSecond EPICS IOC and Serial Simulator](CH3/README.md)
+- [Second EPICS IOC and Serial Simulator](CH3/README.md)
     - [Configure the Second IOC](CH3/yoursecondioc.md)
     - [Create the TCP Simulator](CH3/iocsimulator.md)
     - [Test IOC-Simulator Communication](CH3/secondiocwithsim.md)
@@ -27,6 +27,7 @@
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/stcmd_phases.md)
 
 ----------
+# Appendices
 [EPICS environment](misc/EPICSEnv.md)
 [Future Lessons](misc/FutureLessonsList.md)
 [Contributors](misc/contributors.md)
