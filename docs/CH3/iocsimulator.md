@@ -70,7 +70,7 @@ Add the following content. This script checks for `tcpsvd` first, then falls bac
 PORT="$1"  # Port matching the IOC configuration in st.cmd
 
 if [ -z "$PORT" ]; then
-  PORT=9399 
+    PORT=9399 
 fi
 
 # Determine the directory where this script resides to reliably find the handler script
