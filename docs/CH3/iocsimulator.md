@@ -67,7 +67,11 @@ Add the following content. This script checks for `tcpsvd` first, then falls bac
 #  - author : Jeong Han Lee, Dr.rer.nat.
 #  - email  : jeonglee@lbl.gov
 
-PORT=9399 # Port matching the IOC configuration in st.cmd
+PORT="$1"  # Port matching the IOC configuration in st.cmd
+
+if [ -z "$PORT" ]; then
+  PORT=9399 
+fi
 
 # Determine the directory where this script resides to reliably find the handler script
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
