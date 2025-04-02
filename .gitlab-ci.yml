@@ -1,15 +1,8 @@
-stages:
-    - deploy
+include:
+  - project: alsu/ci
+    ref: master
+    file:
+      - 'mdbook.yml'
 
-pages:
-  stage: deploy
-  image: jeonghanlee/mdbook
-  script:
-    - rustc --version
-    - mdbook --version
-    - mdbook build -d public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  artifacts:
-    paths:
-      - public
+stages:
+  - deploy
