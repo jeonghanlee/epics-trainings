@@ -28,6 +28,7 @@
 
 ----------
 # Appendices
-[EPICS environment](misc/EPICSEnv.md)
-[Future Lessons](misc/FutureLessonsList.md)
+- [EPICS environment](misc/EPICSEnv.md)
+- [Future Lessons](misc/FutureLessonsList.md)
+----------
 [Contributors](misc/contributors.md)
