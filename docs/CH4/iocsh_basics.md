@@ -22,7 +22,7 @@ Let's look at the example you provided, converting a direct configuration into o
 
 Here, the Asyn port configuration and database loading are done directly in the main script:
 
-```shell
+```c
 ## st.cmd
 ...
 
