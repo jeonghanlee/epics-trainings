@@ -2,7 +2,7 @@
 
 In previous chapters, we configured our IOCs directly within the main startup script, typically `st.cmd`. While functional for simple IOCs, this approach can become difficult to manage as configurations grow more complex or when you need to configure multiple similar devices.
 
-This section introduces a more modular and maintainable approach used within the ALS-U EPICS Environment: encapsulating specific configuration tasks into reusable **`iocsh` script files** (often saved with a `.iocsh` extension). These snippet files contain standard `iocsh` commands but are designed to be called from the main `st.cmd` using the `iocshLoad` command, allowing for parameterization via macros.
+This section introduces a more modular and maintainable approach used within the ALS-U EPICS Environment: encapsulating specific configuration tasks into reusable **`iocsh`** script files (often saved with a `.iocsh` extension). These snippet files contain standard `iocsh` commands but are designed to be called from the main `st.cmd` using the `iocshLoad` command, allowing for parameterization via macros.
 
 ## Motivation: Why Use Snippet Files?
 
@@ -18,7 +18,7 @@ Creating reusable `iocsh` script files offers several advantages:
 
 Let's look at the example you provided, converting a direct configuration into one using a reusable snippet.
 
-**Original Approach (`st.cmd`)**
+**Original Approach** (`st.cmd`)
 
 Here, the Asyn port configuration and database loading are done directly in the main script:
 
@@ -46,13 +46,13 @@ dbLoadRecords("$(DB_TOP)/training.db", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT
 
 ```
 
-**Refactored Approach (`st2.cmd` + `training_device.iocsh`)**
+**Refactored Approach** (`st2.cmd` + `training_device.iocsh`)
 
 Now, the main script (`st2.cmd`) defines some parameters and then calls a separate snippet file (`training_device.iocsh`) to perform the actual configuration.
 
 * `st2.cmd`
 
-```shell
+```c
 ...
 epicsEnvSet("DB_TOP", "$(TOP)/db")
 epicsEnvSet("IOCSH_LOCAL_TOP",  "$(TOP)/iocsh")
@@ -67,7 +67,7 @@ iocshLoad("$(IOCSH_LOCAL_TOP)/training_device.iocsh", "PREFIX=$(PREFIX_MACRO),DE
 ```
 
 * `training_device.iocsh` in `jeonglee-DemoApp/iocsh`:
-```shell
+```c
 ####################################################################################################
 ############ START of training-device.iocsh ########################################################
 #-- PREFIX         :
