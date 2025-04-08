@@ -2,7 +2,7 @@
 
 In previous chapters, we configured our IOCs directly within the main startup script, typically `st.cmd`. While functional for simple IOCs, this approach can become difficult to manage as configurations grow more complex or when you need to configure multiple similar devices.
 
-This section introduces a more modular and maintainable approach used within the ALS-U EPICS Environment: encapsulating specific configuration tasks into reusable **`iocsh` script files** (often saved with a `.iocsh` extension). These snippet files contain standard `iocsh` commands but are designed to be called from the main `st.cmd` using the `iocshLoad` command, allowing for parameterization via macros.
+This section introduces a more modular and maintainable approach used within the ALS-U EPICS Environment: encapsulating specific configuration tasks into reusable **`iocsh`** script files (often saved with a `.iocsh` extension). These snippet files contain standard `iocsh` commands but are designed to be called from the main `st.cmd` using the `iocshLoad` command, allowing for parameterization via macros.
 
 ## Motivation: Why Use Snippet Files?
 
@@ -117,34 +117,44 @@ In `st2.cmd`, `epicsEnvSet("IOCSH_LOCAL_TOP", "$(TOP)/iocsh")` defines a standar
 
 ### 2. The `iocshLoad` Command
 
-The command is to read and evaluate IOC shell commands from the given file. A list of macros can be supplied as a parameter. These macros are treated as environment variables **during** exectution of the file’s commands.  Its basic syntax is:
+This command is the core mechanism for executing commands from another file. Its basic syntax is:
 
-`int iocshLoad(const char *pathname, const char *macros)`
+`iocshLoad("path/to/snippet.iocsh", "MACRO1=VALUE1,MACRO2=VALUE2,...")`
 
 * The first argument is the path to the snippet file. Using variables like `$(IOCSH_LOCAL_TOP)` makes paths relative and portable.
-* The second argument is a comma-separated string of `MACRO=VALUE` pairs. These macros (`$(MACRO1)`, `$(MACRO2)`, etc.) become available for substitution *within* the loaded `iocsh` file.
+* The second argument is a comma-separated string of MACRO=VALUE pairs. These macros (`$(MACRO1)`, `$(MACRO2)`, etc.) become available for substitution wherever `$(MACRO)` appears within the loaded `snippet.iocsh` file.
 * The `VALUE` part can itself be a literal string, an environment variable (`$(ENV_VAR)` set via `epicsEnvSet`), or even another macro defined earlier in the calling script. In the example, `PORT_NAME=$(ASYN_PORT_NAME)` uses the value of the `ASYN_PORT_NAME` environment variable to define the `PORT_NAME` macro for the snippet.
 
 ### 3. Snippet File (`*.iocsh`) Structure
 
-* **Parameters:** Uses `$(MACRO)` syntax (e.g., `$(PORT_NAME)`, `$(PREFIX)`) to receive values passed via `iocshLoad`.
-* **Defaults:** `$(MACRO=DEFAULT)` syntax provides a fallback value if the macro isn't passed (e.g., `$(HOST=127.0.0.1)`).
-* **Documentation:** Clear comments explaining the purpose and required/optional macros are crucial for reusability.
-* **Conditional Logic:** The `$(ASYNTRACE=#--)` trick provides simple conditional execution – if `ASYNTRACE` is defined in the `iocshLoad` call (even if empty, like `ASYNTRACE=`), the line runs; otherwise, it becomes a comment.
+* Parameters: Uses `$(MACRO)` syntax (e.g., `$(PORT_NAME)`, `$(PREFIX)`) to receive values passed via iocshLoad.
+* Defaults: `$(MACRO=DEFAULT)` syntax provides a fallback value if the macro isn't passed (e.g., `$(HOST=127.0.0.1)`).
+* Documentation: Clear comments explaining the purpose and required/optional macros are crucial for reusability.
+* Conditional Logic: The `$(ASYNTRACE=#--)` trick provides simple conditional execution – if `ASYNTRACE` is defined in the iocshLoad call (even if empty, like `ASYNTRACE=`), the line runs; otherwise, it becomes a comment.
 
-**Consistency Note:** Inside `training_device.iocsh`, commands related to the Asyn port consistently use the `$(PORT_NAME)` macro, which receives its value from the `iocshLoad` call. This ensures the snippet correctly references the port name it's supposed to configure.
+* Consistency Note: Inside `training_device.iocsh`, commands related to the Asyn port now consistently use the `$(PORT_NAME)` macro, which receives its value from the `iocshLoad` call. This ensures the snippet correctly references the port name it's supposed to configure.
 
+## Useful EPICS IOC shell commands
+
+Even when using snippet files, the underlying commands are standard `iocsh` commands. You can still interact with the running IOC using the shell for debugging:
+
+* `dbl`: List loaded record types, simply EPICS PV (signal) list
+* `dbpr("recordName", interestLevel)`: Print record (signal) details.
+* `epicsEnvShow` : Print value of an environment variable, or all variables. 
+* `help`: List available commands.
+* `exit`: Exit the IOC shell (usually stops the IOC).
 
 ## Exercise: Refactor Your Simulator Configuration
 
 Now, apply this technique to the IOC configuration you created in Chapter 3 for the TCP simulator:
 
-1.  **Create Snippet File:** Create a new file, for example, `$(TOP)/jeonglee-DemoApp/iocsh/simulator_device.iocsh`.
-2.  **Move Commands:** Identify the `drvAsynIPPortConfigure`, `asynOctetSet*Eos`, and `dbLoadRecords` commands related to your simulator in your Chapter 3 `st.cmd` file and move them into `simulator_device.iocsh`.
-3.  **Parameterize:** Replace hardcoded values (like PV prefix, device name, port name, host, port) in the snippet file with `$(MACRO)` variables. Add documentation comments explaining the macros. Provide defaults for host (`127.0.0.1`) and port (`9399`).
-4.  **Define Location:** In your main `st.cmd`, ensure `IOCSH_LOCAL_TOP` is defined (e.g., `epicsEnvSet("IOCSH_LOCAL_TOP", "$(TOP)/iocsh")`).
-5.  **Modify `st.cmd`:** Remove the original commands you moved and add an `iocshLoad` command to call your new `simulator_device.iocsh`, passing the required macros (e.g., `PREFIX=$(MY_PREFIX)`, `DEVICE=$(MY_DEVICE_NAME)`, `PORT_NAME=$(SIM_PORT_NAME)` etc., using appropriate variable names from your `st.cmd`).
-6.  **Test:** Run the IOC. It should start and communicate with the simulator exactly as before, but now using the cleaner, modular structure.
+1.  **Create Snippet File**: Create a new file, for example, `$(TOP)/jeonglee-DemoApp/iocsh/simulator_device.iocsh`.
+2.  **Move Commands**: Identify the `drvAsynIPPortConfigure`, `asynOctetSet*Eos`, and `dbLoadRecords` commands related to your simulator in your Chapter 3 `st.cmd` file and move them into `simulator_device.iocsh`.
+3.  **Parameterize**: Replace hardcoded values (like PV prefix, device name, port name, host, port) in the snippet file with `$(MACRO)` variables. Add documentation comments explaining the macros. Provide defaults for host (`127.0.0.1`) and port (`9399`).
+4.  **Define Location**: In your main `st.cmd`, ensure `IOCSH_LOCAL_TOP` is defined (e.g., `epicsEnvSet("IOCSH_LOCAL_TOP", "$(TOP)/iocsh")`).
+5.  **Modify `st.cmd`**: Remove the original commands you moved and add an `iocshLoad` command to call your new `simulator_device.iocsh`, passing the required macros (e.g., `PREFIX=$(MY_PREFIX)`, `DEVICE=$(MY_DEVICE_NAME)`, `PORT_NAME=$(SIM_PORT_NAME)` etc., using appropriate variable names from your `st.cmd`).
+6. **Build**: After creating or modifying the `simulator_device.iocsh` file in your source directory, run `make` in your application's top-level directory. This command typically copies your `.iocsh` file from its source location (e.g., j`eonglee-DemoApp/iocsh/`) to the runtime iocsh folder (e.g., `$(TOP)/iocsh`) where the IOC expects to find it via `$(IOCSH_LOCAL_TOP)` or a similar path during startup.
+7.  **Test**: Run the IOC from its runtime directory (e.g., `iocBoot/iocB46-182-jeonglee-Demo`). It should start and communicate with the simulator exactly as before, but now using the cleaner, modular structure.
 
 ## Considerations
 
@@ -156,14 +166,3 @@ As you noted, there are some challenges when adopting this approach, especially 
 ## Conclusion
 
 Using `iocshLoad` and creating dedicated `*.iocsh` snippet files represents a best practice within the ALS-U EPICS Environment for managing IOC configurations. While it introduces some initial complexity compared to editing a single `st.cmd`, the long-term benefits in modularity, reusability, clarity, and maintainability are substantial, especially for complex systems. Mastering this technique is a key step towards developing robust and professional EPICS applications.
-
-
-## Useful EPICS IOC shell commands
-
-Even when using snippet files, the underlying commands are standard `iocsh` commands. You can still interact with the running IOC using the shell for debugging:
-
-* `dbl`: List loaded record types, simply EPICS PV (signal) list
-* `dbpr("recordName", interestLevel)`: Print record (signal) details.
-* `epicsEnvShow` : Print value of an environment variable, or all variables. 
-* `help`: List available commands.
-* `exit`: Exit the IOC shell (usually stops the IOC).
