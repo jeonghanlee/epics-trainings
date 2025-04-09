@@ -282,6 +282,31 @@ simulator$ parallel ./tcpserver.bash ::: 9399 9400 9401
 
 4. Stopping Parallel Servers: Use Ctrl+C in the parallel terminal. If processes linger, use `ps`/`pgrep` and `kill`.
 
+## Running Multiple Simulators without GNU Parallel
+
+1. Ensure you have to open three different terminals
+
+2. Run the following commands in three different terminals
+
+```shell
+# Terminal 1
+simulator$ ./tcpserver.bash 9399 advanced_connection_handler.sh
+```
+
+```shell
+# Terminal 2
+simulator$ ./tcpserver.bash 9400 advanced_connection_handler.sh
+```
+
+```shell
+# Terminal 3
+simulator$ ./tcpserver.bash 9401 advanced_connection_handler.sh
+```
+3. Test Each Instance: Use separate socat terminals to connect to ports 9399, 9400, and 9401 as needed. 
+
+4. Stopping Servers: Use Ctrl+C in the each terminal.
+
+
 ## Conclusion
 
 By separating the server launching logic (`tcpserver.bash`) from the connection handling logic (e.g., `connection_handler.sh`, `advanced_connection_handler.sh`), you gain significant flexibility. This allows you to easily create and test different simulated device behaviors, making the simulator a much more powerful tool for developing and debugging EPICS IOCs. The robust launcher script also facilitates running and managing multiple instances concurrently.
