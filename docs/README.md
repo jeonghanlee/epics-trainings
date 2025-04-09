@@ -24,8 +24,8 @@
 - [Advanced IOC Configuration](CH4/README.md)
     - [Working with `iocsh`: Script Files and Commands](CH4/iocsh_basics.md)
     - [Extending the TCP Simulator](CH4/iocsimulator2.md)
-    - [Database Templates and Substitution](CH4/db_templates.md)
     - [Managing Multiple Devices in `st.cmd`](CH4/multiple_devices.md)
+    - [Database Templates and Substitution](CH4/db_templates.md)
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/stcmd_phases.md)
 
 ----------
