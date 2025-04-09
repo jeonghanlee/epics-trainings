@@ -5,6 +5,7 @@ This chapter significantly expands on IOC development by delving into advanced c
 This chapter covers the following topics:
 
 * [Working with `iocsh`: Script Files and Commands](iocsh_basics.md): Developing startup script snippets (`*.iocsh` files) and understanding interactive shell usage.
+* [Update the TCP Simulator](iocsimulator2.md): Developing the TCP simulator to handle more generic device simulations 
 * [Database Templates and Substitution](db_templates.md): Using `.template` and `.substitution` files with `Db/Makefile` for reusable database definitions.
 * [Managing Multiple Devices in `st.cmd`](multiple_devices.md): Applying templates and `iocsh` commands in the startup script for efficient configuration.
 * [IOC Startup Sequence (`st.cmd` Phases)](stcmd_phases.md): Learning about commands executed before and after `iocInit()`.
