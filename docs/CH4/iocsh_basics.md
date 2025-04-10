@@ -160,7 +160,7 @@ Now, apply this technique to the IOC configuration you created in Chapter 3 for 
 
 Here is the example of the full `st2.cmd`. 
 
-```c
+```shell
 #!../../bin/linux-x86_64/jeonglee-Demo
 
 
