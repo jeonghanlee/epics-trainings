@@ -58,40 +58,39 @@ After setting up the `st.cmd` file as shown in the example above, the immediate 
 1. Prepare Environment: You will need multiple terminal windows:
     * One (or more) for running the simulator instances.
     * One for running the EPICS IOC.
-    * One for running Channel Access (CA) client commands (caput, caget).
+    * One for running Channel Access (CA) client commands (`caput`, `caget`).
 
-2. Finalize st.cmd: Complete the startup script by adding the essential iocInit command after all iocshLoad calls (and any other necessary dbLoad... commands).
+2. Finalize `st.cmd`: Complete the startup script by adding the essential iocInit command after all `iocshLoad` calls .
 
-3. Run the System (Order Matters):
-    * Start Simulators (Terminal 1+): In the simulator terminal(s), start the three TCP simulator instances (tcpserver.bash), ensuring they listen on ports 9399, 9400, and 9401 respectively (refer to Section 2 for methods). Leave them running.
-    * Start IOC (Terminal 2): In the IOC terminal, navigate to the IOC's boot directory (e.g., iocBoot/iocYourIOCName), ensure your EPICS environment is sourced, and execute the completed st.cmd file using the IOC binary: ../../bin/<arch>/YourIOCName st.cmd.
+3. Run the System:
+
+    * Start Simulators (Terminal 1+): In the simulator terminal(s), start the three TCP simulator instances (`tcpserver.bash`), ensuring they listen on ports 9399, 9400, and 9401 respectively (refer to Section 2 for methods). Leave them running.
+
+    * Start IOC (Terminal 2): In the IOC terminal, navigate to the IOC's boot directory (e.g., `iocBoot/iocYourIOCName`), ensure your EPICS environment is sourced, and execute the completed `st.cmd` file.
 
 4. Verify Operation (Terminals 2 & 3):
-    * Check IOC Logs (Terminal 2): Observe the IOC console output for messages indicating successful Asyn connections to TCP1, TCP2, and TCP3. Also, check for any errors during startup. Note that you might see Asyn trace messages related to TCP3 because ASYNTRACE= was passed for that instance.
-    * List PVs (Terminal 2): Once the IOC prompt appears (e.g., epics>), use the dbl command to list loaded PVs. Verify that PVs for all three instances are present (e.g., MYDEMO:SIM1:Cmd, MYDEMO:SIM1:Cmd-RB, MYDEMO:SIM2:Cmd, etc., assuming training.db was loaded by the snippet).
+    * Check IOC Logs (Terminal 2): Observe the IOC console output for messages indicating successful Asyn connections to `TCP1`, `TCP2`, and `TCP3`. Also, check for any errors during startup. Note that you might see Asyn trace messages related to `TCP3` because `ASYNTRACE=` was passed for that instance.
+
+    * List PVs (Terminal 2): Once the IOC prompt appears (e.g., `7.0.7>`), use the `dbl` command to list loaded PVs. Verify that PVs for all three instances are present (e.g., `MYDEMO:SIM1:Cmd`, `MYDEMO:SIM1:Cmd-RB`, `MYDEMO:SIM2:Cmd`, etc., assuming `training.db` was loaded by the snippet).
+
     * Test Communication (Terminal 3): In the CA client terminal (ensure EPICS environment is sourced):
-        * (Troubleshooting Tip): If CA commands fail to connect on localhost, run export EPICS_CA_ADDR_LIST=localhost in this terminal first.
-    
-        * Test Instance 1: Send a command and read the reply using the PVs associated with SIM1:
-    ```bash
-
-caput MYDEMO:SIM1:Cmd "Test1"
-caget MYDEMO:SIM1:Cmd-RB
-# Expected Reply: MYDEMO:SIM1:Cmd-RB       Test1 (or specific handler response)
-```
-        * Test Instance 2: Repeat for SIM2:
+           
+        * Test Instance 1: Send a command and read the reply using the PVs associated with `SIM1`:
         ```bash
-
-caput MYDEMO:SIM2:Cmd "Test2"
-caget MYDEMO:SIM2:Cmd-RB
-# Expected Reply: MYDEMO:SIM2:Cmd-RB       Test2 (or specific handler response)
-```
-        * Test Instance 3: Repeat for SIM3:
-
-```
-
-    caput MYDEMO:SIM3:Cmd "Test3"
-    caget MYDEMO:SIM3:Cmd-RB
-    # Expected Reply: MYDEMO:SIM3:Cmd-RB       Test3 (or specific handler response)
-```
+        caput MYDEMO:SIM1:Cmd "Test1"
+        caget MYDEMO:SIM1:Cmd-RB
+        #Expected Reply: `MYDEMO:SIM1:Cmd-RB       Test1 (or specific handler response)
+        ```
+    * Test Instance 2: Repeat for `SIM2`:
+        ```bash
+        caput MYDEMO:SIM2:Cmd "Test2"
+        caget MYDEMO:SIM2:Cmd-RB
+        # Expected Reply: MYDEMO:SIM2:Cmd-RB       Test2 (or specific handler response)
+        ```
+    * Test Instance 3: Repeat for `SIM3`:
+        ```
+        caput MYDEMO:SIM3:Cmd "Test3"
+        caget MYDEMO:SIM3:Cmd-RB
+        # Expected Reply: MYDEMO:SIM3:Cmd-RB       Test3 (or specific handler response)
+        ```
     Successfully sending commands and receiving the expected replies for each instance confirms that the multi-device configuration, using this specific `st.cmd` example, is working correctly.
