@@ -224,6 +224,11 @@ ClockTime_Report #-- Example site-specific utility
 
 ```
 
+### Assignments or Questions for the further understanding.
+* We defined `TARGET_HOST` in `st2.cmd`, however we never use it. Can you explain why?
+* In the `st2.cmd`, we have three different exmaples for `iocshload` usages. Please test it one by one, and see what different among them.
+* Complete command out `iocshload` with `#`. Restart your ioc, then can you see what happens? This is a way to disable `one device` communication within `st2.cmd` effectively. We will discuss this later with real example.
+
 ## Considerations
 
 As you noted, there are some challenges when adopting this approach, especially for beginners:
