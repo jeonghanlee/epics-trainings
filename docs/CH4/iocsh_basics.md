@@ -69,7 +69,7 @@ iocshLoad("$(IOCSH_LOCAL_TOP)/training_device.iocsh", "PREFIX=$(PREFIX_MACRO),DE
 * `training_device.iocsh` in `jeonglee-DemoApp/iocsh`:
 ```c
 ####################################################################################################
-############ START of training-device.iocsh ########################################################
+############ START of training_device.iocsh ########################################################
 #-- PREFIX         :
 #-- DEVICE         : 
 #-- DATABASE_TOP   :
@@ -93,17 +93,17 @@ drvAsynIPPortConfigure("$(PORT_NAME)", "$(HOST=127.0.0.1):$(PORT=9399)", 0, 0, 0
 #-- for long-term maintenance, it is often considered best practice to define port-specific
 #-- behavior like EOS explicitly in the st.cmd file using Asyn commands.
 #-- Input EOS (what character(s) mark the end of a message *received from* the device)
-asynOctetSetInputEos("$(ASYN_PORT_NAME)", 0, "\n")
+asynOctetSetInputEos("$(PORT_NAME)", 0, "\n")
 #-- Output EOS (what character(s) should be *appended to* messages *sent to* the device)
-asynOctetSetOutputEos("$(ASYN_PORT_NAME)", 0, "\n")
+asynOctetSetOutputEos("$(PORT_NAME)", 0, "\n")
 
-$(ASYNTRACE=#--)asynSetTraceMask($(ASYN_PORT_NAME), -1, ERROR|FLOW|DRIVER)
+$(ASYNTRACE=#--)asynSetTraceMask($(PORT_NAME), -1, ERROR|FLOW|DRIVER)
 
 #-- --- Load Database Records ---
 dbLoadRecords("$(DATABASE_TOP)/training.db", "P=$(PREFIX),R=$(DEVICE),PORT=$(PORT_NAME)")
 #-- --- End Record Load ---
 
-############ END of training-device.iocsh ##########################################################
+############ END of training_device.iocsh ##########################################################
 ####################################################################################################
 ```
 
@@ -122,7 +122,7 @@ This command is the core mechanism for executing commands from another file. Its
 `iocshLoad("path/to/training_device.iocsh", "MACRO1=VALUE1,MACRO2=VALUE2,...")`
 
 * The first argument is the path to the snippet file. Using variables like `$(IOCSH_LOCAL_TOP)` makes paths relative and portable.
-* The second argument is a comma-separated string of MACRO=VALUE pairs. These macros (`$(MACRO1)`, `$(MACRO2)`, etc.) become available for substitution wherever `$(MACRO)` appears within the loaded `snippet.iocsh` file.
+* The second argument is a comma-separated string of `MACRO=VALUE` pairs. These macros (`$(MACRO1)`, `$(MACRO2)`, etc.) become available for substitution wherever `$(MACRO)` appears within the loaded `snippet.iocsh` file.
 * The `VALUE` part can itself be a literal string, an environment variable (`$(ENV_VAR)` set via `epicsEnvSet`), or even another macro defined earlier in the calling script. In the example, `PORT_NAME=$(ASYN_PORT_NAME)` uses the value of the `ASYN_PORT_NAME` environment variable to define the `PORT_NAME` macro for the snippet.
 
 ### 3. Snippet File (`*.iocsh`) Structure
@@ -152,8 +152,8 @@ Now, apply this technique to the IOC configuration you created in Chapter 3 for 
 2.  **Move Commands**: Identify the `drvAsynIPPortConfigure`, `asynOctetSet*Eos`, and `dbLoadRecords` commands related to your simulator in your Chapter 3 `st.cmd` file and move them into `training_device.iocsh`.
 3.  **Parameterize**: Replace hardcoded values (like PV prefix, device name, port name, host, port) in the snippet file with `$(MACRO)` variables. Add documentation comments explaining the macros. Provide defaults for host (`127.0.0.1`) and port (`9399`).
 4.  **Define Location**: In your main `st.cmd`, ensure `IOCSH_LOCAL_TOP` is defined (e.g., `epicsEnvSet("IOCSH_LOCAL_TOP", "$(TOP)/iocsh")`).
-5.  **Modify `st.cmd`**: Remove the original commands you moved and add an `iocshLoad` command to call your new `simulator_device.iocsh`, passing the required macros (e.g., `PREFIX=$(MY_PREFIX)`, `DEVICE=$(MY_DEVICE_NAME)`, `PORT_NAME=$(SIM_PORT_NAME)` etc., using appropriate variable names from your `st.cmd`).
-6. **Build**: After creating or modifying the `simulator_device.iocsh` file in your source directory, run `make` in your application's top-level directory. This command typically copies your `.iocsh` file from its source location (e.g., `jeonglee-DemoApp/iocsh/`) to the runtime iocsh folder (e.g., `$(TOP)/iocsh`) where the IOC expects to find it via `$(IOCSH_LOCAL_TOP)` or a similar path during startup.
+5.  **Modify `st.cmd`**: Remove the original commands you moved and add an `iocshLoad` command to call your new `training_device.iocsh`, passing the required macros (e.g., `PREFIX=$(MY_PREFIX)`, `DEVICE=$(MY_DEVICE_NAME)`, `PORT_NAME=$(SIM_PORT_NAME)` etc., using appropriate variable names from your `st.cmd`).
+6. **Build**: After creating or modifying the `training_device.iocsh` file in your source directory, run `make` in your application's top-level directory. This command typically copies your `.iocsh` file from its source location (e.g., `jeonglee-DemoApp/iocsh/`) to the runtime iocsh folder (e.g., `$(TOP)/iocsh`) where the IOC expects to find it via `$(IOCSH_LOCAL_TOP)` or a similar path during startup.
 7.  **Test**: Run the IOC from its runtime directory (e.g., `iocBoot/iocB46-182-jeonglee-Demo`). It should start and communicate with the simulator exactly as before, but now using the cleaner, modular structure.
 
 ## An example of `st2.cmd`
