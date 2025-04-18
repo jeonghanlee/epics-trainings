@@ -14,7 +14,7 @@ In this lesson, you will learn how to do the following:
 
 Clone the ALS-U EPICS repository using Git.
 
-### Prerequisites
+### `git clone`
 
 Users may need to have SSH access to the ALS GitLab repository to clone the following repositories.
 
@@ -26,35 +26,91 @@ By cloning the repository, you have the environment at the `${HOME}/epics` folde
 
 
 ## Configure the ALS-U EPICS enviornment
+The ALS-U EPICS environment supports multiple operating system versions and EPICS versions. **Please note that the pre-built binaries included in this environment currently target the Linux x86_64 architecture exclusively.**
 
-The ALS-U EPICS environment supports multiple versions. To select a version, source the appropriate `setEpicsEnv.bash` script:
+To select and activate a specific environment version in your current terminal session, you need to source the appropriate `setEpicsEnv.bash` script corresponding to your operating system and desired EPICS version:
 
 ```shell
-source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash  # For Debian 12
+# Example for EPICS 7.0.7 on Debian 12 (x86_64)
+source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash
 # or
-source ~/epics/1.1.1/rocky-8.10/7.0.7/setEpicsEnv.bash # For Rocky 8.10
+# Example for EPICS 7.0.7 on Rocky 8.10 (x86_64)
+source ~/epics/1.1.1/rocky-8.10/7.0.7/setEpicsEnv.bash
 ```
-The output should resemble this (user and paths will vary):
+Sourcing the script sets up necessary environment variables like `EPICS_BASE`, `PATH`, and `LD_LIBRARY_PATH`. The output should resemble this (user and specific paths will vary):
 ```shell
 Set the EPICS Environment as follows:
 THIS Source NAME    : setEpicsEnv.bash
 THIS Source PATH    : /home/jeonglee/epics/1.1.1/debian-12/7.0.7
 EPICS_BASE          : /home/jeonglee/epics/1.1.1/debian-12/7.0.7/base
-EPICS_HOST_ARCH     : linux-x86_64
+EPICS_HOST_ARCH     : linux-x86_64  # <-- Note the architecture
 EPICS_MODULES       : /home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules
 PATH                : /home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pmac/bin/linux-x86_64:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pvxs/bin/linux-x86_64:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/base/bin/linux-x86_64:/home/jeonglee/programs/root_v6-28-04/bin:/home/jeonglee/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 LD_LIBRARY_PATH     : /home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pmac/lib/linux-x86_64:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pvxs/bundle/usr/linux-x86_64/lib:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/pvxs/lib/linux-x86_64:/home/jeonglee/epics/1.1.1/debian-12/7.0.7/base/lib/linux-x86_64:/home/jeonglee/programs/root_v6-28-04/lib/root
 
 Enjoy Everlasting EPICS!
 ```
+Note how the `EPICS_HOST_ARCH` variable and the paths explicitly mention `linux-x86_64`.
+
 
 ## Testing the Environment
 
-Verify the installation by running the following commands:
+Once the environment is sourced, verify that the EPICS command-line tools are accessible in your PATH:
 
 ```shell
+# Check help output for an EPICS tool (e.g., caput)
 $ caput -h
+
+# Verify the location of an EPICS tool (e.g., caget)
 $ which caget
+# Expected output might be similar to: /home/jeonglee/epics/1.1.1/debian-12/7.0.7/base/bin/linux-x86_64/caget
 ```
 
-Technically, you have now the ALS-U EPICS environment.
+If these commands run successfully and show help/path information, you have successfully configured the ALS-U EPICS environment in your current terminal session.
+
+
+## Alternative Environment for Other Linux Distributions (Training Contingency)
+
+This training and ALS-U Controls officially supports **Debian 12** and **Rocky 8.10** on the **Linux x86_64** architecture, using the primary ALS-U EPICS environment repository cloned into `~/epics` as described in the main "Get the ALS-U EPICS environment" section.
+
+**If, and only if,** you are attending this training using **Rocky 9.x**, **Ubuntu 22.04**, or **Ubuntu 24.04** (on Linux `x86_64`) and cannot use the officially supported setup, the following alternative environment repository can be used *specifically to allow participation in the training exercises*.
+
+**Important Considerations:**
+* This alternative repository provides builds that are functional for the training but may **not** be the latest official ALS-U production versions.
+* It is **not** the recommended environment for actual development or deployment work at ALS-U.
+* Using this path requires adjusting subsequent commands (like `source`) and potentially other paths mentioned in the training materials.
+
+**Alternative Repository Setup:**
+
+1.  **Clone the Repository:** Use the following command to clone into a separate directory (e.g., `~/epics-training-alt`). (This uses HTTPS and typically does not require SSH keys, though ALS GitLab login might be needed).
+```shell
+$ git clone https://git.als.lbl.gov/jeonglee/alsu-epics-environment.git ~/epics-training-alt
+```
+
+2.  **Verify Structure:** The relevant structure inside this directory should look like this (confirming builds for various OS exist):
+```
+$ tree --charset=ascii -L 2 ~/epics-training-alt/1.1.1/
+/home/user/epics-training-alt/1.1.1/  # Path will vary based on user/clone location
+|-- debian-12
+|   |-- 7.0.7
+|   `-- vendor
+|-- rocky-8.10
+|   |-- 7.0.7
+|   `-- vendor
+|-- rocky-9.5
+|   |-- 7.0.7
+|   `-- vendor
+|-- ubuntu-22.04
+|   |-- 7.0.7
+|   `-- vendor
+`-- ubuntu-24.04
+    |-- 7.0.7
+    `-- vendor
+```
+
+3.  **Configure:** Proceed to the main "Configure the ALS-U EPICS environment" steps, but ensure you `source` the `setEpicsEnv.bash` script from the correct subdirectory within *your chosen alternative path* (e.g., `~/epics-training-alt/1.1.1/ubuntu-22.04/7.0.7/setEpicsEnv.bash`).
+
+
+## Summary
+In this section, you learned the fundamental steps to get started with the ALS-U EPICS environment on your local Linux `x86_64` machine. You successfully cloned the environment repository using git and learned how to activate a specific version by sourcing the corresponding `setEpicsEnv.bash` script. Finally, you verified the setup by confirming that essential EPICS command-line tools are available in your path. You are now ready to use this configured environment for running IOCs and developing EPICS applications.
+
