@@ -14,7 +14,7 @@ In this lesson, you will learn how to do the following:
 
 Clone the ALS-U EPICS repository using Git.
 
-### `git clone`
+### Clone the ALS-U EPICS environment by using `git clone`
 
 Users may need to have SSH access to the ALS GitLab repository to clone the following repositories.
 
@@ -58,26 +58,23 @@ Note how the `EPICS_HOST_ARCH` variable and the paths explicitly mention `linux-
 Once the environment is sourced, verify that the EPICS command-line tools are accessible in your PATH:
 
 ```shell
-# Check help output for an EPICS tool (e.g., caput)
+# Check help output for an EPICS command-line tool (e.g., caput)
 $ caput -h
 
-# Verify the location of an EPICS tool (e.g., caget)
+# Verify the location of an EPICS command-line tool (e.g., caget)
 $ which caget
-# Expected output might be similar to: /home/jeonglee/epics/1.1.1/debian-12/7.0.7/base/bin/linux-x86_64/caget
 ```
 
 If these commands run successfully and show help/path information, you have successfully configured the ALS-U EPICS environment in your current terminal session.
 
-
 ## Alternative Environment for Other Linux Distributions (Training Contingency)
+This training and ALS-U Controls officially supports **Debian 12** and **Rocky 8.10** on the **Linux x86_64** architecture, using the primary ALS-U EPICS environment repository cloned into `~/epics` as described in the main [Get the ALS-U environment](installation.md##Get the ALS-U EPICS environment) section.
 
-This training and ALS-U Controls officially supports **Debian 12** and **Rocky 8.10** on the **Linux x86_64** architecture, using the primary ALS-U EPICS environment repository cloned into `~/epics` as described in the main "Get the ALS-U EPICS environment" section.
-
-**If, and only if,** you are attending this training using **Rocky 9.x**, **Ubuntu 22.04**, or **Ubuntu 24.04** (on Linux `x86_64`) and cannot use the officially supported setup, the following alternative environment repository can be used *specifically to allow participation in the training exercises*.
+**If, and only if,** you are attending this training using **Rocky 9.5**, **Ubuntu 22.04**, or **Ubuntu 24.04** (on Linux `x86_64`) and cannot use the officially supported setup, the following alternative environment repository can be used in the training exercises.
 
 **Important Considerations:**
-* This alternative repository provides builds that are functional for the training but may **not** be the latest official ALS-U production versions.
-* It is **not** the recommended environment for actual development or deployment work at ALS-U.
+* This alternative repository provides builds that are functional for the training but may **not** be the latest official ALS-U EPICS environment production versions.
+* It is **not** the recommended environment for actual development or deployment work at ALS-U Controls System.
 * Using this path requires adjusting subsequent commands (like `source`) and potentially other paths mentioned in the training materials.
 
 **Alternative Repository Setup:**
