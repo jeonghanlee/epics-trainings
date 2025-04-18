@@ -1,9 +1,7 @@
 # Your First Running EPICS IOC
-
 In this section, you will run your very first EPICS Input/Output Controller (IOC) using the standard `softIocPVX` executable included in the environment. You will create a minimal database file defining a single Process Variable (PV) and then use essential EPICS command-line tools like caget, caput, and pvxget to interact with this PV over the network, demonstrating both Channel Access (CA) and the newer PV Access (PVA) protocols.
 
 ## Lesson Overview
-
 In this lesson, you will learn how to do the following:
 * Create a minimal EPICS database (`.db`) file.
 * Run a simple IOC using `softIocPVX`.
@@ -13,7 +11,6 @@ In this lesson, you will learn how to do the following:
 * Perform basic connection troubleshooting for CA and PVA.
 
 ## Make an EPICS Database file
-
 Please create the following EPICS database (`.db`) file with the name as `water.db`. This file defines a single Process Variable (PV).
 
 ```c
@@ -34,7 +31,6 @@ This file defines a record instance named `temperature:water`.
 Save this content as `water.db`.
 
 ## Run your first `softioc`
-
 Now we start the `softIocPVX` executable (a generic IOC program included with EPICS base) using the database file we just created.
 
 1. Open your first terminal window.
@@ -71,19 +67,18 @@ temperature:water # Should list the PV you defined
 ```
 
 ## Play with EPICS command line tools
-
 Now, let's interact with the running IOC from a different terminal.
 
-1. Open a new, separate terminal window
+1. Open a new, separate terminal window, which we call it `Terminal 2`
 2. Source the ALS-U EPICS environment with `disable` option, which suppress output messages in this new terminal as well: 
-```bash
+```shell
 # In Terminal 2 (CA/PVA Clients)
 $ source ~/epics/1.1.1/debian-12/7.0.7/setEpicsEnv.bash "disable"
 ```
 
 3. Try reading the initial value and description using Channel Access (`caget`) and PV Access (`pvxget`), then write new values using caput (`CA`) and pvxput (`PVA`), and read them back:
 
-```bash
+```shell
 # In Terminal 2 (CA/PVA Clients)
 $ caget temperature:water      # Reads the VAL field (e.g., 0) using CA
 $ caget temperature:water.DESC # Reads the DESC field using CA (e.g., "Water temperature Setpoint")
@@ -100,12 +95,10 @@ $ pvxput temperature:water 44
 # Read back using CA
 $ caget temperature:water      # Should show 44
 ```
-
 The commands `caget`, `pvxget`, and `caput` are simple EPICS command-line clients. `caget` and `caput` use the CA (Channel Access) network protocol, while `pvxget` (and `pvxput`) use the newer PVA (PV Access) protocol available in EPICS 7+. These network protocols are fundamental to how different EPICS components (IOCs, clients, services) communicate.
 
-
 ## Troubleshooting
-If your `caput` or `caget` commands fail with a message like `Channel connect timed out: 'PVNAME' not found.`, it means the CA client tools cannot find your running IOC over the network.
+If your `caput` or `caget` commands fail with a message like `Channel connect timed out: PVNAME not found.`, it means the CA client tools cannot find your running IOC over the network.
 
 ```shell
 # Example Error:
@@ -113,18 +106,17 @@ $ caget caget temperature:water
 Channel connect timed out: 'caget temperature:water' not found.
 ```
 
-
 When running the IOC and CA clients on the same machine (like localhost), this often happens because the default CA broadcast mechanism isn't sufficient or is blocked. You need to explicitly tell the CA clients where to find the IOC server using an environment variable:
 
 1. Set `EPICS_CA_ADDR_LIST`: In the terminal where you run `caput`/`caget` (Terminal 2), set this variable to point to the machine running the IOC (in this case, localhost).
 ```shell
-# In Terminal 2(CA Clients):
+# In Terminal 2 (CA Clients)
 $ export EPICS_CA_ADDR_LIST=localhost
 ```
 
 Retry the command:
 ```shell
-# In Terminal 2 (CA Clients):
+# In Terminal 2 (CA Clients)
 $ caget temperature:water
 # Expected output (should now work, showing the current value):
 temperature:water    44
@@ -133,7 +125,7 @@ temperature:water    44
 If you would like to evaluate the PVA protocol, you also have to define the following EPICS environment variable `EPICS_PVA_ADDR_LIST` for PVA (Process Variable Access) protocol. We will cover PVA protocol for more advanced lesson later.
 
 ```shell
-# In Terminal 2 (PVA Clients):
+# In Terminal 2 (PVA Clients)
 $ export EPICS_PVA_ADDR_LIST=localhost
 $ pvxget temperature:water
 # Expected output (should now work, showing structure):
@@ -145,11 +137,11 @@ $ pvxget temperature:water
 ### Rocky or Redhat Variant Firewall
 Rocky Linux (Redhat Variant) has its own `firewalld` service running by default. It blocks the CA and PVA communication needed for EPICS. Thus, one should `stop` and `disable` the service for this training overall. Note that you can edit the `firewalld` configuration to allow specific ports, but this is out-of-scope of this introductory training.
 
-
 ```bash
 # Run these commands with administrator privileges (e.g., using sudo)
-sudo systemctl stop firewalld
-sudo systemctl disable firewalld
+sudo systemctl stop firewalld      # stop the firewalld service
+sudo systemctl disable firewalld   # unmarks the firewalld for autostart
+sudo systemctl mask firewalld      # prevent the firewalld from being started
 ``` 
 
 ## Summary
