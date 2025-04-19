@@ -135,14 +135,15 @@ $ pvxget temperature:water
 ```
 
 ### Rocky or Redhat Variant Firewall
-Rocky Linux (Redhat Variant) has its own `firewalld` service running by default. It blocks the CA and PVA communication needed for EPICS. Thus, one should `stop` and `disable` the service for this training overall. Note that you can edit the `firewalld` configuration to allow specific ports, but this is out-of-scope of this introductory training.
-
-```bash
+Rocky Linux (Redhat Variant) has its own `firewalld` service running by default. It blocks the CA and PVA communication needed for EPICS. Thus, one should `stop` and `disable` the service for this training overall.
+```shell
 # Run these commands with administrator privileges (e.g., using sudo)
 sudo systemctl stop firewalld      # stop the firewalld service
 sudo systemctl disable firewalld   # unmarks the firewalld for autostart
 sudo systemctl mask firewalld      # prevent the firewalld from being started
 ``` 
+Note that you can edit the `firewalld` configuration to allow specific ports, but this is out-of-scope of this introductory training.
+
 
 ## Summary
 In this lesson, you successfully performed the essential first steps in working with an EPICS IOC:
