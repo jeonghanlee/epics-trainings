@@ -114,15 +114,14 @@ When running the IOC and CA clients on the same machine (like localhost), this o
 $ export EPICS_CA_ADDR_LIST=localhost
 ```
 
-Retry the command:
+2. Retry the command:
 ```shell
 # In Terminal 2 (CA Clients)
 $ caget temperature:water
 # Expected output (should now work, showing the current value):
 temperature:water    44
 ```
-
-If you would like to evaluate the PVA protocol, you also have to define the following EPICS environment variable `EPICS_PVA_ADDR_LIST` for PVA (Process Variable Access) protocol. We will cover PVA protocol for more advanced lesson later.
+3. If you would like to evaluate the PVA protocol, you also have to define the following EPICS environment variable `EPICS_PVA_ADDR_LIST` for PVA (Process Variable Access) protocol. We will cover PVA protocol for more advanced lesson later.
 
 ```shell
 # In Terminal 2 (PVA Clients)
