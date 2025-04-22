@@ -1,10 +1,10 @@
 # ALS-U EPICS Environment Design Principles (`linux-x86_64` + OS-Specific Folders)
 
-**Note:** This section discusses the underlying design choices for the EPICS environment's architecture and cross-distribution support. While important for a deep understanding, some concepts related to build systems, `EPICS_HOST_ARCH`, operating system specifics, library compatibility (like `glibc`), and Application Binary Interfaces (`ABI`s) may be considered advanced. A full grasp of these details is not required for basic environment usage if following standard procedures.
+**Note:** This section discusses the underlying design choices for the EPICS environment's architecture and cross-distribution support. While important for a deep understanding, some concepts related to build systems, `EPICS_HOST_ARCH`, operating system specifics, library compatibility (like `glibc`), and Application Binary Interfaces (ABIs) may be considered advanced. A full grasp of these details is not required for basic environment usage if following standard procedures.
 
 ## Introduction
 
-This section covers the in-depth design principles and fundamental reasons why the ALS-U EPICS environment standardizes on `EPICS_HOST_ARCH=linux-x86_64` for building core EPICS and its modules, while simultaneously utilizing OS-specific folders (e.g., `debian-12`, `rocky-8.10`) to manage distribution-level differences. This combined approach addresses the significant challenge of ensuring consistent EPICS operation across different Linux distributions, which inherently vary in system libraries, package managers, and configurations. It leverages industry standards while ensuring adaptability across supported operating systems.
+This section covers the in-depth design principles and fundamental reasons why the ALS-U EPICS environment standardizes on `EPICS_HOST_ARCH=linux-x86_64` for building core EPICS and its modules, while simultaneously utilizing OS-specific folders (e.g., `debian-12`, `rocky-8.10`) to manage distribution-level differences. This combined approach addresses the significant challenge of ensuring consistent EPICS operation across different Linux distributions and their various versions, which inherently vary in system libraries, package managers, and configurations. It leverages industry standards while ensuring adaptability across supported operating systems.
 
 
 ## Principle One: Adherence to Linux Architecture Standards (`linux-x86_64`)
@@ -40,6 +40,8 @@ A related principle is to minimize redundant effort and complexity. Using distri
 *   **Increased Complexity and Maintenance Burden:** Fragmenting build artifacts across numerous directories (e.g., `bin/debian12_x86_64`, `lib/rocky8_x86_64`) and multiplying the effort required for updates, patches, and testing across all targets.
 
 *   **Potential for Inconsistencies:** Increasing the risk of subtle, unintended differences creeping into builds for different OS versions over time.
+
+Furthermore, this structure simplifies the process of adding support for new OS versions; it typically involves creating a new OS-specific folder to manage its unique dependencies and configurations, while leveraging the existing `linux-x86_64` core components.
 
 ## Principle Three: Managing Distribution-Specific Variations (`debian-12`, `rocky-8.10` Folders)
 
