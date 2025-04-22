@@ -26,6 +26,7 @@
     - [Working with `iocsh`: Script Files and Commands](CH4/iocsh_basics.md)
     - [Extending the TCP Simulator](CH4/iocsimulator2.md)
     - [Managing Multiple Devices in `st.cmd`](CH4/multiple_devices.md)
+    - [Introducing the TC-32 Simulator](CH4/iocsimulator3.md)
     - [Database Templates and Substitution](CH4/db_templates.md)
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/stcmd_phases.md)
 
