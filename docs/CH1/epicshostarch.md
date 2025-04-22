@@ -8,7 +8,7 @@ This section covers the in-depth design principles and fundamental reasons why t
 
 ## Principle One: Adherence to Linux Architecture Standards (`linux-x86_64`)
 
-A core principle is to align with broader Linux ecosystem standards. The use of architecture names like `linux-x86_64` (instead of distribution-specific names like `debian12_x86_64`) is rooted in historical conventions, standardization, and practical considerations within the Linux world. The `EPICS_HOST_ARCH` variable is central to the EPICS build system, guiding the selection of compiler flags, linker options, and determining the output directories for compiled binaries and libraries (e.g., `bin/linux-x86_64`, `lib/linux-x86_64`).
+A core principle is to align with broader Linux ecosystem standards. The use of architecture names like `linux-x86_64` (instead of distribution-specific names like `rocky8-x86_64`) is rooted in historical conventions, standardization, and practical considerations within the Linux world. The `EPICS_HOST_ARCH` variable is central to the EPICS build system, guiding the selection of compiler flags, linker options, and determining the output directories for compiled binaries and libraries (e.g., `bin/linux-x86_64`, `lib/linux-x86_64`).
 
 ### Historical Context
 In the early days of Linux, standardized names (i386, alpha, sparc) were crucial for distinguishing builds for different CPU architectures. With the advent of 64-bit x86 architecture around 2003 (`AMD64/Intel64`), `x86_64` quickly became the vendor-neutral standard adopted by major distributions (Debian, Red Hat, etc.). EPICS adopted these conventions for its `EPICS_HOST_ARCH` variable to identify build targets.
@@ -30,10 +30,10 @@ The standard was adopted early and changing it would cause disruption without si
 
 ## Principle Two: Avoiding Unnecessary Build Complexity
 
-A related principle is to minimize redundant effort and complexity. Using distribution-specific architecture names like `debian12_x86_64` for `EPICS_HOST_ARCH` was rejected because it would lead to significant inefficiencies and risks:
+A related principle is to minimize redundant effort and complexity. Using distribution-specific architecture names like ``rocky8-x86_64` for `EPICS_HOST_ARCH` was rejected because it would lead to significant inefficiencies and risks:
 
 * **Massive Duplication of Effort:** Requiring separate, nearly identical EPICS Base/module builds for every supported OS version, wasting significant build time.
-* **Increased Complexity and Maintenance Burden:** Fragmenting build artifacts across numerous directories (e.g., `bin/debian12_x86_64`, `lib/rocky8_x86_64`) and multiplying the effort required for updates, patches, and testing across all targets.
+* **Increased Complexity and Maintenance Burden:** Fragmenting build artifacts across numerous directories (e.g., `bin/debian12-x86_64`, `lib/rocky8-x86_64`) and multiplying the effort required for updates, patches, and testing across all targets.
 * **Potential for Inconsistencies:** Increasing the risk of subtle, unintended differences creeping into builds for different OS versions over time.
 
 Furthermore, this structure simplifies the process of adding support for new OS versions; it typically involves creating a new OS-specific folder to manage its unique dependencies and configurations, while leveraging the existing `linux-x86_64` core components.
