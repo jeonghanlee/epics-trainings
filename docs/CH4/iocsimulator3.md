@@ -1,6 +1,6 @@
-# Training: Simulating a TC-32 Temperature Controller
+# Simulating a TC-32 Temperature Controller
 
-This lesson introduces the `tc32_emulator.bash` script, designed to simulate the data output of a simple 32-channel temperature controller. Unlike a server that waits for commands, this emulator continuously pushes simulated data over a network connection, mimicking devices that stream readings. This is valuable for testing EPICS IOCs or other clients that need to parse such a data stream.
+This lesson introduces the `tc32_emulator.bash` script, designed to simulate the data output of a simple 32-channel temperature monitoring device. Unlike a server that waits for commands, this emulator continuously pushes simulated data over a network connection, mimicking devices that stream readings. This is valuable for testing EPICS IOCs or other clients that need to parse such a data stream and for how we can practice to build the EPICS record database by using `.template` and `.substitutions` files.
 
 ## Lesson Overview
 
@@ -45,7 +45,7 @@ This script uses `socat` to create a network endpoint (TCP port) that emulates a
 #  this program. If not, see https://www.gnu.org/licenses/gpl-2.0.txt
 #
 #  Usage: ./tc_emulator.bash                (uses default port)
-#         ./tc_emulator.bash --port 12345   (uses 12345 port)
+#         ./tc_emulator.bash --port 9399    (uses 9399 port)
 #
 # - author : Jeong Han Lee, Dr.rer.nat.
 # - email  : jeonglee@lbl.gov
@@ -61,11 +61,16 @@ for cmd in socat bc mktemp; do
 done
 
 DEFAULT_PORT="9399"
+PORT=""
 
 # Parse command-line arguments for custom port
 while [[ $# -gt 0 ]]; do
   case $1 in
     --port)
+        if [[ -z "$2" || "$2" =~ ^-- ]]; then
+            printf "Error: --port requires a value.\nUsage: %s [--port PORT]\n" "$0"
+            exit 1
+        fi
         PORT="$2";
         shift 2
         ;;
@@ -75,6 +80,8 @@ while [[ $# -gt 0 ]]; do
         ;;
   esac
 done
+
+PORT="${PORT:-$DEFAULT_PORT}"
 
 SOCAT_LOG=$(mktemp)
 
@@ -93,8 +100,8 @@ trap cleanup EXIT
 SERIAL_DEV=""  # Initialize variable for PTY device path
 for i in {1..20}; do
   SERIAL_DEV=$(grep -o '/dev/pts/[0-9]*' "$SOCAT_LOG" | tail -1)  # Search for PTY path in socat log
-  [ -n "$SERIAL_DEV" ] && break  # Break if PTY device found
-  sleep 1  # Wait 1 second before retrying
+  [ -n "$SERIAL_DEV" ] && break                                   # Break if PTY device found
+  sleep 1                                                         # Wait 1 second before retrying
 done
 
 # If PTY device was not found, print error and exit
@@ -107,7 +114,7 @@ if [ -z "$SERIAL_DEV" ]; then
 fi
 
 printf "Emulator running on port %s\n" "$PORT"
-printf "Serial emulated at: %s\n" "$SERIAL_DEV"
+printf "Serial emulated at: %s\n"      "$SERIAL_DEV"
 
 # Initialize temperature array with random values between 10 and 90
 # $RANDOM generates a new random number in the range [0, 32767]
@@ -148,35 +155,36 @@ done
 ### Make the script executable:
 
 ```
-chmod +x tc32_emulator.bash
+$ chmod +x tc32_emulator.bash
 ```
 
 ### How the Emulator Works
 
-1. TCP-PTY Bridge (socat): The script starts socat to listen on a specific TCP port (default 9399). When a client connects, socat creates a pseudo-terminal (PTY) device (e.g., /dev/pts/5) and connects the TCP session to it. This makes the TCP connection look like a serial port to the rest of the system.
+1. TCP-PTY Bridge (`socat`): The script starts socat to listen on a specific TCP port (default 9399). When a client connects, socat creates a pseudo-terminal (PTY) device (e.g., `/dev/pts/5`) and connects the TCP session to it. This makes the TCP connection look like a serial port to the rest of the system.
 
-2. Temperature Simulation (bc):
+2. Temperature Simulation:
 
 * An internal array holds 32 temperature values.
 * Temperatures are initialized randomly between 10.0 and 90.0.
-* In each cycle, every temperature is updated with a small random change (±0.75), ensuring values stay within the 10.0-90.0 range.
+* In each cycle, every temperature is updated with a small random change (`±0.75`), ensuring values stay within the `10.0-90.0` range.
+* We assumes that temperature unit is `degC`.
 
 3. Data Streaming:
 
 * The script enters an infinite loop.
 * It iterates through channels 1 to 32.
 * For each channel, it gets the latest simulated temperature.
-* It formats the data as CH<XX>: <TEMP>\n (e.g., CH01: 45.2\n).
-* Crucially, it writes this string directly to the PTY device ($SERIAL_DEV).
+* It formats the data as `CH<XX>: <TEMP>\n` (e.g., `CH01: 45.2\n`).
+* Crucially, it writes this string directly to the PTY device (`$SERIAL_DEV`).
 * socat automatically forwards this data from the PTY to any connected TCP client.
-* Timing: After writing all 32 channel readings, the script pauses for 2 seconds (sleep 2) before generating and sending the next batch.
-* Cleanup: When you stop the script (Ctrl+C), it automatically kills the background socat process thanks to the trap command.
+* Timing: After writing all 32 channel readings, the script pauses for 2 seconds (`sleep 2`) before generating and sending the next batch.
+* Cleanup: When you stop the script (`Ctrl+C`), it automatically kills the background socat process thanks to the trap command.
 
 ## Running the Emulator
 
 Navigate to the directory containing the script in a terminal.
 
-```bash
+```shell
 # Option 1: Run with default port (9399)
 $ ./tc32_emulator.bash
 
@@ -184,29 +192,36 @@ $ ./tc32_emulator.bash
 $ ./tc32_emulator.bash --port 10001
 ```
 
-The script will print the port it's listening on and the PTY device path (e.g., /dev/pts/X). Leave the emulator running in this terminal.
+The script will print the port it's listening on and the PTY device path (e.g., `/dev/pts/X`). Leave the emulator running in this terminal.
 
 ## Testing / Observing the Emulator Output
 
-Since this emulator sends data continuously, you connect to it to receive that data. Open another terminal window and use socat or netcat (nc).
+Since this emulator sends data continuously, you connect to it to receive that data. Open another terminal window and use `socat` or netcat (`nc`).
 
-### Using socat:
+### Using `socat`:
 
 ```shell
 # Connect to the emulator running on localhost:9399
 $ socat - TCP:localhost:9399
 ```
 
-### Using netcat (nc):
+### Using netcat (`nc`):
 
 ```shell
 # Connect to the emulator running on localhost:9399
 nc localhost 9399
 ```
 
+### Using `telnet`:
+
+```shell
+# Connect to the emulator running on localhost:9399
+telnet localhost 9399
+```
+
 You should see the stream of CHXX: TEMP data appearing in your terminal, with a new block of 32 lines appearing every 2 seconds:
 
-```
+```shell
 CH01: 17.9643
 CH02: 26.4624
 CH03: 17.4912
@@ -234,18 +249,36 @@ While the underlying socat command uses fork (allowing multiple clients to conne
 2. Run the emulator in each terminal, specifying a unique port for each instance:
 
 ```shell
-    # Terminal 1
-    ./tc32_emulator.bash --port 10001
+# Terminal 1
+$ ./tc32_emulator.bash --port 9039
 
-    # Terminal 2
-    ./tc32_emulator.bash --port 10002
-    ```shell
-    # Terminal 3
-    ./tc32_emulator.bash --port 10003
+# Terminal 2
+$ ./tc32_emulator.bash --port 9040
+
+# Terminal 3
+$ ./tc32_emulator.bash --port 9041
 ```
 
-3. Test Each Instance: Use separate socat or nc terminals to connect to ports 10001, 10002, and 10003 respectively to observe their independent data streams.
-4. Stopping Emulators: Use Ctrl+C in each terminal where an emulator instance is running.
+Or you can use `parallel`
+
+```shell
+$ parallel ./tc32_emulator.bash --port ::: 9399 9400 9401
+```
+
+3. Test Each Instance: Use separate `socat` or `nc` terminals to connect to ports`9039`, `9040`, and `9041` respectively to observe their independent data streams.
+
+```shell
+# Terminal A
+$ socat - TCP:localhost:9399
+
+# Terminal B
+$ nc localhost:9400
+
+# Terminal C
+$ telnet localhost 9401
+```
+
+4. Stopping Emulators: Use `Ctrl+C` in each terminal where an emulator instance is running.
 
 ## Conclusion
 
