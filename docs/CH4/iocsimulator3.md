@@ -1,6 +1,6 @@
 # Simulating a TC-32 Temperature Controller
 
-This lesson introduces the `tc32_emulator.bash` script, designed to simulate the data output of a simple 32-channel temperature controller. Unlike a server that waits for commands, this emulator continuously pushes simulated data over a network connection, mimicking devices that stream readings. This is valuable for testing EPICS IOCs or other clients that need to parse such a data stream and for how we can practice to build the EPICS record database by using `.template` and `.substitutions` files.
+This lesson introduces the `tc32_emulator.bash` script, designed to simulate the data output of a simple 32-channel temperature monitoring device. Unlike a server that waits for commands, this emulator continuously pushes simulated data over a network connection, mimicking devices that stream readings. This is valuable for testing EPICS IOCs or other clients that need to parse such a data stream and for how we can practice to build the EPICS record database by using `.template` and `.substitutions` files.
 
 ## Lesson Overview
 
@@ -100,8 +100,8 @@ trap cleanup EXIT
 SERIAL_DEV=""  # Initialize variable for PTY device path
 for i in {1..20}; do
   SERIAL_DEV=$(grep -o '/dev/pts/[0-9]*' "$SOCAT_LOG" | tail -1)  # Search for PTY path in socat log
-  [ -n "$SERIAL_DEV" ] && break  # Break if PTY device found
-  sleep 1  # Wait 1 second before retrying
+  [ -n "$SERIAL_DEV" ] && break                                   # Break if PTY device found
+  sleep 1                                                         # Wait 1 second before retrying
 done
 
 # If PTY device was not found, print error and exit
@@ -114,7 +114,7 @@ if [ -z "$SERIAL_DEV" ]; then
 fi
 
 printf "Emulator running on port %s\n" "$PORT"
-printf "Serial emulated at: %s\n" "$SERIAL_DEV"
+printf "Serial emulated at: %s\n"      "$SERIAL_DEV"
 
 # Initialize temperature array with random values between 10 and 90
 # $RANDOM generates a new random number in the range [0, 32767]
@@ -177,14 +177,14 @@ $ chmod +x tc32_emulator.bash
 * It formats the data as `CH<XX>: <TEMP>\n` (e.g., `CH01: 45.2\n`).
 * Crucially, it writes this string directly to the PTY device (`$SERIAL_DEV`).
 * socat automatically forwards this data from the PTY to any connected TCP client.
-* Timing: After writing all 32 channel readings, the script pauses for 2 seconds (sleep 2) before generating and sending the next batch.
+* Timing: After writing all 32 channel readings, the script pauses for 2 seconds (`sleep 2`) before generating and sending the next batch.
 * Cleanup: When you stop the script (`Ctrl+C`), it automatically kills the background socat process thanks to the trap command.
 
 ## Running the Emulator
 
 Navigate to the directory containing the script in a terminal.
 
-```bash
+```shell
 # Option 1: Run with default port (9399)
 $ ./tc32_emulator.bash
 
@@ -267,7 +267,7 @@ $ parallel ./tc32_emulator.bash --port ::: 9399 9400 9401
 
 3. Test Each Instance: Use separate `socat` or `nc` terminals to connect to ports`9039`, `9040`, and `9041` respectively to observe their independent data streams.
 
-```
+```shell
 # Terminal A
 $ socat - TCP:localhost:9399
 
