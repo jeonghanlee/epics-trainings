@@ -6,4 +6,4 @@ This chapter covers the following topics:
 
 * [Installation](installation.md): Provides detailed steps to set up the ALS-U EPICS Environment.
 * [Test Environment](testenv.md): Outlines how to launch and run tests to ensure the environment is functioning correctly after installation.
-
+* [Host Architecture and OS-Specific folder](epicshostarch.md): Explains the environment's approach to host architecture support, focusing on `EPICS_HOST_ARCH`, the `linux-x86_64` standard, and the role of OS-specific directories.
