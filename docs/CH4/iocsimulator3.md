@@ -282,5 +282,4 @@ $ telnet localhost 9401
 
 ## Conclusion
 
-The `tc32_emulator.bash` script provides a convenient way to simulate a device that continuously streams data over a network connection. By using socat to bridge TCP to a PTY and having the script write simulated data to that PTY, it effectively mimics the behavior of certain types of hardware, making it a useful tool for testing and developing client applications like EPICS IOCs that need to parse specific data formats arriving periodically. Remember that unlike command-response servers, clients
-
+The `tc32_emulator.bash` script provides a convenient way to simulate a device that continuously streams data over a network connection. By using socat to bridge TCP to a PTY and having the script write simulated data to that PTY, it effectively mimics the behavior of certain types of hardware, making it a useful tool for testing and developing client applications like EPICS IOCs that need to parse specific data formats arriving periodically. Remember that unlike command-response servers, clients connect to this emulator primarily to receive its data stream.
