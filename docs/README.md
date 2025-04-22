@@ -6,7 +6,7 @@
 - [Getting Started](CH1/READM.md)
     - [Installation](CH1/installation.md)
     - [Test Environment](CH1/testenv.md)
-    - [Host Architecture and OS-Specific folder](epicshostarch.md)
+    - [Host Architecture and OS-Specific folder](CH1/epicshostarch.md)
 
 # Chapter 2: First EPICS IOC and Gitlab CI
 - [First IOC and CI](CH2/README.md)
