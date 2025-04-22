@@ -36,6 +36,8 @@ A related principle is to minimize redundant effort and complexity. Using distri
 * **Increased Complexity and Maintenance Burden:** Fragmenting build artifacts across numerous directories (e.g., `bin/debian12_x86_64`, `lib/rocky8_x86_64`) and multiplying the effort required for updates, patches, and testing across all targets.
 * **Potential for Inconsistencies:** Increasing the risk of subtle, unintended differences creeping into builds for different OS versions over time.
 
+Furthermore, this structure simplifies the process of adding support for new OS versions; it typically involves creating a new OS-specific folder to manage its unique dependencies and configurations, while leveraging the existing `linux-x86_64` core components.
+
 ## Principle Three: Managing Distribution-Specific Variations (`debian-12`, `rocky-8.10` Folders)
 
 While standardizing on `EPICS_HOST_ARCH=linux-x86_64` ensures architectural compatibility for the core EPICS build, it's recognized that critical differences exist *between the distributions themselves*. Therefore, a key principle is to manage these variations explicitly using OS-specific folders.
