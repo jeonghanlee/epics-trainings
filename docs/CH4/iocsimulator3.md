@@ -100,8 +100,8 @@ trap cleanup EXIT
 SERIAL_DEV=""  # Initialize variable for PTY device path
 for i in {1..20}; do
   SERIAL_DEV=$(grep -o '/dev/pts/[0-9]*' "$SOCAT_LOG" | tail -1)  # Search for PTY path in socat log
-  [ -n "$SERIAL_DEV" ] && break                                   # Break if PTY device found
-  sleep 1                                                         # Wait 1 second before retrying
+  [ -n "$SERIAL_DEV" ] && break  # Break if PTY device found
+  sleep 1  # Wait 1 second before retrying
 done
 
 # If PTY device was not found, print error and exit
@@ -114,7 +114,7 @@ if [ -z "$SERIAL_DEV" ]; then
 fi
 
 printf "Emulator running on port %s\n" "$PORT"
-printf "Serial emulated at: %s\n"      "$SERIAL_DEV"
+printf "Serial emulated at: %s\n" "$SERIAL_DEV"
 
 # Initialize temperature array with random values between 10 and 90
 # $RANDOM generates a new random number in the range [0, 32767]
@@ -141,13 +141,28 @@ function generate_temp
   printf "%s\n" "$new_temp"
 }
 
+previous_time=$(date +%s.%N)
 # Main loop: update and send temperature readings forever
+#
 while true; do
   for i in $(seq 1 32); do
+#    Each generate_temp takes around between 0.006 sec and 0.015 seconds
+#    Each Channel should be updated around between 0.192 and 0.48 seconds
+#    So, we expect to see that time difference will be between +0.2 and +0.5 via
+#    camonitor -t sI PVNAME
+#    PVNAME         +0.410798 17.5535
+#    PVNAME         +0.366885 18.2611
+#    PVNAME         +0.346312 17.7282
+#    PVNAME         +0.413986 18.1144
+#
+    current_time=$(date +%s.%N)
+    time_diff=$(echo "$current_time - $previous_time" | bc)
     val=$(generate_temp $((i - 1)))
+    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     printf "CH%02d: %s\n" "$i" "$val" > "$SERIAL_DEV"
+#    printf "Δt=%ss CH%02d: %s\n" "$time_diff" "$i" "$val" > "$SERIAL_DEV"
+    previous_time=$current_time
   done
-  sleep 2
 done
 ```
 
