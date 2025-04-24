@@ -37,13 +37,8 @@ While I am working on the simulator, I changed the folder and repository name as
 
 ```shell
 $ bash tools/generate_ioc_structure.bash -l training -p jeonglee-Demo -f EPICS-IOC-demo
-Your Location ---training--- was NOT defined in the predefined ALS/ALS-U locations
-----> gtl ln ltb inj br bts lnrf brrf srrf arrf bl acc als cr ar01 ar02 ar03 ar04 ar05 ar06 ar07 ar08 ar09 ar10 ar11 ar12 sr01 sr02 sr03 sr04 sr05 sr06 sr07 sr08 sr09 sr10 sr11 sr12 bl01 bl02 bl03 bl04 bl05 bl06 bl07 bl08 bl09 bl10 bl11 bl12 fe01 fe02 fe03 fe04 fe05 fe06 fe07 fe08 fe09 fe10 fe11 fe12 alsu bta ats sta lab testlab
->>
->>
->> Do you want to continue (Y/n)?
->> We are moving forward .
 
+...
 >> We are now creating a folder with >>> EPICS-IOC-demo <<<
 >> If the folder is exist, we can go into EPICS-IOC-demo
 >> in the >>> /home/jeonglee/gitsrc <<<
@@ -61,18 +56,8 @@ Using target architecture linux-x86_64 (only one available)
 >>> IOC     : ioctraining-jeonglee-Demo
 >>> iocBoot IOC path /home/jeonglee/gitsrc/EPICS-IOC-demo/iocBoot/ioctraining-jeonglee-Demo
 
-Exist : .gitlab-ci.yml
-Exist : .gitignore
-Exist : .gitattributes
-The following paths are ignored by one of your .gitignore files:
-bin
-db
-dbd
-iocsh
-lib
-hint: Use -f if you really want to add them.
-hint: Turn this message off by running
-hint: "git config advice.addIgnoredFile false"
+...
+
 >> leaving from /home/jeonglee/gitsrc/EPICS-IOC-demo
 >> We are in /home/jeonglee/gitsrc
 ```
@@ -81,7 +66,6 @@ You sucessfully create the new IOC instance based on the same IOC application.
 
 
 ### The StreamDevice Protocol (`tc32.proto`)
-
 First, we need a StreamDevice protocol file that defines how the IOC should read data from the TC-32 emulator. Based on the emulator's output format (`CHXX: <TEMP>\n`), we can define a simple protocol to extract the floating-point temperature value.
 
 Navigate to your application's `Db` directory (e.g., `jeonglee-DemoApp/Db/`).
@@ -123,11 +107,11 @@ Add the following content:
 # An Analog Input record to receive temperature data
 record(ai, "$(P)$(R)CH$(CH)")
 {
-    field(DESC, "TC temperature at Channel $(CH)")    # Description using the channel macro
-    field(DTYP, "stream")                             # Use the 'stream' device support
-    field( INP, "@tc32.proto get_temp($(CH)) $(PORT)") # Reference protocol, command, args, and port
-    field( EGU, "degC")                               # Units
-    field(SCAN, "I/O Intr")                           # Interrupt-Driven Scan
+  field(DESC, "TC temperature at Channel $(CH)")     # Description using the channel macro
+  field(DTYP, "stream")                              # Use the 'stream' device support
+  field( INP, "@tc32.proto get_temp($(CH)) $(PORT)") # Reference protocol, command, args, and port
+  field( EGU, "degC")                                # Units
+  field(SCAN, "I/O Intr")                            # Interrupt-Driven Scan
 }
 ```
 * **Explanation:** This defines a single `ai` record structure. Its PV name uses `$(P)`, `$(R)`, and `$(CH)` macros. The SCAN field set to `I/O Intr` means the record will process whenever new data arrives for its channel via StreamDevice.
