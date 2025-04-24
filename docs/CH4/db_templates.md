@@ -235,7 +235,7 @@ $ ./st.cmd
 Observe the IOC startup output. You should see messages indicating the Asyn port configuration and the loading of 32 records, one after another, as each `dbLoadRecords` command is executed. You can check the available signals via `dbl`.
 
 
-3. **Monitoring PVs:** Open a new terminal, source your EPICS environment, and use CA client tools like caget or camonitor to verify the records were loaded and are receiving data. The PVs should be named MYDEMO:TC32:CHXX (based on the macros used in st.cmd).
+3. **Monitoring PVs:** Open a new terminal, source your EPICS environment, and use CA client tools like `caget` or `camonitor` to verify the records were loaded and are receiving data. The PVs should be named `MYDEMO:TC32:CHXX` (based on the macros used in `st.cmd`).
 
 ```shell
 # Terminal 3 (caget, camonitor)
