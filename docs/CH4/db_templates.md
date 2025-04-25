@@ -1,22 +1,23 @@
 # Database Templates and Substitution
 
-Manually defining records for multiple similar devices or channels, like the 32 channels of our TC-32 temperature simulator, quickly becomes tedious and error-prone. Imagine writing 32 identical `ai` records, only changing a channel number or port name! This is where EPICS database templates (`.template` files) and substitution files (`.substitution` files) become indispensable tools.
+Manually defining records for multiple similar devices or channels, like the 32 channels of our TC-32 temperature simulator, quickly becomes tedious and error-prone. Imagine writing 32 identical `ai` records, only changing a channel number or port name! This is where EPICS database templates (`.template` files) and substitution files (`.substitutions` files) become indispensable tools.
 
-This section will show you how to define a generic record structure once in a `.template` file, use a `.substitution` file to specify the variations needed for each instance (like different channel numbers or PV names), and use the EPICS build system (`Db/Makefile`) to automatically generate a complete `.db` database file containing all the necessary records. This generated - expanding - `.db` file is then loaded by the IOC startup script (`st.cmd`).
+This section will show you how to define a generic record structure once in a `.template` file, use a `.substitutions` file to specify the variations needed for each instance (like different channel numbers or PV names), and use the EPICS build system (`Db/Makefile`) to automatically generate a complete `.db` database file containing all the necessary records. This generated - expanding - `.db` file is then loaded by the IOC startup script (`st.cmd`).
 
-By the end of this section, you will understand the workflow for using templates and substitutions to efficiently configure large numbers of similar records.
+By the end of this section, you will understand the workflow for using templates and substitutions to efficiently configure large numbers of similar records at build time. We will also briefly touch upon loading substitutions directly at runtime as an alternative.
 
 ## Lesson Overview
 
 In this lesson, you will learn to:
 
-* Understand the roles of `.template`, `.substitution`, and `Db/Makefile` in the process of generating database files.
+* Understand the roles of `.template`, `.substitutions`, and `Db/Makefile` in the build-time generation process.
 * Create a StreamDevice protocol file (`.proto`) for parsing a specific data format (using the TC-32 emulator as an example).
 * Create a reusable database template file (`.template`) with macros to define a generic record structure for a single device channel.
-* Create a substitution file (`.substitution`) to specify the macro values needed to instantiate the template for multiple channels (e.g., all 32 channels of the TC-32).
+* Create a substitution file (`.substitutions`) to specify the macro values needed to instantiate the template for multiple channels (e.g., all 32 channels of the TC-32).
 * Modify your application's `Db/Makefile` to define rules that process the template and substitution files into a single generated `.db` file.
 * Build your EPICS IOC application to execute the Makefile rules and generate the `.db` file.
-* Update your IOC startup script (`st.cmd`) to load the *generated* `.db` file and configure the necessary Asyn port.
+* Update your IOC startup script (`st.cmd`) to load the *generated* `.db` file and configure the necessary Asyn port, demonstrating the build-time approach.
+* Briefly understand the runtime substitution method using dbLoadTemplate.
 * Verify using CA client tools that multiple channel records have been loaded correctly and are receiving data from the simulator.
 
 ## Requirements Recap
@@ -27,15 +28,17 @@ This lesson assumes you have:
 * Access to your EPICS IOC application source directory (e.g., `jeonglee-DemoApp`) and `iocBoot` directory.
 * Familiarity with basic EPICS build concepts (`make`).
 
-## Demonstrating the Inefficient Method: Loading Templates Manually
+## Demonstrating the Inefficient Method: Loading Templates Manually at Runtime
 
-To understand the value of database templates and substitution files processed at build time, let's first see how tedious it would be to configure 32 channels using techniques we've covered so far, specifically by repeatedly loading a template file directly in the IOC startup script.
+To understand the value of database templates and substitution files processed primarily at build time, let's first see how tedious it would be to configure 32 channels using techniques we've covered so far, specifically by repeatedly loading a template file directly in the IOC startup script using the dbLoadRecords command. This is essentially performing template substitution at runtime.
 
 ## Generate IOC based on the Second IOC `jeonglee-Demo`
 
-While I am working on the simulator, I changed the folder and repository name as `EPICS-IOC-demo`. Thus this is the **Case 3** example in [Expanding the Frist IOC](../CH2/addioctofirst.md)
+While I am working on the simulator, I changed the folder and repository name as `EPICS-IOC-demo`. Thus this is the **Case 3** example in [Expanding the First IOC](../CH2/addioctofirst.md). Ensure your `$TOP` environment variable points to the root of your EPICS-IOC-demo directory (e.g., `/home/jeonglee/gitsrc/EPICS-IOC-demo`).
 
 ```shell
+# Navigate to your gitsrc directory (or wherever you run your generation script from)
+$ cd /home/jeonglee/gitsrc
 $ bash tools/generate_ioc_structure.bash -l training -p jeonglee-Demo -f EPICS-IOC-demo
 
 ...
@@ -68,11 +71,11 @@ You sucessfully create the new IOC instance based on the same IOC application.
 ### The StreamDevice Protocol (`tc32.proto`)
 First, we need a StreamDevice protocol file that defines how the IOC should read data from the TC-32 emulator. Based on the emulator's output format (`CHXX: <TEMP>\n`), we can define a simple protocol to extract the floating-point temperature value.
 
-Navigate to your application's `Db` directory (e.g., `jeonglee-DemoApp/Db/`).
+Navigate to your application's `Db` directory (e.g., `${TOP}/jeonglee-DemoApp/Db/`).
 
 ```shell
 # Navigate to your application's Db directory
-$ cd jeonglee-DemoApp/Db
+$ cd ${TOP}/jeonglee-DemoApp/Db
 $ vi tc32.proto
 ```
 Add the following content:
@@ -117,9 +120,9 @@ record(ai, "$(P)$(R)CH$(CH)")
 * **Explanation:** This defines a single `ai` record structure. Its PV name uses `$(P)`, `$(R)`, and `$(CH)` macros. The SCAN field set to `I/O Intr` means the record will process whenever new data arrives for its channel via StreamDevice.
 
 
-### Building the IOC Application
+### Building the IOC Application (Initial Build)
 
-Before loading these files, rebuild your IOC application. Navigate to your `${TOP}` folder and run `make`. This ensures the build system is aware of the new `.proto` and `.template` files and copies them to the correct location (`${TOP}/db/`).
+Before loading these files, rebuild your IOC application. Navigate to your `${TOP}` folder and run `make`. This ensures the build system is aware of the new `.proto` and `.template` files and copies them to the correct location (`${TOP}/db`). While we are demonstrating runtime loading in this section, having the files installed by the build system is still good practice.
 
 ```shell
 $ make
@@ -131,14 +134,14 @@ $ ls db/
 # You should see tc32.proto and temperature.template listed along with other files
 ```
 
-### Update `st.cmd`
+### Update `st.cmd` (Manual Runtime Loading)
 
 Now, let's demonstrate the inefficient way to configure all 32 channels using the `temperature.template`. Navigate to your IOC instance's boot directory (e.g., `iocBoot/ioctraining-jeonglee-Demo/`) and edit the `st.cmd` file.
 
 
 ```shell
 # Navigate to your iocBoot directory
-$ cd iocBoot/ioctraining-jeonglee-Demo/
+$ cd ${TOP}/iocBoot/ioctraining-jeonglee-Demo/
 $ vi st.cmd
 ```
 
@@ -173,6 +176,7 @@ asynOctetSetInputEos("$(ASYN_PORT_NAME)",  0, "\n")
 asynOctetSetOutputEos("$(ASYN_PORT_NAME)", 0, "\n")
 
 # --- START: Manually loading the database template file for each channel ---
+# This performs runtime substitution for each record instance individually.
 dbLoadRecords("$(DB_TOP)/temperature.template", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME),EGU=Celsius,CH=01")
 dbLoadRecords("$(DB_TOP)/temperature.template", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME),EGU=Celsius,CH=02")
 dbLoadRecords("$(DB_TOP)/temperature.template", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME),EGU=Celsius,CH=03")
@@ -220,7 +224,7 @@ Now, run the simulator and the IOC to see this configuration in action.
 
 ```shell
 # Terminal 1 (Simulator)
-$ cd simulator  # Adjust path as needed
+$ cd ${TOP}/simulator  # Adjust path as needed
 $ ./tc32_emulator.bash
 ```
 Leave this running.
@@ -229,7 +233,7 @@ Leave this running.
 
 ```shell
 # Terminal 2 (IOC)
-$ cd iocBoot/ioctraining-jeonglee-Demo/
+$ cd ${TOP}/iocBoot/ioctraining-jeonglee-Demo/
 $ ./st.cmd
 ```
 Observe the IOC startup output. You should see messages indicating the Asyn port configuration and the loading of 32 records, one after another, as each `dbLoadRecords` command is executed. You can check the available signals via `dbl`.
@@ -254,26 +258,24 @@ $ caget MYDEMO:TC32:CH{01..32}
 $ camonitor -t sI MYDEMO:TC32:CH{01..32}
 ```
 
-You should see valid temperature data streaming for the monitored PVs, confirming that this method works for loading the records and interacting with the simulator.
+For large numbers of PVs, using brace expansion as shown (`CH{01..32}`) can help, but be careful with shell compatibility.
 
-### The Problem: Manual Configuration is Tedious
+### Manual Configuration is Tedious
 
 While the above method works, it's clear that manually adding and maintaining 32 separate `dbLoadRecords` lines in `st.cmd` for a single device like the TC-32 is highly inefficient.
 
-This approach is clearly unsustainable for real-world systems with potentially hundreds or thousands of similar channels or devices. Any change to the record definition (e.g., adding an alarm field or changing units) would require finding and editing the parameter string in 32 separate `dbLoadRecords` lines. A simple typo in one line could lead to hard-to-debug errors.
+This approach is unsustainable for real-world systems with hundreds or thousands of channels. It's prone to copy-paste errors and maintenance headaches.
 
-Fortunately, EPICS provides a robust solution to this exact problem using database templates and substitution files processed primarily at build time, allowing us to define the structure once and instantiate it many times automatically. The resulting single database file is then loaded efficiently at IOC loading time with a single `dbLoadRecords` command.
+Fortunately, EPICS provides a robust solution to this exact problem using database templates and substitution files processed primarily at build time, allowing us to define the structure once and instantiate it many times automatically before the IOC starts. The resulting single database file is then loaded efficiently at IOC loading time with a single `dbLoadRecords` command.
 
 
-## Database Templates and Substitution Files
+# The Efficient Method: Build-Time Database Generation
 
-The efficient and standard EPICS method for handling configurations like the 32 channels of the TC-32 emulator involves using a `.template` file (which you've already created) in conjunction with a `.substitutions` file and the EPICS build system (`Db/Makefile`). This process allows you to define the record structure once and create many instances automatically at build time using the standard implicit rules provided by EPICS Base.
+The efficient and standard EPICS method for handling configurations like the 32 channels of the TC-32 emulator involves using a `.template` file (which you've already created) in conjunction with a `.substitutions` file and the EPICS build system (`Db/Makefile`). This process allows you to define the record structure once and create many instances automatically at build time using the standard implicit rules provided by EPICS Base. The output of this process is a standard `.db` file ready to be loaded by the IOC.
 
 ### The Substitution File (`TC-32.substitutions`)
 
-The `.substitutions` file is where you define how the template should be instantiated. It provides the build system with a list of macro value sets to use when expanding the template file.
-
-Examne `temperature.template` again to see the MACRO variables:
+The `.substitutions` file is where you define how the template should be instantiated at build time. It provides the build system with a list of macro value sets to use when expanding the template file.
 
 ```c
 record(ai,"$(P)$(R)CH$(CH)")
@@ -287,21 +289,21 @@ record(ai,"$(P)$(R)CH$(CH)")
 ```
 You can see macros `P`, `R`, `CH`, `PORT`, `EGU`. You can select which macros can be defined within the `.substitutions` file (build-time substitution) and which are left for `st.cmd` or `.iocsh` loading time.
 
-In the `.substitutions` file below, you've chosen to define `EGU` as a global value that applies to all instances defined in the file, and you've provided specific values for the `CH` macro for each of the 32 channels. The `P`, `R`, and `PORT` macros are intentionally not given fixed values here, meaning they will be substituted later when the generated database file is loaded by the IOC.
+In the `.substitutions` file below, you've chosen to define `EGU` as a global value that applies to all instances defined in the file, and you've provided specific values for the CH macro for each of the 32 channels. The `P`, `R`, and `PORT` macros are intentionally not given fixed values here, meaning they will remain as `$(P)`, `$(R)`, and `$(PORT)` macros in the final `TC-32.db` file generated by the build process. Their values will be provided later when the generated database file is loaded by the IOC at runtime using `dbLoadRecords`.
 
-Create the file `TC-32.substitutions` in your application's Db directory (e.g., `jeonglee-DemoApp/Db/`).
+Create the file `TC-32.substitutions` in your application's Db directory (e.g., `${TOP}/jeonglee-DemoApp/Db/`).
 
 ```shell
 # Navigate to your application's Db directory
-$ cd jeonglee-DemoApp/Db/
+$ cd ${TOP}/jeonglee-DemoApp/Db/
 $ vi TC-32.substitutions
 ```
 Add the following content:
 
 ```bash
-
+# Global macros apply to all instances in this file
 global {EGU="Celsius"}
-
+# This file references the template file to expand
 file "temperature.template"
 {
 # Define the pattern of macros expected by the template
@@ -358,31 +360,30 @@ pattern {CH}
 
 ### Integrating with the Build System (`Db/Makefile`)
 
-The EPICS build system uses the `Db/Makefile` to understand which database files need to be built and installed. For standard cases where a `.db` file has a corresponding `.template` and/or `.substitutions` file with the same prefix, simply listing the target `.db` file in the DB variable is sufficient to trigger the automatic generation and installation of that file by the EPICS build rules. 
+The EPICS build system uses the `Db/Makefile` to understand which database files need to be built and installed. For standard cases where a target `.db` file should be generated by processing a `.template` file using a `.substitutions` file with the same prefix, simply listing the target `.db` file in the DB variable is sufficient to trigger the automatic generation by the EPICS build rules. The build system looks for files named `target.substitutions` when it sees `target.db` in the DB variable.
 
-You also need to list your source and protocol files using appropriate variables so the build system knows about them and copies them to the correct installation directory if necessary. We will revisit the subject later in more technical / maintaince aspects. 
+You also need to list your source files (.template, .substitutions, .proto) using appropriate variables to ensure the build system is aware of them and copies them to the correct installation directory (${TOP}/db).
 
-Edit the `Db/Makefile` in your application's Db directory (e.g., `jeonglee-DemoApp/Db/Makefile)`.
+Edit the `Db/Makefile` in your application's Db directory (e.g., `${TOP}/jeonglee-DemoApp/Db/Makefile)`.
 
 
 ```makefile
 DB += TC-32.db
-
-...
-DB += $(patsubst ../%, %, $(wildcard ../*.template))
-DB += $(patsubst ../%, %, $(wildcard ../*.substitutions))
-
-...
-
+#
+# DB += $(patsubst ../%, %, $(wildcard ../*.template))         # <-- we don't need this
+# DB += $(patsubst ../%, %, $(wildcard ../*.substitutions))    # <-- we don't need this
+#
 DB += $(patsubst ../%, %, $(wildcard ../*.proto))
 
 ```
 
-* `DB += TC-32.db`: This line lists the target database file `TC-32.db` in the DB variable. This informs the build system that `TC-32.db` is a file that should be built and installed.
-* The subsequent lines using `DB += $(patsubst ../%, %, $(wildcard ...))` list source and configuration files (`.template`, `.substitutions`, `.proto`) in the DB variable. This is intended to ensure these files are also handled by the build system, likely resulting in them being copied to the final db directory.
+* `DB += TC-32.db`: This line lists the target database file `TC-32.db` in the DB variable. This informs the build system that `TC-32.db` is a file that should be built and installed. Its presence, along with  `TC-32.substitutions` having the same `TC-32` prefix internally, triggers the build-time processing.
+
+* The subsequent lines using `DB += $(patsubst ../%, %, $(wildcard ...))` list source and configuration files (`.proto`) in the DB variable. This is intended to ensure these files are also handled by the build system, likely resulting in them being copied to the final db directory.
+
 * When you run make, the EPICS build system processes these instructions. The presence of `TC-32.db` in the DB variable, combined with the existence of `temperature.template` and `TC-32.substitutions` (which references the template), triggers the build system's underlying rules to process `temperature.template` using the substitutions in `TC-32.substitutions` and generate the `TC-32.db` file.
 
-### Building the IOC Application
+### Building the IOC Application (Build-Time Generation)
 
 Now that you've created the `.substitution` file and updated the `Db/Makefile` to list the files, navigate to your application's top-level directory and run make.
 
@@ -391,20 +392,20 @@ Now that you've created the `.substitution` file and updated the `Db/Makefile` t
 $ make
 ```
 
-The make command, guided by the EPICS build rules and your `Db/Makefile`, will perform the necessary steps to build your application and process your database files. It will generate the `TC-32.db` file by processing `temperature.template` using `TC-32.substitutions` and place the generated file in your runtime DB directory (e.g., `${TOP}/db`). Your source files (`.template`, `.substitutions`, `.proto`) should also be copied to the db directory as per your Makefile instructions.
+The make command, guided by the EPICS build rules and your `Db/Makefile`, will perform the necessary steps to build your application and process your database files. It will specifically execute a command to process `temperature.template` using the substitutions in `TC-32.substitutions` and generate the `TC-32.db` file. Both the generated TC-32.db and your source file (`tc32.proto`) should be copied to your runtime DB directory (e.g., `${TOP}/db`).
 
 You can verify the generated file exists:
 
 ```shell
 $ ls db/ 
-# You should see TC-32.db listed along with other files
-# You should also see temperature.template, TC-32.substitutions, and tc32.proto
+# You should see TC-32.db
+# You should also see tc32.proto
 ```
 
 You can also inspect the contents of `TC-32.db` with a text editor. You will see 32 record definitions (one for each line in your `.substitutions` file). Each record will have `CH` and `EGU` fields with the values "01" through "32" and "Celsius" respectively, but the `INP` field and the record name will still contain `$(P)`, `$(R)`, and `$(PORT)` macros, as these were not substituted by your `.substitutions` file's pattern.
 
 
-### Update `st.cmd`
+### Update `st.cmd` (Loading the Generated .db File)
 
 Now, let's demonstrate the way to configure all 32 channels using the `TC-32.db`. Navigate to your IOC instance's boot directory (e.g., `iocBoot/ioctraining-jeonglee-Demo/`), copy `st.cmd` to `st2.cmd`, and edit the `st2.cmd`
 
@@ -445,14 +446,20 @@ drvAsynIPPortConfigure("$(ASYN_PORT_NAME)", "$(TARGET_HOST):$(TARGET_PORT)", 0, 
 asynOctetSetInputEos("$(ASYN_PORT_NAME)", 0, "\n")
 asynOctetSetOutputEos("$(ASYN_PORT_NAME)", 0, "\n")
 
+# --- START: Loading the generated database file ---
+# This loads the pre-substituted .db file created by the build system.
+# Runtime substitution is only needed for the macros NOT substituted at build time (P, R, PORT).
 dbLoadRecords("$(DB_TOP)/TC-32.db", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME)")
+# --- END: Loading the generated database file ---
 
 iocInit
 
 ClockTime_Report
 ```
+Note that `dbLoadRecords` is still used, but now it loads the file `TC-32.db` which contains the 32 record definitions with `CH` and `EGU` already fixed. Only `P`, `R`, and `PORT` are substituted at runtime by this single command.
 
-### Running and Verification
+
+### Running and Verification  (Build-Time Method)
 
 Now, let's see the efficient configuration in action. You will run the simulator, start the IOC using the updated `st2.cmd` file, and verify that the 32 temperature channel records have been loaded and are receiving data using CA client tools.
 
@@ -497,30 +504,104 @@ $ camonitor -t sI MYDEMO:TC32:CH{01..32}
 You should see valid temperature data streaming for all 32 channels, confirming that this efficient method using templates and substitution files successfully configured all the necessary records via a single `dbLoadRecords` call on the generated `.db` file.
 
 
+
+## Alternative: Runtime Substitution with dbLoadTemplate
+
+Build-time generation is the standard and generally preferred method for production environments due to performance and consistency. However, it is also possible to perform the template substitution at runtime using the dbLoadTemplate iocsh command.
+
+The runtime method (`dbLoadTemplate`) is more flexible, but can slow IOC startup for large databases. 
+**It is not recommended for production at ALS-U**.
+
+To use this method, create `st3.cmd`:
+
+```shell
+# Navigate to your iocBoot directory
+$ cd ${TOP}/iocBoot/ioctraining-jeonglee-Demo/
+$ vi st3.cmd
+```
+
+
+```shell
+#!../../bin/linux-x86_64/jeonglee-Demo
+
+< envPaths
+
+epicsEnvSet("DB_TOP", "$(TOP)/db")
+
+epicsEnvSet("STREAM_PROTOCOL_PATH", "$(DB_TOP)")
+
+# --- REQUIRED for dbLoadTemplate to find the .template file! ---
+epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(DB_TOP)")
+
+epicsEnvSet("PREFIX_MACRO", "MYDEMO:")
+epicsEnvSet("DEVICE_MACRO", "TC32:") 
+
+epicsEnvSet("IOCNAME", "training-jeonglee-Demo")
+epicsEnvSet("IOC", "ioctraining-jeonglee-Demo")
+
+dbLoadDatabase "$(TOP)/dbd/jeonglee-Demo.dbd"
+jeonglee_Demo_registerRecordDeviceDriver pdbbase
+
+cd "${TOP}/iocBoot/${IOC}"
+
+epicsEnvSet("ASYN_PORT_NAME", "LocalTCPServer")
+epicsEnvSet("TARGET_HOST",    "127.0.0.1")
+epicsEnvSet("TARGET_PORT",    "9399")
+drvAsynIPPortConfigure("$(ASYN_PORT_NAME)", "$(TARGET_HOST):$(TARGET_PORT)", 0, 0, 0)
+
+asynOctetSetInputEos("$(ASYN_PORT_NAME)", 0, "\n")
+asynOctetSetOutputEos("$(ASYN_PORT_NAME)", 0, "\n")
+
+# --- START: Loading the substitution file directly at runtime ---
+# This command processes TC-32.substitutions and its referenced template
+# (temperature.template, found via EPICS_DB_INCLUDE_PATH) at runtime.
+dbLoadTemplate("$(DB_TOP)/TC-32.substitutions", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME)")
+# --- END: Loading the substitution file directly at runtime ---
+
+iocInit
+
+ClockTime_Report
+
+...
+```
+
+* `dbLoadTemplate("$(DB_TOP)/TC-32.substitutions", ...)`: This command tells the IOC to read the `TC-32.substitutions file`. It will then look for the file "..." directive within that file, find `temperature.template`, and use the pattern and value lists to instantiate the records defined in the template.
+* `EPICS_DB_INCLUDE_PATH`: This environment variable is essential when using dbLoadTemplate. It tells the IOC where to search for `.template` files referenced within the `.substitutions` file being loaded.
+
+Make sure both the `.template` and `.substitutions` files are copied to `${TOP}/db`. In your Makefile, add:
+
+```makefile
+DB += $(patsubst ../%, %, $(wildcard ../*.template))
+DB += $(patsubst ../%, %, $(wildcard ../*.substitutions))
+```
+
+
 ## Benefits of Database Templates and Substitution
 
-As demonstrated, the template and substitution file workflow, integrated with the EPICS build system, provides significant advantages for configuring multiple similar records compared to manual methods:
+As demonstrated, the template and substitution file workflow provides significant advantages for configuring multiple similar records compared to purely manual methods. Whether you choose build-time generation (loading a expanded `.db`) or runtime substitution (`dbLoadTemplate`), these techniques offer improvements:
+
 
 * **Scalability:** Easily create hundreds or thousands of similar records by adding lines to a `.substitutions` file or even generating the `.substitutions` file programmatically.
+
 * **Maintainability:** Update the structure of the records for all instances by editing a single `.template` file. Update common parameters (like `EGU`) for all instances by editing the global block in the `.substitutions` file.
+
 * **Consistency:** Ensures all instances are configured identically based on the template and substitution rules, reducing configuration errors.
-* **Readability:** The `st.cmd` file remains clean and short, focusing on loading the single generated database file and setting top-level macros, rather than containing repetitive record definitions or dbLoadRecords calls for every single record instance.
-* **Build-Time Generation:** The heavy lifting of generating record instances happens during the build process (make), triggered by the appropriate Makefile rules, not at IOC startup (`iocInit`), potentially leading to faster startup times for very large configurations.
+
+* **Readability:** The `st.cmd` file remains clean and short, focusing on loading database files and setting top-level macros, rather than containing repetitive record definitions.
+
+* **Build-Time Efficiency (for `.db` generation):** Generating record instances happens during the build process (`make`), triggered by Makefile rules, not at IOC startup (`iocInit`). This leads to faster startup times for very large configurations compared to runtime substitution methods (`dbLoadRecords` on `.template` or `dbLoadTemplate`).
+
 * **Reduced Errors:** Minimizes copy-paste errors inherent in manual methods.
 
 
-
+While `iocshLoad` with snippets is excellent for encapsulating sequences of iocsh commands (like configuring an Asyn port and then loading one database file or set of records), templates and substitution files (processed at build time or runtime) are the primary methods for generating large numbers of similar database records themselves from a common definition. Often, these techniques are used together: `iocshLoad` might configure the device connection, and then `dbLoadRecords` (loading a build-time `.db`) is used within `st.cmd` or an iocsh script to load the records associated with that connection.
 
 ## Questions for further understanding:
 
-* Modify the `temperature.template` to add a simple alarm field (e.g., `HIGH` or `LOLO`) and rebuild the IOC.
+* Modify the `temperature.template` to add a simple alarm field (e.g., `HIGH` or `LOLO`) and rebuild the IOC using the build-time method (make and running `st2.cmd`). Verify the new field appears using `caget MYDEMO:TC32:CHXX.HIGH`.
 
 * Explore the generated `TC-32.db` file. See how the template and substitution file were combined to create the final record definitions.
 
-* Experiment with moving `$(P)`, `$(R)`, or `$(PORT)` from being load-time macros (provided in `st2.cmd`) to build-time macros (defined in the `.substitutions` file's pattern and list, potentially using global for common values). 
+* Experiment with moving `$(P)`, `$(R)`, or `$(PORT)` from being load-time macros (provided in `st2.cmd` or `st3.cmd`) to build-time macros (defined in the `.substitutions` file's pattern and list, potentially using global for common values). How does the generated `.db` file look different? How would you load it in `st.cmd`?
 
-* Experiment with `dbLoadTemplate` in `st2.cmd` (WIP)
-
-
-
-While `iocshLoad` with snippets is excellent for encapsulating sequences of iocsh commands (like configuring an Asyn port and then loading one database file or set of records), templates and substitution files processed at build time are the standard and most efficient method for generating large numbers of similar database records themselves from a common definition. Often, these techniques are used together: `iocshLoad` might configure the device connection and dbLoadRecords is then used within `st.cmd` to load a `.db` file (which was itself generated from a `.template`/`.substitutions`) associated with that connection.
+* Experiment with running the IOC using `st3.cmd` which employs the `dbLoadTemplate` runtime method. Compare the IOC startup time to running with `st2.cmd` (build-time method) for 32 channels. (Note: the difference might be very small for only 32 channels, but becomes significant for thousands).
