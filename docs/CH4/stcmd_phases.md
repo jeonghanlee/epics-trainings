@@ -1,4 +1,4 @@
-# IOC Startup Sequence (`st.cmd` Phases)
+# 4.6 IOC Startup Sequence (`st.cmd` Phases)
 
 The startup script, conventionally named `st.cmd`, is the script executed when an EPICS Input/Output Controller (IOC) starts. It's a sequence of commands interpreted by the IOC shell (`iocsh`) that sets up your EPICS IOC environment, loads the necessary software components and database configurations, and ultimately brings the control system to a ready and operational state. Understanding the structure and phases of the `st.cmd` script is fundamental to developing and debugging IOC applications.
 

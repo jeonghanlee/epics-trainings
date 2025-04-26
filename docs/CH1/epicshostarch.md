@@ -1,4 +1,4 @@
-# ALS-U EPICS Environment Design Principles (`linux-x86_64` + OS-Specific Folders)
+# 1.3 ALS-U EPICS Environment Design Principles (`linux-x86_64` + OS-Specific Folders)
 
 **Note:** This section discusses the underlying design choices for the EPICS environment's architecture and cross-distribution support. While important for a deep understanding, some concepts related to build systems, `EPICS_HOST_ARCH`, operating system specifics, library compatibility (like `glibc`), and Application Binary Interfaces (ABIs) may be considered advanced. A full grasp of these details is not required for basic environment usage if following standard procedures.
 

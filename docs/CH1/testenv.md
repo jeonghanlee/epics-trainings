@@ -1,4 +1,4 @@
-# Your First Running EPICS IOC
+# 1.2 Your First Running EPICS IOC
 In this section, you will run your very first EPICS Input/Output Controller (IOC) using the standard `softIocPVX` executable included in the environment. You will create a minimal database file defining a single Process Variable (PV) and then use essential EPICS command-line tools like caget, caput, and pvxget to interact with this PV over the network, demonstrating both Channel Access (CA) and the newer PV Access (PVA) protocols.
 
 ## Lesson Overview

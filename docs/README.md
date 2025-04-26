@@ -20,7 +20,6 @@
     - [Create the TCP Simulator](CH3/iocsimulator.md)
     - [Test IOC-Simulator Communication](CH3/secondiocwithsim.md)
 
-----------
 # Chapter 4: Advanced IOC Configuration and Startup
 - [Advanced IOC Configuration](CH4/README.md)
     - [Working with `iocsh`: Script Files and Commands](CH4/iocsh_basics.md)

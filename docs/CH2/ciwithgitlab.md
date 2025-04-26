@@ -1,4 +1,4 @@
-# GitLab Continuous Integration for IOC Development
+# 2.3 GitLab Continuous Integration for IOC Development
 This section details the Continuous Integration (CI) process implemented within the ALS-U GitLab environment, designed to standardize the building and testing of EPICS IOCs. You will learn how IOC projects include configuration from a central CI project (`alsu/ci`), understand the standard pipeline stages (like build and test), and crucially, discover how to conditionally incorporate necessary ALS-U site-specific modules into your CI builds using a simple `.sitemodules` trigger file. A hands-on walkthrough demonstrates pushing your IOC code to GitLab and observing the CI pipeline behavior both before and after enabling site module support.
 
 ## Lesson Overview
