@@ -27,7 +27,7 @@ This shows the IOC shell prompt (7.0.7 >) and that basic commands like `help`, `
 
 You can also inspect the shared libraries that your IOC executable depends on using system tools like ldd on Linux:
 
-```shell
+```
 $ ldd bin/linux-x86_64/jeonglee-Demo 
 	linux-vdso.so.1 (0x00007ffe787f1000)
 	libasyn.so => /home/jeonglee/epics/1.1.1/debian-12/7.0.7/modules/asyn/lib/linux-x86_64/libasyn.so (0x00007f0dfd15b000)
@@ -110,32 +110,25 @@ Looking at your example `st.cmd`:
 < envPaths
 
 epicsEnvSet("DB_TOP", "$(TOP)/db")
-
 epicsEnvSet("STREAM_PROTOCOL_PATH", "$(DB_TOP)")
-
 epicsEnvSet("EPICS_DB_INCLUDE_PATH", "$(DB_TOP)")
 
-# Define macros for the overall device/IOC
 epicsEnvSet("PREFIX_MACRO", "MYDEMO:")
-epicsEnvSet("DEVICE_MACRO", "TC32:") # Using TC32 for this example
+epicsEnvSet("DEVICE_MACRO", "TC32:")
 
 epicsEnvSet("IOCNAME", "training-jeonglee-Demo")
 epicsEnvSet("IOC", "ioctraining-jeonglee-Demo")
-
-
 
 dbLoadDatabase "$(TOP)/dbd/jeonglee-Demo.dbd"
 jeonglee_Demo_registerRecordDeviceDriver pdbbase
 
 cd "${TOP}/iocBoot/${IOC}"
 
-
 #-- Device / System Configuration
 epicsEnvSet("ASYN_PORT_NAME", "LocalTCPServer")
 epicsEnvSet("TARGET_HOST",    "127.0.0.1")
 epicsEnvSet("TARGET_PORT",    "9399")
 drvAsynIPPortConfigure("$(ASYN_PORT_NAME)", "$(TARGET_HOST):$(TARGET_PORT)", 0, 0, 0)
-
 asynOctetSetInputEos("$(ASYN_PORT_NAME)", 0, "\n")
 asynOctetSetOutputEos("$(ASYN_PORT_NAME)", 0, "\n")
 
@@ -146,13 +139,11 @@ dbLoadRecords("$(DB_TOP)/TC-32.db", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(
 iocInit
 
 #-- After iocInit, commands and others...
-
 ClockTime_Report
 ```
-
 Here are the typical types of commands found in this phase, illustrated by your example:
 
-1. Environment Setup:
+1. **Environment Setup:**
 
 * `< envPaths`: This is a common convention to source the `envPaths` file. This file, usually generated during the build process (as seen in your `envPaths` example below), defines essential environment variables like `TOP`, `EPICS_BASE`, and paths to included EPICS modules.
 
@@ -171,28 +162,27 @@ epicsEnvSet("EPICS_BASE","/home/jeonglee/epics/1.1.1/debian-12/7.0.7/base")
 ```
 * `epicsEnvSet("VAR_NAME", "value")`: Used to define additional environment variables specific to the application or IOC instance. This includes defining paths (`DB_TOP`, `STREAM_PROTOCOL_PATH`), or macro values (`PREFIX_MACRO`, `DEVICE_MACRO`, `IOCNAME`). These variables and macros make the `st.cmd` script more flexible and easier to manage.
 
-2. Database Definition and Support Registration:
+2. **Database Definition and Support Registration:**
 
 * `dbLoadDatabase "$(TOP)/dbd/jeonglee-Demo.dbd`": Loads the compiled database definitions (`.dbd`) file. Note that `.dbd` file contains any type of definition except record instances defined in a `.db` file. EPICS has teh following database defintionns such as `Menu`, `Record Type`, `Device`, `Driver`, `Registrar`, `Variable`, `Function`, and `Breakpoint Table`.
 
 * `jeonglee_Demo_registerRecordDeviceDriver pdbbase`: This command (where `jeonglee_Demo` is typically derived from your application name) registers the device and driver support routines that were linked into your IOC executable with the EPICS database processing core. This is crucial so that records can find and connect to the low-level code that interacts with hardware. The source file will be generated automatically through the building procedure. You can check it in `jeonglee-DemoApp/src/O.linux-x86_64/jeonglee-Demo_registerRecordDeviceDriver.cpp` and the file is defined in `jeonglee-DemoApp/src/Makefile` as well.
 
-3. Changing Directory:
+3. **Changing Directory:**
 * `cd "${TOP}/iocBoot/${IOC}"`: Changes the current working directory to the IOC's specific boot directory. This is a common convention and simplifies the paths used for loading subsequent configuration files.
 
-4. Hardware and Driver Configuration:
+4. **Hardware and Driver Configuration:**
 
 * `drvAsynIPPortConfigure("LocalTCPServer", "127.0.0.1:9399", ...)`: Commands specific to hardware drivers or communication modules (like Asyn) are placed here. This configures the low-level interface used to communicate with external devices.
 
 * `asynOctetSetInputEos(...), asynOctetSetOutputEos(...)`: Configuration specific to the communication protocol, such as setting end-of-string terminators for serial or TCP communication.
 
-5. Record Instance Loading:
+5. **Record Instance Loading:**
 
 * `dbLoadRecords("$(DB_TOP)/TC-32.db", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME)")`: 
 Loads the actual record instances (the PVs) using database files (`.db`).
 
 At the end of this phase, the IOC shell has loaded all the necessary definitions, configured the communication interfaces, and created the record instances in memory, but the records are not yet actively processing or interacting with the hardware in a real-time loop.
-
 
 ## `iocInit()`: Bringing the IOC to Life
 
@@ -201,7 +191,6 @@ The `iocInit()` command is the turning point. When executed, it performs the vit
 Once `iocInit()` completes, the IOC is **"live."** Records configured for scanning will begin processing, Channel Access clients can connect and interact with the PVs, and the IOC is actively monitoring and controlling the connected hardware.
 
 For a detailed explanation of the internal steps performed by `iocInit()`, including the distinction between `iocBuild` and `iocRun` phases and the sequence of calls to various EPICS subsystems and initialization hooks, please refer to the separate documentation on [Advanced `iocInit()`](adviocInit.md) [^note].
-
 
 ## After iocInit(): Post-Initialization Actions
 
@@ -216,14 +205,12 @@ ClockTime_Report
 Typical actions in this phase include:
 
 * **Starting Sequence Programs (SNC Programs):** Sequence programs, which implement complex state machine logic using SNL, are commonly started after `iocInit()` using the `seq` command. This ensures that the PVs the sequence program interacts with are already loaded and initialized.
+
 * **Performing Post-Startup Configuration:** While most configuration is done before `iocInit()`, sometimes specific settings or actions that depend on the IOC being live are performed here.
+
 * **Running Diagnostic or Utility Commands:** Commands for reporting status, health checks, or other utilities that are relevant after the IOC is fully operational can be placed here, such as the `ClockTime_Report` in your example. These might provide confirmation that the IOC started successfully and is functioning as expected.
+
 * **Setting Initial PV Values:** While initial values are often handled during record initialization via device support, in some cases, commands might be used here to set specific PVs to a desired state after startup, although this is less common than setting values before iocInit or relying on device support init.
 
-## Key Concepts Summarized
-
-* **Before iocInit():** Setup the environment, load database definitions (`.dbd`), register support (`*_registerRecordDeviceDriver`), configure low-level communication (`drvAsyn..., asynSet...`), and load record instances (`dbLoadRecords, dbLoadTemplate`). This phase builds the structure and provides the necessary software components.
-* **iocInit():** Initializes the EPICS kernel, starts real-time tasks, and initializes all loaded records. This command brings the IOC to life.
-* **After iocInit():** Execute commands that require a fully running IOC, such as starting sequence programs (`seq`), running post-startup diagnostics, or performing final configuration steps.
 
 [^note]: Based on the [EPICS Application Developer’s Guide](https://docs.epics-controls.org/en/latest/appdevguide/IOCInit.html#id1)
