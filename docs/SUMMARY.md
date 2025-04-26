@@ -28,6 +28,7 @@
     - [A TC-32 Temperature Monitoring Device Simulator](CH4/iocsimulator3.md)
     - [Database Templates and Substitution](CH4/db_templates.md)
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/stcmd_phases.md)
+        -[Advanced `iocInit()` Note](CH4/adviocInit.md)
 ----------
 [EPICS environment](misc/EPICSEnv.md)
 [Future Lessons](misc/FutureLessonsList.md)
