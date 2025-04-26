@@ -9,6 +9,7 @@ The initialization process, as performed by `iocInit` (which encompasses `iocBui
 This phase sets up the core environment and loads/initializes the static configuration but does *not* yet start the main processing or I/O threads.
 
 1.  **Configure Main Thread:**
+
     * The main thread's execution environment is prepared.
     * `initHookAtIocBuild` is announced (allowing registered functions to run at this specific point).
     * The message "Starting iocInit" is logged.
@@ -18,31 +19,31 @@ This phase sets up the core environment and loads/initializes the static configu
 2.  **General Purpose Modules:**
     * `coreRelease` is called, typically printing the EPICS Base version.
     * `taskwdInit` is called to start the task watchdog system, which monitors other tasks.
-    * `callbackInit` is called to start the general-purpose callback tasks used for scheduling work at different priorities.
+    * `callbackInit` is called to start the general-purpose callback tasks.
     * `initHookAfterCallbackInit` is announced.
 
 3.  **Channel Access Links:**
-    * `dbCaLinkInit` initializes the module for handling Channel Access links between records. Its processing task is *not* started yet.
+    * `dbCaLinkInit` initializes the module for handling database channel access links. Its task is *not* started yet.
     * `initHookAfterCaLinkInit` is announced.
 
 4.  **Driver Support:**
-    * `initDrvSup` is called. This routine finds all registered driver support entry tables and calls each driver's `init` routine.
+    * `initDrvSup` is called. This routine find all the hardware drivers so they are ready to use. The initDrvSup function finds each driver's info and runs its setup code.
     * `initHookAfterInitDrvSup` is announced.
 
 5.  **Record Support:**
-    * `initRecSup` is called. This routine finds all registered record support entry tables and calls the module-level `init` routine for each record type.
+    * `initRecSup` is called. This routine finds each record support entry table and calls the init routine for each record type.
     * `initHookAfterInitRecSup` is announced.
 
 6.  **Device Support (Initial Call):**
-    * `initDevSup` is called for the first time. This routine finds all registered device support entry tables and calls their `init` routine, indicating this is the initial call.
+    * `initDevSup` is called for the first time. This routine looks up each device support entry table and calls their init routine, indicating this is the initial call.
     * `initHookAfterInitDevSup` is announced.
 
 7.  **Database Records:**
-    * `initDatabase` is called, performing a multi-pass initialization of the loaded record instances:
-        * **Pass 1:** Initializes basic record fields (like `RSET`, `PACT`) and calls record support's `init_record` function for each record.
-        * **Pass 2:** Converts `PV_LINK` fields into either `DB_LINK` (if the target PV is in the same IOC) or `CA_LINK` (if the target is remote). Extended device support's `add_record` routine may be called.
-        * **Pass 3:** Calls record support's `init_record` function again for each record (second pass).
-    * An exit routine is registered to handle database shutdown when the IOC exits.
+    * `initDatabase` is called, making three passes over the database performing the following:
+        * **Pass 1:** Initializes record fields (like `RSET`, `RDES`, `MLOK`, `MLIS`, `PACT`, `DSET`) for each record and calls record support's `init_record`.
+        * **Pass 2:** Converts `PV_LINK` into either `DB_LINK` (if the target PV is in the same IOC) or `CA_LINK` (if the target is remote) and call any extended device support's `add_record` routine.
+        * **Pass 3:** Calls record support's `init_record` function again (second pass).
+    * An exit routine `epicsAtExit` is registered to handle database shutdown when the IOC exits.
     * `dbLockInitRecords` is called to set up the database lock sets.
     * `dbBkptInit` initializes the database debugging module.
     * `initHookAfterInitDatabase` is announced.
@@ -53,19 +54,19 @@ This phase sets up the core environment and loads/initializes the static configu
 
 9.  **Scanning and Access Security:**
     * `scanInit` initializes the periodic, event, and I/O event scanners, but the scan threads are created in a state where they cannot process records yet.
-    * `asInit` initializes the Channel Access access security system. If this fails, IOC initialization is aborted.
+    * `asInit` initializes the access security. If this fails, IOC initialization is aborted.
     * `dbProcessNotifyInit` initializes support for process notification.
     * After a short delay, `initHookAfterScanInit` is announced.
 
 10. **Initial Processing:**
-    * `initialProcess` is called. This function finds all records that have their `PINI` (Process at Initialization) field set to `YES` and triggers a processing cycle for them.
+    * `initialProcess` processes all reacords that have `PINI` set to `YES`
     * `initHookAfterInitialProcess` is announced.
 
 11. **Channel Access Server (Initial Setup):**
-    * `rsrv_init` is called to initialize the Channel Access server structures, but its network tasks are not yet allowed to run, so it doesn't announce its presence on the network.
+    * `rsrv_init` is called to start the Channel Access server, but its tasks are not yet allowed to run, so it doesn't announce its presence on the network.
     * `initHookAfterCaServerInit` is announced.
 
-At this point, the `iocBuild` phase is complete. The IOC's structure is built, configurations loaded, and support initialized, but it is still in a quiescent state. `initHookAfterIocBuilt` is announced. If you had started with `iocBuild`, the command would finish here.
+At this point, the `iocBuild` phase is complete. So, the IOC has been fully initialized, but it is still in a quiescent state. `initHookAfterIocBuilt` is announced. If you had started with `iocBuild`, the command would finish here.
 
 ## Phase 2: `iocRun` (Bringing the IOC Online)
 
