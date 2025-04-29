@@ -12,15 +12,15 @@ Let's look at the common styles:
 
 * **Style 1: Function-like syntax with parentheses and commas**
 
-This style looks like a function or command call you might see in programming. You put the command name, then arguments inside parentheses, separated by commas.
+    This style looks like a function or command call you might see in programming. You put the command name, then arguments inside parentheses, separated by commas.
 
-`command("arg1", "arg2", ...)`
+    `command("arg1", "arg2", ...)`
 
 * **Style 2: Space-separated syntax**
 
-This style looks more like commands you type directly into a simple computer command line. You put the command name, then the arguments with spaces between them.
+    This style looks more like commands you type directly into a simple computer command line. You put the command name, then the arguments with spaces between them.
 
-`command "arg1" "arg2" ...`
+    `command "arg1" "arg2" ...`
 
 Both styles are generally accepted by the EPICS IOC shell for most commands, though specific commands might have preferences or require quotes around arguments containing spaces or special characters.
 
@@ -28,19 +28,24 @@ Both styles are generally accepted by the EPICS IOC shell for most commands, tho
 Let's look at examples you already saw:
 
 1. **Setting up EPICS environment value (`epicsEnvSet`):**
-You can write it as:
-`epicsEnvSet("STREAM_PROTOCOL_PATH", "$(DB_TOP)")`
-Or just using spaces:
-`epicsEnvSet "STREAM_PROTOCOL_PATH" "$(DB_TOP)"`
+    You can write it as:
+
+    `epicsEnvSet("STREAM_PROTOCOL_PATH", "$(DB_TOP)")`
+
+    Or just using spaces:
+
+    `epicsEnvSet "STREAM_PROTOCOL_PATH" "$(DB_TOP)"`
 
 2. **Loading the device definitions (`dbLoadRecords`):**
-This also typically uses spaces for the main parts, even though the stuff inside the quotes has commas:
-`dbLoadRecords("$(DB_TOP)/TC-32.db", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME)")`
+    This also typically uses spaces for the main parts, even though the stuff inside the quotes has commas:
 
-or, less commonly seen for `dbLoadRecords`'s macro argument but technically possible for the command itself:
-`dbLoadRecords "$(DB_TOP)/TC-32.db" "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME)"`
+    `dbLoadRecords("$(DB_TOP)/TC-32.db", "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME)")`
 
-Here is the comparision `st.cmd` between `st2.cmd` in CH4/db_templates.md and `st4.cmd` with the following style `epicsEnvSet "STREAM_PROTOCOL_PATH" "$(DB_TOP)"`
+    or, less commonly seen for `dbLoadRecords`'s macro argument but technically possible for the command itself:
+
+    `dbLoadRecords "$(DB_TOP)/TC-32.db" "P=$(PREFIX_MACRO),R=$(DEVICE_MACRO),PORT=$(ASYN_PORT_NAME)"`
+
+Here is the comparision `st.cmd` between `st2.cmd` in `CH4/db_templates.md` and `st4.cmd` with the following style `epicsEnvSet "STREAM_PROTOCOL_PATH" "$(DB_TOP)"`
 
 ### `st2.cmd` : Mixed but more `epicsEnvSet(..,..,..) Style
 
