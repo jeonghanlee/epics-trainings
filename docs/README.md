@@ -29,6 +29,11 @@
     - [Database Templates and Substitution](CH4/db_templates.md)
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/stcmd_phases.md)
         - [Advanced `iocInit()` Note](CH4/adviocInit.md)
+
+# Chapter 5 (WIP)
+- [How To's Collection](CH5/README.md)
+    - [In-Depth IOC Configuratino](CH5/how-to-ioc-log1.md)
+
 ----------
 # Additional Resouces
 - [EPICS environment](EPICSEnv.md)
