@@ -32,7 +32,7 @@
 
 # Chapter 5 (WIP)
 - [How To's Collection](CH5/README.md)
-    - [In-Depth IOC Configuratino](CH5/how-to-ioc-log1.md)
+    - [In-Depth IOC Configuration](CH5/how-to-ioc-log1.md)
 
 ----------
 # Additional Resouces

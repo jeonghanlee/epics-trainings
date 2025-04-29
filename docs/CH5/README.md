@@ -4,4 +4,4 @@ This chapter collects several workflow and documentations mostly **HOW TOs** sni
 
 This chapter covers the following topics:
 
- [In-Depth IOC Configuratino](how-to-ioc-log1.md): Understanding IOC Application Configuration
+ [In-Depth IOC Configuration](how-to-ioc-log1.md): Understanding IOC Application Configuration
