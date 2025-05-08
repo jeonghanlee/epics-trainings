@@ -1,7 +1,11 @@
-# Chapter 5: How To's Collection
+# Chapter 5: Understanding IOC Application Configuration
 
-This chapter collects several workflow and documentations mostly **HOW TOs** snippts documentation to improve your understanding on generic EPICS IOC development. 
+An EPICS Input/Output Controller (IOC) application requires configuration to define its behavior, load databases, initialize hardware interfaces, and set various parameters. The primary file responsible for the initial setup of an IOC instance is the startup script, typically named `st.cmd`. Additionally, other files like `configure/RELEASE`, `configure/CONFIG_SITE`, and `system.dbd` play crucial roles in defining dependencies, site-specific settings, and the overall database definition.
 
 This chapter covers the following topics:
 
- [In-Depth IOC Configuration](how-to-ioc-log1.md): Understanding IOC Application Configuration
+ [Style of `st.cmd`](how-to-ioc-log1.md): Style of `st.cmd` Commands
+ [`RELEASE` file](how-to-ioc-log2.md): Deep Insight on `configure/RELEASE`
+ [`CONFIG_SITE` file](how-to-ioc-log3.md): Deep Insight on `configure/CONFIG_SITE`
+ [`system.dbd` file](how-to-ioc-log4.md): What `system.dbd` file is
+ 
