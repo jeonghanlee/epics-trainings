@@ -61,7 +61,6 @@ CHECK_RELEASE = NO
 -include $(TOP)/configure/CONFIG_SITE.local
 ```
 
-
 ## **AREA 1:** Build Checks and Target Architectures
 
 This area contains settings that affect the build process's checks and the target platforms.
@@ -109,7 +108,9 @@ Just like `RELEASE.local`, these `CONFIG_SITE.local` files are added to `.gitign
 
 ## Assignment
 
-1. Add `INSTALL_LOCATION` into `configure/CONFIG_SITE.local`, and build your IOC. Please check your installation location about the directory structure, and what kind of files you can see during `make`, `make clean`, `make install` and `make distclean`.
+### 1. `INSTALL_LOCATION`
+
+Please add `INSTALL_LOCATION` into `configure/CONFIG_SITE.local`, and build your IOC. Please check your installation location about the directory structure, and what kind of files you can see during `make`, `make clean`, `make install` and `make distclean`.
 
 ```bash
 $ echo "INSTALL_LOCATION=${HOME}/new_location" > configure/CONFIG_SITE.local
@@ -124,23 +125,20 @@ $ tree ~/new_location
 $ make
 ```
 
-Even with `make distclean`, the installation folder will not be removed. Thus, you should remove it manually if you don't need it.
+Even with `make distclean`, the installation folder will not be removed. Thus, you should remove it manually if you don't need it. Please check `TOP` definition in `envPaths`:
+```shell
+$ cat iocBoot/*/envPaths 
+```
 
-Please check `TOP` definition in `envPaths`
+## 2. `iocBoot`
+You observe that the `iocBoot` folder and its contents are not automatically installed to the `INSTALL_LOCATION`. With this fact, can you develop your own deployment plan for each IOC application? The answer is typically "it depends". However, please think and develop an architecture by yourself. The ALS-U EPICS Environment doesn't currently have such an architecture design, since at this moment we will not use `INSTALL_LOCATION` at the IOC application level. Please check `TOP` definition in `envPaths` under the `iocBoot` folder:
 
 ```shell
 $ cat iocBoot/*/envPaths 
 ```
 
-2. You observe that the `iocBoot` folder and its contents are not automatically installed to the `INSTALL_LOCATION`. With this fact, can you develop your own deployment plan for each IOC application? The answer is typically "it depends". However, please think and develop an architecture by yourself. The ALS-U EPICS Environment doesn't currently have such an architecture design, since at this moment we will not use `INSTALL_LOCATION` at the IOC application level.
-
-Please check `TOP` definition in `envPaths` under the `iocBoot` folder:
-
-```shell
-$ cat iocBoot/*/envPaths 
-```
-
-3. Okay, we can use `IOCS_APPL_TOP`. Note the use of `>>` during creating `CONFIG_SITE.local` to append to the file:
+## 3. `IOCS_APPL_TOP`
+Okay, we can use `IOCS_APPL_TOP`. Note the use of `>>` during creating `CONFIG_SITE.local` to append to the file:
 
 ```shell
 $ echo "INSTALL_LOCATION=${HOME}/new_location" > configure/CONFIG_SITE.local
@@ -160,4 +158,5 @@ $ cat iocBoot/*/envPaths
 ```
 Can you explain what difference you see in the `envPaths` file compared to before?
 
-4. For both cases (after Part 2 and after Part 3), try running the IOC executable from the source location, the installation location, or elsewhere, and observe what happens. In what way can you make the IOC run correctly in both cases?
+## 4. `IOC`
+For both cases (after Part 2 and after Part 3), try running the IOC executable from the source location, the installation location, or elsewhere, and observe what happens. In what way can you make the IOC run correctly in both cases?
