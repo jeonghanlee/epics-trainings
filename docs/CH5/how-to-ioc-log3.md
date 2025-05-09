@@ -134,7 +134,7 @@ $ cat iocBoot/*/envPaths
 
 2. You observe that the `iocBoot` folder and its contents are not automatically installed to the `INSTALL_LOCATION`. With this fact, can you develop your own deployment plan for each IOC application? The answer is typically "it depends". However, please think and develop an architecture by yourself. The ALS-U EPICS Environment doesn't currently have such an architecture design, since at this moment we will not use `INSTALL_LOCATION` at the IOC application level.
 
-Please check `TOP` definition in `envPaths`
+Please check `TOP` definition in `envPaths` under the `iocBoot` folder:
 
 ```shell
 $ cat iocBoot/*/envPaths 
@@ -153,11 +153,11 @@ $ tree ~/new_location
 $ make clean
 $ tree ~/new_location
 ```
-Please check the `TOP` definition in the envPaths file located in your source directory's `iocBoot` folder again:
+Please check the `TOP` definition in the `envPaths` file located in your source directory's `iocBoot` folder again:
 
 ```shell
 $ cat iocBoot/*/envPaths 
 ```
 Can you explain what difference you see in the `envPaths` file compared to before?
 
-4. Try running the IOC in both cases. Try running it from the source location, the installation location, or elsewhere, and observe what happens. In what way can you make the IOC running correctly?
+4. For both cases (after Part 2 and after Part 3), try running the IOC executable from the source location, the installation location, or elsewhere, and observe what happens. In what way can you make the IOC run correctly in both cases?
