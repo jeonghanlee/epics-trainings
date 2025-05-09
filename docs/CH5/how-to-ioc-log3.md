@@ -105,3 +105,22 @@ Similar to `configure/RELEASE`, `configure/CONFIG_SITE` supports including local
 These lines mean that if `CONFIG_SITE.local` files exist in the parent directory `$(TOP)/..` or within the application's configure directory `$(TOP)/configure`, their contents will be included. Any variable definitions in these local files will override definitions made earlier in the main `CONFIG_SITE`.
 
 Just like `RELEASE.local`, these `CONFIG_SITE.local` files are added to `.gitignore` within the ALS-U EPICS Environment, to keep local build customizations out of the shared version control repository.
+
+
+## Assignment
+
+Add `INSTALL_LOCATION` into `configure/CONFIG_SITE.local`, and build your IOC. Please check your installation location about the directory structure, and what kind of files you can see during `make`, `make clean`, `make install` and `make distclean`.
+
+
+```bash
+$ echo "INSTALL_LOCATION=${HOME}/new_location" > configure/CONFIG_SITE.local
+$ tree ~/new_location
+$ make distclean
+$ tree ~/new_location
+$ make install
+$ tree ~/new_location
+$ make clean
+$ tree ~/new_location
+```
+
+Even with `make distclean`, the installation folder will not be removed. Thus, you should remove it manually if you don't need it.
