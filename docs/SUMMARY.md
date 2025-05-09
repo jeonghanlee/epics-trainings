@@ -34,7 +34,7 @@
 - [How To's Collection](CH5/README.md)
     - [Style of `st.cmd`](CH5/how-to-ioc-log1.md): Style of `st.cmd` Commands
     - [`RELEASE` file](CH5/how-to-ioc-log2.md): Deep Insight on `configure/RELEASE`
-    - [`CONFIG_SITE` file](CH5/how-to-ioc-log3.md): Deep Insight on `configure/CONFIG_SITE`
+    - [`CONFIG_SITE` file](CH5/how-to-ioc-log3.md): `configure/CONFIG_SITE` - Controlling Application-Specific Build Options
     - [`system.dbd`](CH5/how-to-ioc-log4.md): What `system.dbd` file is
 ----------
 [EPICS environment](misc/EPICSEnv.md)
