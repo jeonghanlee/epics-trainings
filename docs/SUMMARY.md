@@ -30,7 +30,7 @@
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/stcmd_phases.md)
         - [Advanced `iocInit()` Note](CH4/adviocInit.md)
 
-# Chapter 5 (WIP)
+# Chapter 5
 - [How To's Collection](CH5/README.md)
     - [Style of `st.cmd`](CH5/how-to-ioc-log1.md): Style of `st.cmd` Commands
     - [`RELEASE` file](CH5/how-to-ioc-log2.md): Deep Insight on `configure/RELEASE`

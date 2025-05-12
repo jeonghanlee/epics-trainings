@@ -10,9 +10,9 @@ Here is the future lessons list, which I would like to develop.
 * [x] Chapter 4: `template`, `substitution` and flatting database files `Db/Makefile`
 * [x] Chapter 4: Expand the simulator (1st level) - multiple instance
 * [x] Chapter 4: Expand the simulator (2nd level) - complicate signals process
-* [ ] `INSTAL_LOCATION` in `CONFIG_SITE`
-* [ ] EPICS Variables in `CONFIG_SITE`
-* [ ] Chapter 5: `system.dbd`
+* [x] `INSTAL_LOCATION` in `CONFIG_SITE`
+* [x] EPICS Variables in `CONFIG_SITE`
+* [x] Chapter 5: `system.dbd`
 * [ ] DB record process (very simple,....)
 * [ ] common modules integration `iocStats`, `autosave`, `recsync`, and so on
 * [ ] sequencer example, `APPNAMEAPP/src/Makefile modification`
