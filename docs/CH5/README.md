@@ -4,8 +4,8 @@ An EPICS Input/Output Controller (IOC) application requires configuration to def
 
 This chapter covers the following topics:
 
- [Style of `st.cmd`](how-to-ioc-log1.md): Style of `st.cmd` Commands
- [`RELEASE` file](how-to-ioc-log2.md): Deep Insight on `configure/RELEASE`
- [`CONFIG_SITE` file](how-to-ioc-log3.md): `configure/CONFIG_SITE` - Controlling Application-Specific Build Options
- [`system.dbd` file](how-to-ioc-log4.md): What `system.dbd` file is
+- [Style of `st.cmd`](how-to-ioc-log1.md): Style of `st.cmd` Commands
+- [`RELEASE` file](how-to-ioc-log2.md): Deep Insight on `configure/RELEASE`
+- [`CONFIG_SITE` file](how-to-ioc-log3.md): `configure/CONFIG_SITE` - Controlling Application-Specific Build Options
+- [`system.dbd` file](how-to-ioc-log4.md): What `system.dbd` file is
  
