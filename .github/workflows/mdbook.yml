@@ -39,12 +39,12 @@ jobs:
         run: |
             rustc --version
             mdbook --version
-            mdbook build
+            mdbook build -d public
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: '.'
+          path: './public'
 
   # Deployment job
   deploy:
