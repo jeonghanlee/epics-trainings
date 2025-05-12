@@ -29,10 +29,13 @@
     - [Database Templates and Substitution](CH4/db_templates.md)
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/stcmd_phases.md)
         - [Advanced `iocInit()` Note](CH4/adviocInit.md)
-
-# Chapter 5 (WIP)
+        
+# Chapter 5
 - [How To's Collection](CH5/README.md)
-    - [In-Depth IOC Configuration](CH5/how-to-ioc-log1.md)
+    - [Style of `st.cmd`](CH5/how-to-ioc-log1.md): Style of `st.cmd` Commands
+    - [`RELEASE` file](CH5/how-to-ioc-log2.md): Deep Insight on `configure/RELEASE`
+    - [`CONFIG_SITE` file](CH5/how-to-ioc-log3.md): `configure/CONFIG_SITE` - Controlling Application-Specific Build Options
+    - [`system.dbd`](CH5/how-to-ioc-log4.md): What `system.dbd` file is
 
 ----------
 # Additional Resouces
