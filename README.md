@@ -1,5 +1,7 @@
 # ALS-U EPICS Training Documentation
 
+[![Deploy mdBook site to Pages](https://github.com/jeonghanlee/epics-training/actions/workflows/mdbook.yml/badge.svg)](https://github.com/jeonghanlee/epics-training/actions/workflows/mdbook.yml)
+
 Welcome to the documentation for the ALS-U EPICS Environment. This guide is designed to assist in developing and testing Input/Output Controllers (IOCs) for the Advanced Light Source Upgrade (ALS-U).
 
 The training is designed with the ALS-U EPICS Environment. And this  environment is designed to **simplify** the development process, ensure code quality, and promote consistency across all ALS-U IOC projects. Furthermore, it aims to remove tedious and error-prone procedures often associated with traditional EPICS IOC development and deployment.
