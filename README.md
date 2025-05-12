@@ -14,7 +14,7 @@ This documentation is built and published through our Continuous Integration (CI
 
 ## ALS-U Mirror Github Pages
 
-* https://jeonghanlee.github.io/epics-training/
+* https://jeonghanlee.github.io/epics-trainings/
 
 ## Git Source sites
 * [ALS-U EPICS Environment](docs/README.md)
