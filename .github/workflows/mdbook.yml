@@ -35,16 +35,19 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-      - name: Build with mdBook
+
+      - name: Env Check
         run: |
             rustc --version
             mdbook --version
-            mdbook build -d public
+      - name: Build with mdBook
+        run: mdbook build
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: 'public'
+          # book.toml, we define build.build-dir as public
+          path: './public'
 
   # Deployment job
   deploy:
