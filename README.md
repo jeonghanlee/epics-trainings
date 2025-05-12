@@ -6,7 +6,15 @@ The training is designed with the ALS-U EPICS Environment. And this  environment
 
 This documentation is built and published through our Continuous Integration (CI) pipeline, ensuring that you always have access to the latest information.
 
-You can view the complete documentation online via the CI published GitLab Pages:
 
-https://jeonglee.pages.als.lbl.gov/epics-trainings/
+## ALS-U Internal Gitlab Pages
+* https://jeonglee.pages.als.lbl.gov/epics-trainings/
+
+## ALS-U Mirror Github Pages
+
+* https://jeonghanlee.github.io/epics-training/
+
+## Git Source sites
+* [ALS-U EPICS Environment](docs/READM.md)
+
 
