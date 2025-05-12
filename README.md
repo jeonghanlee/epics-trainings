@@ -15,6 +15,6 @@ This documentation is built and published through our Continuous Integration (CI
 * https://jeonghanlee.github.io/epics-training/
 
 ## Git Source sites
-* [ALS-U EPICS Environment](docs/READM.md)
+* [ALS-U EPICS Environment](docs/README.md)
 
 
