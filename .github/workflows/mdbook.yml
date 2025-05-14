@@ -41,7 +41,9 @@ jobs:
             rustc --version
             mdbook --version
       - name: Build with mdBook
-        run: mdbook build
+        run: |
+            mv book-github.toml book.toml
+            mdbook build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
