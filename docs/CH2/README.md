@@ -4,6 +4,6 @@ Now that your environment is set up, this chapter walks you through creating you
 
 This chapter covers the following topics:
 
-* [First EPICS IOC](yourfirstioc.md): Building a basic EPICS IOC from scratch.
-* [Expand the First IOC](addioctofirst.md): Adding more functionality to your initial IOC.
-* [Continuous Integration](ciwithgitlab.md): Setting up GitLab CI pipelines for your IOC project.
+* [First EPICS IOC](02.01.yourfirstioc.md): Building a basic EPICS IOC from scratch.
+* [Expand the First IOC](02.02.addioctofirst.md): Adding more functionality to your initial IOC.
+* [Continuous Integration](02.03.ciwithgitlab.md): Setting up GitLab CI pipelines for your IOC project.

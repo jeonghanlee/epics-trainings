@@ -4,6 +4,6 @@ This chapter builds on the previous examples by guiding you through configuring 
 
 This chapter covers the following topics:
 
-* [Configure the Second IOC](yoursecondioc.md): Setting up and configuring a second IOC application, potentially introducing device support relevant for external communication.
-* [Create the TCP Simulator](iocsimulator.md): Developing a simple TCP server application to simulate responses from a hardware device (like one communicating over serial).
-* [Test IOC-Simulator Communication](secondiocwithsim.md): Testing the interaction between your second IOC and the device simulator.
+* [Configure the Second IOC](03.01.yoursecondioc.md): Setting up and configuring a second IOC application, potentially introducing device support relevant for external communication.
+* [Create the TCP Simulator](03.02.iocsimulator.md): Developing a simple TCP server application to simulate responses from a hardware device (like one communicating over serial).
+* [Test IOC-Simulator Communication](03.03.secondiocwithsim.md): Testing the interaction between your second IOC and the device simulator.
