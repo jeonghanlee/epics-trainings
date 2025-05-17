@@ -1,7 +1,7 @@
 # https://rust-lang.github.io/mdBook/format/configuration/general.html
 [book]
-title = "ALS-U EPICS Envorinment Training"
-description = "ALS-U EPICS Training Materials with ALS-U EPICS environment"
+title = "ALS-U EPICS Environment Training"
+description = "ALS-U EPICS Training Materials with ALS-U EPICS Environment"
 authors = ["Jeong Han Lee, Dr.rer.nat"]
 src = "docs"
 language = "en"
