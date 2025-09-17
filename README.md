@@ -1,22 +1,20 @@
-# ALS-U EPICS Training Documentation
+# EPICS Training Documentation
 
 [![Deploy mdBook site to Pages](https://github.com/jeonghanlee/epics-training/actions/workflows/mdbook.yml/badge.svg)](https://github.com/jeonghanlee/epics-training/actions/workflows/mdbook.yml)
 
-Welcome to the documentation for the ALS-U EPICS Environment. This guide is designed to assist in developing and testing Input/Output Controllers (IOCs) for the Advanced Light Source Upgrade (ALS-U).
+This guide is designed to assist in developing and testing Input/Output Controllers (IOCs) using a streamlined and scalable approach. Our focus isn't on the fundamental functionality of EPICS, but rather on a development process that emphasizes how to quickly transition from a single-device IOC to one that manages multiple pieces of equipment.
 
-The training is designed with the ALS-U EPICS Environment. And this  environment is designed to **simplify** the development process, ensure code quality, and promote consistency across all ALS-U IOC projects. Furthermore, it aims to remove tedious and error-prone procedures often associated with traditional EPICS IOC development and deployment.
+This specific EPICS environment is designed to simplify the development process, ensure code quality, and promote consistency across all IOC projects. Our approach aims to eliminate the tedious, error-prone procedures often associated with traditional EPICS development and deployment.
 
 This documentation is built and published through our Continuous Integration (CI) pipeline, ensuring that you always have access to the latest information.
 
-
-## ALS-U Internal Gitlab Pages
-* https://jeonglee.pages.als.lbl.gov/epics-trainings/
-
-## ALS-U Mirror Github Pages
+## Github Pages
 
 * https://jeonghanlee.github.io/epics-trainings/
 
 ## Git Source sites
-* [ALS-U EPICS Environment](docs/README.md)
+* [EPICS Environment](docs/README.md)
 
+## License
+EPICS Training  © 2025 by Jeong Han Lee is licensed under Creative Commons Attribution-NonCommercial 4.0 International. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc/4.0/
 
