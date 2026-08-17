@@ -38,7 +38,6 @@ jobs:
 
       - name: Env Check
         run: |
-            rustc --version
             mdbook --version
       - name: Build with mdBook
         run: |
