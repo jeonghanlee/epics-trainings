@@ -8,11 +8,10 @@
     - [Test Environment](CH1/01.02.testenv.md)
     - [Host Architecture and OS-Specific folder](CH1/01.03.epicshostarch.md)
 
-# Chapter 2: First EPICS IOC and Gitlab CI
-- [First EPICS IOC and Gitlab CI](CH2/README.md)
+# Chapter 2: First EPICS IOC
+- [First EPICS IOC](CH2/README.md)
     - [First EPICS IOC](CH2/02.01.yourfirstioc.md)
     - [Expand the First IOC](CH2/02.02.addioctofirst.md)
-    - [Continous Integration](CH2/02.03.ciwithgitlab.md)
 
 # Chapter 3: Second EPICS IOC and Serial Simulator
 - [Second EPICS IOC and Serial Simulator](CH3/README.md)

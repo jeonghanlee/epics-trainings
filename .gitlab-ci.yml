@@ -1,8 +1,0 @@
-include:
-  - project: alsu/ci
-    ref: master
-    file:
-      - 'mdbook.yml'
-
-stages:
-  - deploy

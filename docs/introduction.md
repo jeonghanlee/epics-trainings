@@ -4,7 +4,7 @@
 
 Welcome to the official training documentation for the Advanced Light Source Upgrade (ALS-U) EPICS Environment. This guide serves as the central resource for understanding, installing, using, and maintaining the standardized EPICS software environment specifically tailored for developing and deploying Input/Output Controllers (IOCs) at ALS-U.
 
-This training is hosted on both GitHub Pages and GitLab Pages as part of a set of resources aimed at providing comprehensive guidance for the ALS-U EPICS development workflow.
+This training is hosted on GitHub Pages as part of a set of resources aimed at providing comprehensive guidance for the ALS-U EPICS development workflow.
 
 ## Purpose of the ALS-U EPICS Environment
 
@@ -33,7 +33,6 @@ Key topics covered include:
 * Simulating **device communication** for testing and development.
 * Utilizing **`iocsh` scripts** and **database templates** for efficient and scalable configuration.
 * Understanding the structure and function of key **IOC configuration files** (`st.cmd`, `RELEASE`, `CONFIG_SITE`, `system.dbd`).
-* Integrating **Continuous Integration (CI)** practices into the development workflow (details specific to the ALS-U internal GitLab repository).
 
 ## Target Audience
 
@@ -47,7 +46,7 @@ This guide is organized into chapters designed to lead you through the ALS-U EPI
 
 * **Chapter 1: Environment Setup and Verification:** Focuses on getting the environment operational, covering installation, initial testing, and understanding host architecture concepts like `EPICS_HOST_ARCH` and OS-specific directories.
 
-* **Chapter 2: First EPICS IOC and GitLab CI:** Guides you through creating and expanding your first basic EPICS IOC within the environment and integrating it with GitLab Continuous Integration (CI) pipelines.
+* **Chapter 2: First EPICS IOC:** Guides you through creating and expanding your first basic EPICS IOC within the environment.
 
 * **Chapter 3: Second EPICS IOC and Device Simulation:** Builds on basic development by demonstrating how to configure an IOC for device communication and simulating that communication using a TCP-based simulator.
 
@@ -65,10 +64,7 @@ This guide is organized into chapters designed to lead you through the ALS-U EPI
 
 ## Online Version
 
-The latest official version of this training guide is always available online at the ALS-U internal Gitlab Pages site:
-[`https://jeonglee.pages.als.lbl.gov/epics-trainings/`](https://jeonglee.pages.als.lbl.gov/epics-trainings/)
-
-The latest mirror version of this training guide is always available online at the GitHub Pages site:
+The latest version of this training guide is always available online at the GitHub Pages site:
 [`https://jeonghanlee.github.io/epics-trainings/`](https://jeonghanlee.github.io/epics-trainings/)
 
 ## General Prerequisites
