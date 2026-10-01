@@ -39,5 +39,5 @@
 
 ----------
 # Additional Resouces
-- [EPICS environment](EPICSEnv.md)
-- [Future Lessons](FutureLessonsList.md)
+- [EPICS environment](misc/EPICSEnv.md)
+- [Future Lessons](misc/FutureLessonsList.md)
