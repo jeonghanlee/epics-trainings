@@ -14,6 +14,7 @@ In this lesson, you will learn:
 | Package | Used in | Purpose |
 |---|---|---|
 | `libevent-pthreads-2.1-7t64`, `libevent-2.1-7t64`, `libevent-extra-2.1-7t64`, `libevent-openssl-2.1-7t64` | CH1 | Runtime libraries required by `softIocPVX` (missing on minimal installs) |
+| `libevent-dev` | CH2 | Development headers/symlinks to link `libevent` when building an IOC (`cannot find -levent_core` without it) |
 | `socat` | CH3, CH4 | TCP servers and TCP-PTY bridge used by the simulator scripts |
 | `bc` | CH4 (04.04) | Floating-point temperature simulation in `tc32_emulator.bash` |
 | `parallel` (optional) | CH4 (04.02, 04.04) | Running multiple simulator instances with one command |
@@ -32,6 +33,7 @@ $ sudo apt install -y \
     libevent-2.1-7t64 \
     libevent-extra-2.1-7t64 \
     libevent-openssl-2.1-7t64 \
+    libevent-dev \
     socat bc parallel
 ```
 
@@ -40,7 +42,7 @@ $ sudo apt install -y \
 ### Rocky 8.10 / 10.2
 
 ```shell
-$ sudo dnf install -y libevent socat bc parallel
+$ sudo dnf install -y libevent libevent-devel socat bc parallel
 ```
 
 ## Verification
