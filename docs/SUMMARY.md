@@ -1,6 +1,7 @@
  Summary
 
 [Introduction](introduction.md)
+[Prerequisites: Required System Packages](prerequisites.md)
 -----------
 # Chapter 1
 - [Getting Started](CH1/README.md)
@@ -29,6 +30,7 @@
     - [Database Templates and Substitution](CH4/04.05.db_templates.md)
     - [IOC Startup Sequence (`st.cmd` Phases)](CH4/04.06.stcmd_phases.md)
         - [Advanced `iocInit()` Note](CH4/04.06.01.adviocInit.md)
+    - [Verified Working Examples](CH4/verified_examples.md)
 
 # Chapter 5
 - [How To's Collection](CH5/README.md)
