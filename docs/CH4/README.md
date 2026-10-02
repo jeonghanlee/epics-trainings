@@ -12,3 +12,11 @@ This chapter covers the following topics:
 * [Database Templates and Substitution](04.05.db_templates.md): Using `.template` and `.substitution` files with `Db/Makefile` for reusable database definitions.
 * [IOC Startup Sequence (`st.cmd` Phases)](04.06.stcmd_phases.md): Learning about commands executed before and after `iocInit()`.
     * [Advanced `iocInit()`](04.06.01.adviocInit.md): Seperated Advanced `iocInit` description.
+
+## Exercise
+
+Do these on your own, without re-reading the sections above.
+
+1. **Break it, then fix it.** Copy `st.cmd` to `st_break.cmd`, move `iocInit` above the `dbLoadRecords` line, and start the IOC. Note what behaves differently — there may be no hard error. Restore the order and say which phase each command belongs to.
+2. **Combine it.** Write a `tc32_device.iocsh` snippet that configures one TC-32 device (Asyn port plus `dbLoadRecords` of the generated `TC-32.db`), then `iocshLoad` it twice in `st.cmd` for two emulator instances on different ports. Verify both PV sets with `caget`.
+3. **Explain it.** In one sentence each: when does macro substitution happen for a `.template` loaded via `dbLoadRecords` versus the build-time generated `TC-32.db` — and why does the build-time method start faster?
