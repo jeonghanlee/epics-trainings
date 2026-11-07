@@ -1,16 +1,16 @@
-# Chapter 2: First EPICS IOC
+# Chapter 2: Generate and expand IOC applications
 
-Now that your environment is set up, this chapter walks you through creating your first EPICS Input/Output Controller (IOC) within the ALS-U EPICS Environment.
+Follow the lessons in order; keep the application source for later exercises.
 
-This chapter covers the following topics:
+* [Generate, build, and start a compiled IOC application.](02.01.yourfirstioc.md)
+* [Add boot instances and separate folder and application names.](02.02.addioctofirst.md)
 
-* [First EPICS IOC](02.01.yourfirstioc.md): Building a basic EPICS IOC from scratch.
-* [Expand the First IOC](02.02.addioctofirst.md): Adding more functionality to your initial IOC.
+## Chapter exercises
 
-## Exercise
-
-Do these on your own, without re-reading the sections above.
-
-1. **Break it, then fix it.** In `configure/RELEASE`, point `ASYN` at a directory that does not exist (for example `ASYN = $(MODULES)/asyn_missing`), then run `make` and read the error. Restore the original path, rebuild, and explain in one sentence how the `ifneq ($(ASYN),)` blocks in `mouseApp/src/Makefile` relate to what you just saw.
-2. **Do it alone.** Add a third instance with a location of your choice (for example `-l lab -p mouse`), build it with `make`, and run its `./st.cmd` until you see the IOC shell prompt.
-3. **Diff it.** Run `diff iocBoot/iochome-mouse/st.cmd iocBoot/iocpark-mouse/st.cmd`, then `diff iocBoot/iochome-mouse/st.cmd iocBoot/iocpark-woodmouse/st.cmd`. For each differing line, say which generator option (`-l`, `-p`, `-d`, `-f`) caused it.
+1. From `mouse/`, run `make clean uninstall`. Enable `ASYN` in
+   `configure/RELEASE` with the path `$(MODULES)/asyn_missing`, then run
+   `make`. Read the missing dependency error. Restore the original file
+   and rebuild successfully.
+2. Add and run the `lab` instance described in lesson 2.2.
+3. Compare the generated startup files with `diff` as shown in lesson
+   2.2. Explain which generator option accounts for each changed line.

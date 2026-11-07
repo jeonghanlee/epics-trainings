@@ -1,17 +1,16 @@
-# Chapter 1: Environment Setup and Verification
+# Chapter 1: Select and verify the environment
 
-Welcome to the ALS-U EPICS Environment documentation. This first chapter focuses on getting the environment operational. It covers the installation procedure and the essential steps to test your setup.
+Follow the lessons in order; keep the application source for later exercises.
 
-This chapter covers the following topics:
+* [Install the binary distribution matching your OS.](01.01.installation.md)
+* [Read and write a PV through CA and PVA.](01.02.testenv.md)
+* [Distinguish host architecture from the OS directory.](01.03.epicshostarch.md)
+* [Compare the three IOC startup methods.](01.04.module_loader.md)
 
-* [Installation](01.01.installation.md): Provides detailed steps to set up the ALS-U EPICS Environment.
-* [Test Environment](01.02.testenv.md): Outlines how to launch and run tests to ensure the environment is functioning correctly after installation.
-* [Host Architecture and OS-Specific folder](01.03.epicshostarch.md): Explains the environment's approach to host architecture support, focusing on `EPICS_HOST_ARCH`, the `linux-x86_64` standard, and the role of OS-specific directories.
+## Chapter exercises
 
-## Exercise
-
-Do these on your own, without re-reading the sections above.
-
-1. **Break it, then fix it.** Open a fresh terminal and run `caget` without sourcing `setEpicsEnv.bash`. Note the failure. Then source the script, start `softIocPVX -d water.db`, and in the client terminal check that `echo $EPICS_CA_ADDR_LIST` shows a value (if not, `export EPICS_CA_ADDR_LIST=localhost` and confirm `caget temperature:water` works). Then `unset EPICS_CA_ADDR_LIST`, run `caget temperature:water` again, observe the timeout, restore the value, and confirm the read works.
-2. **Extend it.** Copy `water.db` to `air.db`, add a second `ao` record named `temperature:air` with an initial `VAL` of `20`, and bring up the IOC yourself. Verify both PVs with `dbl` and `caget`.
-3. **Explain it.** Print `EPICS_HOST_ARCH` in your terminal and, in one sentence, explain why the environment keeps the architecture name (`linux-x86_64`) separate from the OS folder name (e.g., `ubuntu-24.04`).
+1. Add the air temperature record and repeat the failed-search exercise
+   in [lesson 1.2](01.02.testenv.md). Restore the client address afterward.
+2. Print `EPICS_HOST_ARCH` and explain why `linux-x86_64` does not identify
+   a compatible Debian, Ubuntu, or Rocky binary tree.
+3. Stop the IOC with `exit` before starting Chapter 2.

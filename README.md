@@ -1,5 +1,9 @@
 # EPICS Training Documentation
 
+The lessons use EPICS-env 1.5.0 with EPICS Base 7.0.10. Chapters 2 through 5
+cover compiled IOC applications. Chapter 6 uses the installed `iocsh.bash`
+module loader with the same device databases and simulators.
+
 [![Deploy Docs](https://github.com/jeonghanlee/epics-trainings/actions/workflows/docs.yml/badge.svg)](https://github.com/jeonghanlee/epics-trainings/actions/workflows/docs.yml)
 
 This guide is designed to assist in developing and testing Input/Output Controllers (IOCs) using a streamlined and scalable approach. Our focus isn't on the fundamental functionality of EPICS, but rather on a development process that emphasizes how to quickly transition from a single-device IOC to one that manages multiple pieces of equipment.

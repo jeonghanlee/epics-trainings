@@ -1,24 +1,16 @@
-# Potential Advanced Lessons List
+# Further training topics
 
-Here is the future lessons list, which I would like to develop.
+The six chapters cover local IOC applications, text device protocols,
+database templates, and the installed module loader. These topics need
+separate lessons:
 
-* [x] Chapter 4: `iocsh`: explain how it works within the ALS-U EPICS IOC template generator, and a simple handon excise based on the existing simulator
-* [x] Chapter 4: `st.cmd` for multiple same devices after `iocsh`
-* [x] Chapter 4: `st.cmd` after and before iocInit
-* [x] Chapter 4: `DB_INSTALL` and `DB` related with other modules db template
+* Record processing, links, and alarm design.
+* Autosave and restore policies.
+* IOC statistics and service discovery modules.
+* Sequencer programs and state machines.
+* Structured PVA device interfaces.
+* IOC services with procServ and systemd.
+* Deployment and operational acceptance requirements.
 
-* [x] Chapter 4: `template`, `substitution` and flatting database files `Db/Makefile`
-* [x] Chapter 4: Expand the simulator (1st level) - multiple instance
-* [x] Chapter 4: Expand the simulator (2nd level) - complicate signals process
-* [x] `INSTAL_LOCATION` in `CONFIG_SITE`
-* [x] EPICS Variables in `CONFIG_SITE`
-* [x] Chapter 5: `system.dbd`
-* [ ] DB record process (very simple,....)
-* [ ] common modules integration `iocStats`, `autosave`, `recsync`, and so on
-* [ ] sequencer example, `APPNAMEAPP/src/Makefile modification`
-* [ ] autosave
-* [ ] `pva` EPICS environment
-* [ ] External Services : screen, run, and so on
-* [ ] External Services : `procServ`, unix domain, con
-* [ ] External Services : systemd integration
-* [ ] `Software Requirement Specification`
+These are topics for further study, not prerequisites for the exercises
+in this book.
