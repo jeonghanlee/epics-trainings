@@ -7,7 +7,7 @@ Canonical branch or ref: master
 Git upstream: origin/master
 Remote tracker: none
 
-Next session entry point: `docs/milestone-8d760dd.md` -- review updated draft plans `M1`-`M5` (`G1` closed by `D5`), record `Plan Acceptance`, and obtain `Implementation Authorization` starting with `M1` and `M2`.
+Next session entry point: `docs/milestone-8d760dd.md` -- commit and push verified `M1` and `M2` changes to record `origin/master` landing evidence and close `M1`/`M2` (unblocking `M3`), or proceed to `M3` after landing `M1`.
 
 ## Milestone
 
@@ -15,8 +15,8 @@ Next session entry point: `docs/milestone-8d760dd.md` -- review updated draft pl
 
 | Group | ID | Work unit | Type | Status | Ready | Deps | Done when / Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Structure | M1 | Repository cleanup, landing page merge, `SUMMARY.md` alignment, and CI guard | Milestone | Not started | Yes | D1, D2 | Unreferenced `CH2` PNGs and `introduction.md` removed, `README.md` and `SUMMARY.md` aligned, typos fixed, and `mdbook build` passes cleanly; [detail](#m1---repository-cleanup-landing-page-merge-summary-alignment-and-ci-guard) |
-| Conventions | M2 | Chapter 1 to 5 EPICS conventions, async put fix, naming guidance, and code fences | Milestone | Not started | Yes | D3 | `CH1`-`CH5` DB headers, `04.03` `caput -c`, first-use naming notes, and Markdown code fences normalized and verified; [detail](#m2---chapter-1-to-5-epics-conventions-async-put-fix-naming-guidance-and-code-fences) |
+| Structure | M1 | Repository cleanup, landing page merge, `SUMMARY.md` alignment, and CI guard | Milestone | In progress | No | D1, D2 | Deliverable and `M1 / T1`-`T3` verified (`2026-11-11`); awaiting commit and `origin/master` landing evidence; [detail](#m1---repository-cleanup-landing-page-merge-summary-alignment-and-ci-guard) |
+| Conventions | M2 | Chapter 1 to 5 EPICS conventions, async put fix, naming guidance, and code fences | Milestone | In progress | No | D3 | Deliverable and `M2 / T1`-`T3` verified (`2026-11-11`); awaiting commit and `origin/master` landing evidence; [detail](#m2---chapter-1-to-5-epics-conventions-async-put-fix-naming-guidance-and-code-fences) |
 | Loader | G1 | Owner decision on `QSRV2` `dbLoadGroup` scope in Chapter 6 | External gate | Complete | No | | Resolved on `2026-11-10` by `D5` (`5-b`: include `QSRV2` `dbLoadGroup` example in `06.03.tc32_loader.md`); [detail](#g1---owner-decision-on-qsrv2-dbloadgroup-scope-in-chapter-6) |
 | Loader | M3 | Chapter 6 `iocsh.bash` loader expansion and live service exercises | Milestone | Not started | No | M1, G1, D5 | `06.01`-`06.05` expanded with `-n` anatomy, 3-device `iocshLoad` reuse, `dbLoadGroup` group PV, `linStat` + `autosave` + `retools` lesson, 4 failure checks, and `CH6` exercises verified on `EPICS-env 1.5.0`; [detail](#m3---chapter-6-iocsh-loader-expansion-and-live-service-exercises) |
 | Pedagogy | M4 | Multi-terminal context blocks, observed outputs, and chapter checklists | Milestone | Not started | No | M2, M3 | Multi-terminal IOC lessons state terminal setup, `CH1`-`CH5` runtime lessons include live `1.5.0` observed outputs, and `CH1`-`CH6` include readiness checklists; [detail](#m4---multi-terminal-context-blocks-observed-outputs-and-chapter-checklists) |
@@ -39,7 +39,7 @@ Next session entry point: `docs/milestone-8d760dd.md` -- review updated draft pl
 Origin: 8d760dd / M1
 Identity History: none
 GitHub Issue: none
-Status: Not started
+Status: In progress (deliverable and T1-T3 verified; awaiting commit and origin/master landing evidence)
 
 ##### Summary
 
@@ -70,9 +70,9 @@ Out of scope: Lesson technical content, EPICS database/startup syntax edits (`M2
 
 ##### Implementation Plan
 
-Plan Status: draft
-Plan Acceptance: none
-Implementation Authorization: none
+Plan Status: accepted
+Plan Acceptance: 2026-11-11
+Implementation Authorization: 2026-11-11
 Superseded Plan Artifacts: none
 
 1. Remove `docs/CH2/images/*.png` with `git rm` and verify zero remaining references across `docs/` and `README.md` (`M1 / T2`).
@@ -92,9 +92,9 @@ Superseded Plan Artifacts: none
 
 | Label | Observed At | Environment | Result | Evidence |
 | --- | --- | --- | --- | --- |
-| T1 | Not run | Local host Docker (`jeonghanlee/mdbook`) | Pending | none |
-| T2 | Not run | `/data/gitsrc/epics-trainings` checkout | Pending | none |
-| T3 | Not run | Local host Python 3 + Git | Pending | none |
+| T1 | 2026-11-11T01:48-08:00 | Local host Docker (`jeonghanlee/mdbook`, `mdbook v0.5.4`, Debian 13 `x86_64`) | Pass | `mdbook build` exited `0`; `public/index.html` rendered merged landing-page table and `CH1/`-`CH6/` links; `public/introduction.html`, `public/milestone-8d760dd.*`, and `public/CH2/images` absent; all internal HTML hrefs across `public/` resolved |
+| T2 | 2026-11-11T01:49-08:00 | `/data/gitsrc/epics-trainings` checkout | Pass | 11 `CH2/images/*.png` files and `docs/introduction.md` removed; zero links to deleted paths; all 31 `docs/SUMMARY.md` links match `[Title](path)` without leading section numbers, trailing text, or duplicate titles; zero non-ASCII bytes |
+| T3 | 2026-11-11T01:52-08:00 | Local host Python 3 + Git + Docker (`jeonghanlee/mdbook`) | Pass | `yaml.safe_load` parsed `.github/workflows/docs.yml` with `safe.directory` before `mdbook build` and `git status --porcelain` guard after; container root `safe.directory` + `git status --porcelain` exited `0`; `git diff --check` clean and zero source files modified by `mdbook build` |
 
 ##### Closure Evidence
 
@@ -105,7 +105,7 @@ Superseded Plan Artifacts: none
 Origin: 8d760dd / M2
 Identity History: none
 GitHub Issue: none
-Status: Not started
+Status: In progress (deliverable and T1-T3 verified; awaiting commit and origin/master landing evidence)
 
 ##### Summary
 
@@ -134,9 +134,9 @@ Out of scope: `docs/CH6/*.md` edits (owned by `M3`), multi-terminal header block
 
 ##### Implementation Plan
 
-Plan Status: draft
-Plan Acceptance: none
-Implementation Authorization: none
+Plan Status: accepted
+Plan Acceptance: 2026-11-11
+Implementation Authorization: 2026-11-11
 Superseded Plan Artifacts: none
 
 1. Update `water.db` in `docs/CH1/01.02.testenv.md` to `record(ao, "temperature:water") {` with 4-space field indentation (`M2 / T1`).
@@ -156,9 +156,9 @@ Superseded Plan Artifacts: none
 
 | Label | Observed At | Environment | Result | Evidence |
 | --- | --- | --- | --- | --- |
-| T1 | Not run | `/data/gitsrc/epics-trainings` checkout | Pending | none |
-| T2 | Not run | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` and `/data/gitsrc/tools` | Pending | none |
-| T3 | Not run | Local host Docker (`jeonghanlee/mdbook`) | Pending | none |
+| T1 | 2026-11-11T02:29-08:00 | `/data/gitsrc/epics-trainings` checkout | Pass | Scanned all 26 Markdown files (`136` code fences, `4` record headers) across `docs/CH1`-`docs/CH5`; zero next-line `{` record headers, zero ```` ```text ```` fences, `6` `caput -c` writes in `04.03`, all `4` first-use identifier notes present (`02.01`, `02.02`, `03.01`), `04.01` duplicate clause fixed, pure ASCII, and `git diff --check` clean |
+| T2 | 2026-11-11T02:29-08:00 | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` and `/data/gitsrc/tools` on local Debian 13 host | Pass | Generated `jeonglee_Demo` via `generate_ioc_structure.bash`, extracted `training.proto`/`training.db`/`training_device.iocsh`/`tcpserver.bash`/`advanced_connection_handler.sh`/`st3.cmd` verbatim from `CH3`-`CH4`, ran `st3.cmd` against 3 simulators (`9399`-`9401`); `caput -c` + `caget` returned 3 distinct PIDs (`2721601`, `2721602`, `2721607`), 3 valid temperatures (`51`, `98`, `19`), and `TCP3` asyn trace lines |
+| T3 | 2026-11-11T02:29-08:00 | Local host Docker (`jeonghanlee/mdbook`, `mdbook v0.5.4`) | Pass | `mdbook build` exited `0`; all 26 `public/CH1`-`public/CH5` HTML pages rendered cleanly with zero `language-text` blocks, unbroken `<ol>` in `public/CH4/04.01.iocsh_basics.html`, and zero source side effects |
 
 ##### Closure Evidence
 
@@ -229,8 +229,8 @@ Out of scope: Site-only modules (`siteApps`, `unidrv`), `procServ`/`systemd` dae
 
 ##### Implementation Plan
 
-Plan Status: draft
-Plan Acceptance: none
+Plan Status: accepted
+Plan Acceptance: 2026-11-11
 Implementation Authorization: none
 Superseded Plan Artifacts: none
 
@@ -295,8 +295,8 @@ Out of scope: Simulator-only Bash/`socat` lessons without an IOC or EPICS client
 
 ##### Implementation Plan
 
-Plan Status: draft
-Plan Acceptance: none
+Plan Status: accepted
+Plan Acceptance: 2026-11-11
 Implementation Authorization: none
 Superseded Plan Artifacts: none
 
@@ -357,8 +357,8 @@ Out of scope: Modifying `presentation/alsu-epics-env-training-2025-04-09-revisio
 
 ##### Implementation Plan
 
-Plan Status: draft
-Plan Acceptance: none
+Plan Status: accepted
+Plan Acceptance: 2026-11-11
 Implementation Authorization: none
 Superseded Plan Artifacts: none
 
