@@ -16,3 +16,10 @@ Follow the lessons in order; keep the application source for later exercises.
    installation-path exercise in lesson 5.3.
 3. Explain the difference between selecting dependencies in `RELEASE`
    and selecting build options in `CONFIG_SITE`.
+
+## Before moving on
+
+- [ ] `configure/RELEASE.local` and `configure/CONFIG_SITE.local` in `jeonglee_Demo/` are restored so `make` succeeds.
+- [ ] `iocBoot/ioctraining-jeonglee_Demo/envPaths` sets `TOP` to your `jeonglee_Demo` directory, with `db/` and `iocsh/` intact for Chapter 6.
+- [ ] Every `jeonglee_Demo` IOC, `softIoc`, and `tc32_emulator.bash` process is stopped.
+- [ ] `ss -ltn 'sport = :9399'` reports no active TCP listener.

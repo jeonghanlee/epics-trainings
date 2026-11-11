@@ -14,3 +14,9 @@ Follow the lessons in order; keep the application source for later exercises.
 2. Add and run the `lab` instance described in lesson 2.2.
 3. Compare the generated startup files with `diff` as shown in lesson
    2.2. Explain which generator option accounts for each changed line.
+
+## Before moving on
+
+- [ ] `tools/generate_ioc_structure.bash` remains in your workspace directory for Chapters 3 and 4.
+- [ ] `mouse/configure/RELEASE` is restored after exercise 1 and `make` succeeds in `mouse/`.
+- [ ] Every `mouse` and `jeonglee_mouse` IOC process is stopped with `exit`.

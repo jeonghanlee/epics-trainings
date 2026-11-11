@@ -20,3 +20,10 @@ Follow the lessons in order; keep the application source for later exercises.
 3. Explain which macros are resolved at build time and which remain for
    startup. Generating a flat database changes where expansion happens;
    it does not establish a measured startup-time advantage.
+
+## Before moving on
+
+- [ ] `jeonglee_Demo/` retains `iocsh/training_device.iocsh`, `simulator/advanced_connection_handler.sh`, and `simulator/tc32_emulator.bash` for Chapters 5 and 6.
+- [ ] `jeonglee_Demo/db/TC-32.db` is rebuilt from restored sources so `head -n 7 db/TC-32.db` shows `$(P)$(R)CH01` and `$(PORT)`.
+- [ ] Every `jeonglee_Demo` IOC is stopped with `exit` and every simulator is stopped with Ctrl+C.
+- [ ] `ss -ltn 'sport = :9399 or sport = :9400 or sport = :9401'` reports no active TCP listeners.

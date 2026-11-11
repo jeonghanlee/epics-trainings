@@ -44,7 +44,8 @@
     - [Run an IOC with installed modules](CH6/06.01.first_loader.md)
     - [Connect the TCP simulator](CH6/06.02.tcp_loader.md)
     - [Read 32 temperature channels](CH6/06.03.tc32_loader.md)
-    - [Module selection and loader errors](CH6/06.04.loader_reference.md)
+    - [Add host statistics, autosave, and regex search](CH6/06.04.common_services.md)
+    - [Module selection and loader errors](CH6/06.05.loader_reference.md)
 
 [EPICS client discovery variables](misc/EPICSEnv.md)
 [Further training topics](misc/FutureLessonsList.md)

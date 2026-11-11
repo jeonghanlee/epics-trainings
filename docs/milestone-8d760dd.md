@@ -7,7 +7,7 @@ Canonical branch or ref: master
 Git upstream: origin/master
 Remote tracker: none
 
-Next session entry point: `docs/milestone-8d760dd.md` -- commit and push verified `M1` and `M2` changes to record `origin/master` landing evidence and close `M1`/`M2` (unblocking `M3`), or proceed to `M3` after landing `M1`.
+Next session entry point: `docs/milestone-8d760dd.md` -- commit and push verified `M3` and `M4` changes (under separate `git-workflow` authority) to close `M3` and `M4` and unblock `M5`, or authorize `M5` implementation on the current checkout.
 
 ## Milestone
 
@@ -15,11 +15,11 @@ Next session entry point: `docs/milestone-8d760dd.md` -- commit and push verifie
 
 | Group | ID | Work unit | Type | Status | Ready | Deps | Done when / Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Structure | M1 | Repository cleanup, landing page merge, `SUMMARY.md` alignment, and CI guard | Milestone | In progress | No | D1, D2 | Deliverable and `M1 / T1`-`T3` verified (`2026-11-11`); awaiting commit and `origin/master` landing evidence; [detail](#m1---repository-cleanup-landing-page-merge-summary-alignment-and-ci-guard) |
-| Conventions | M2 | Chapter 1 to 5 EPICS conventions, async put fix, naming guidance, and code fences | Milestone | In progress | No | D3 | Deliverable and `M2 / T1`-`T3` verified (`2026-11-11`); awaiting commit and `origin/master` landing evidence; [detail](#m2---chapter-1-to-5-epics-conventions-async-put-fix-naming-guidance-and-code-fences) |
+| Structure | M1 | Repository cleanup, landing page merge, `SUMMARY.md` alignment, and CI guard | Milestone | Complete | No | D1, D2 | Landed on `origin/master` in `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` (`2026-11-11`); [detail](#m1---repository-cleanup-landing-page-merge-summary-alignment-and-ci-guard) |
+| Conventions | M2 | Chapter 1 to 5 EPICS conventions, async put fix, naming guidance, and code fences | Milestone | Complete | No | D3 | Landed on `origin/master` in `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` (`2026-11-11`); [detail](#m2---chapter-1-to-5-epics-conventions-async-put-fix-naming-guidance-and-code-fences) |
 | Loader | G1 | Owner decision on `QSRV2` `dbLoadGroup` scope in Chapter 6 | External gate | Complete | No | | Resolved on `2026-11-10` by `D5` (`5-b`: include `QSRV2` `dbLoadGroup` example in `06.03.tc32_loader.md`); [detail](#g1---owner-decision-on-qsrv2-dbloadgroup-scope-in-chapter-6) |
-| Loader | M3 | Chapter 6 `iocsh.bash` loader expansion and live service exercises | Milestone | Not started | No | M1, G1, D5 | `06.01`-`06.05` expanded with `-n` anatomy, 3-device `iocshLoad` reuse, `dbLoadGroup` group PV, `linStat` + `autosave` + `retools` lesson, 4 failure checks, and `CH6` exercises verified on `EPICS-env 1.5.0`; [detail](#m3---chapter-6-iocsh-loader-expansion-and-live-service-exercises) |
-| Pedagogy | M4 | Multi-terminal context blocks, observed outputs, and chapter checklists | Milestone | Not started | No | M2, M3 | Multi-terminal IOC lessons state terminal setup, `CH1`-`CH5` runtime lessons include live `1.5.0` observed outputs, and `CH1`-`CH6` include readiness checklists; [detail](#m4---multi-terminal-context-blocks-observed-outputs-and-chapter-checklists) |
+| Loader | M3 | Chapter 6 `iocsh.bash` loader expansion and live service exercises | Milestone | In progress | No | M1, G1, D5 | `06.01`-`06.05` expanded with `-n` anatomy, 3-device `iocshLoad` reuse, `dbLoadGroup` group PV, `linStat` + `autosave` + `retools` lesson, 4 failure checks, and `CH6` exercises verified on `EPICS-env 1.5.0`; [detail](#m3---chapter-6-iocsh-loader-expansion-and-live-service-exercises) |
+| Pedagogy | M4 | Multi-terminal context blocks, observed outputs, and chapter checklists | Milestone | In progress | No | M2, M3 | Multi-terminal IOC lessons state terminal setup, `CH1`-`CH5` runtime lessons include live `1.5.0` observed outputs, and `CH1`-`CH6` include readiness checklists; [detail](#m4---multi-terminal-context-blocks-observed-outputs-and-chapter-checklists) |
 | Reference | M5 | Printable quick reference card and full-book reader verification | Milestone | Not started | No | M1, M3, M4, D4 | Single-page PDF quick reference generated and linked from `docs/README.md`, container `mdbook build` clean, and 2nd-person reader review converged; [detail](#m5---printable-quick-reference-card-and-full-book-reader-verification) |
 
 ### Decisions
@@ -39,7 +39,7 @@ Next session entry point: `docs/milestone-8d760dd.md` -- commit and push verifie
 Origin: 8d760dd / M1
 Identity History: none
 GitHub Issue: none
-Status: In progress (deliverable and T1-T3 verified; awaiting commit and origin/master landing evidence)
+Status: Complete
 
 ##### Summary
 
@@ -98,14 +98,14 @@ Superseded Plan Artifacts: none
 
 ##### Closure Evidence
 
-- none
+- Observed `2026-11-11T10:09-08:00`: pushed commit `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` to `origin/master`, ran `git fetch origin`, and verified `git rev-parse origin/master` equals `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` with `git diff --name-only origin/master c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` empty across all `M1` paths.
 
 #### M2 - Chapter 1 To 5 EPICS Conventions, Async Put Fix, Naming Guidance, And Code Fences
 
 Origin: 8d760dd / M2
 Identity History: none
 GitHub Issue: none
-Status: In progress (deliverable and T1-T3 verified; awaiting commit and origin/master landing evidence)
+Status: Complete
 
 ##### Summary
 
@@ -162,7 +162,7 @@ Superseded Plan Artifacts: none
 
 ##### Closure Evidence
 
-- none
+- Observed `2026-11-11T10:09-08:00`: pushed commit `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` to `origin/master`, ran `git fetch origin`, and verified `git rev-parse origin/master` equals `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` with `git diff --name-only origin/master c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` empty across all `M2` paths.
 
 #### G1 - Owner Decision On QSRV2 dbLoadGroup Scope In Chapter 6
 
@@ -193,7 +193,7 @@ Owner choice deciding whether `docs/CH6/06.03.tc32_loader.md` stays focused on s
 Origin: 8d760dd / M3
 Identity History: none
 GitHub Issue: none
-Status: Not started
+Status: In progress
 
 ##### Summary
 
@@ -231,7 +231,7 @@ Out of scope: Site-only modules (`siteApps`, `unidrv`), `procServ`/`systemd` dae
 
 Plan Status: accepted
 Plan Acceptance: 2026-11-11
-Implementation Authorization: none
+Implementation Authorization: 2026-11-11
 Superseded Plan Artifacts: none
 
 1. Rename `docs/CH6/06.04.loader_reference.md` to `docs/CH6/06.05.loader_reference.md` with `git mv`, create `docs/CH6/06.04.common_services.md`, and update `docs/SUMMARY.md` and `docs/CH6/README.md` (`M3 / T5`).
@@ -253,11 +253,11 @@ Superseded Plan Artifacts: none
 
 | Label | Observed At | Environment | Result | Evidence |
 | --- | --- | --- | --- | --- |
-| T1 | Not run | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` | Pending | none |
-| T2 | Not run | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` | Pending | none |
-| T3 | Not run | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` | Pending | none |
-| T4 | Not run | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` | Pending | none |
-| T5 | Not run | Local host Docker (`jeonghanlee/mdbook`) | Pending | none |
+| T1 | 2026-11-11T14:55-08:00 | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` on local Debian 13 host | Pass | `06.01` `iocsh.bash -n` exited `0` (`# elf:`, `dlload`, `dbLoadDatabase`, `epicsEnvSet("BUSY", ...)`, `/dev/fd/3` + `/dev/fd/4` verified) and live `TRAINING:Run` transitioned `Idle` -> `Busy` (`pvxget` `value.index int32_t = 1`) -> `Idle`; `06.02` single echo (`DEVICE_ID?`, `STATUS?`) and 3-simulator `training_device.iocsh` reuse (`9399`-`9401`) returned distinct PIDs (`2295930`, `2295933`, `2295939`), temperatures (`97`, `33`, `80`), `NO_ALARM`, and `27` `TCP3` asyn trace lines |
+| T2 | 2026-11-11T14:58-08:00 | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` and `/data/gitsrc/tools` on local Debian 13 host | Pass | Expanded `TC-32.db` via `generate_ioc_structure.bash` + `make` from `04.05` inputs and ran `06.03` `st.cmd` against `tc32_emulator.bash --port 9399`; all 32 `LOADER:TC32:CH01`..`CH32` channels reported `10..90` `Celsius` (`CH01=54.58`, `CH16=22.93`, `CH32=11.15`, `NO_ALARM`), `pvxgl(1, "*")` listed `LOADER:TC32:Summary` (`Atomic Get/Put:yes Atomic Members:4`), `pvxget LOADER:TC32:Summary` returned `device.model = "TC-32"` and live `ch01`/`ch16`/`ch32` substructures, `pvxinfo` reported `struct "training:nt/TC32Summary:1.0"`, and `CH6` exercise 1 (`ch08`, `Atomic Members:5`, `ch08.value=69.2425`) passed with emulator-first shutdown (`0.11` s exit) |
+| T3 | 2026-11-11T14:55-08:00 | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` (`linStat`, `autosave`, `retools`, `commonIocsh`) on local Debian 13 host | Pass | `06.04` run 1 published `LOADER_SVC:PROCESS_ID` (`2315640`), `LOADER_SVC:FD_CNT` (`33`), `LOADER_SVC:UPTIME`, and `LOADER_SVC-as:SR_0_Name` (`settings`), matched all 4 PVs via `reGrep`, and saved `LOADER_SVC:Setpoint.VAL 37.5` to `var/LOADER_SVC/save/settings.sav` after a `6.2` s wait; run 2 restored `37.5` (`NO_ALARM` on `CA`, `value double = 37.5` and `alarm.severity int32_t = 0` on `PVA`) without writing |
+| T4 | 2026-11-11T14:58-08:00 | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` on local Debian 13 host | Pass | All 4 `06.05` checks plus fresh-shell `setEpicsEnv.bash` activation and `DIAG_WORK` cleanup matched documented diagnostics: `st_missing.cmd` (`-n` exited `1` with missing default link at `st_missing.cmd:1`), `st_conflict.cmd` (`-n` exited `1` with `Module version conflict: asyn` between `4.44.0` and `4.46.0`), `st_frag.cmd < /dev/null` (`ERROR frag.iocsh line 1: Command 'module' not registered.`), and `-S st_fd4.cmd` (exited `2` with `/dev/fd/4` banner and `ERROR 4 line 4: Command 'unknownStartupCommand' not registered.`) |
+| T5 | 2026-11-11T14:59-08:00 | Local host Docker (`jeonghanlee/mdbook`, `mdbook v0.5.4`) + Python 3 + Git | Pass | `mdbook build` exited `0` with identical `git status --porcelain` before and after build; `public/CH6/06.01`-`06.05.html` and `public/CH6/index.html` rendered cleanly (`06.04.loader_reference.html` absent); `39` HTML pages and `458` internal links/anchors verified; `104` code fences and `2` record definitions across `7` `M3` Markdown files passed fence-tag, record-header, macro-fusion, `DESC` <= 40, pure-ASCII, and `git diff --check` checks |
 
 ##### Closure Evidence
 
@@ -268,7 +268,7 @@ Superseded Plan Artifacts: none
 Origin: 8d760dd / M4
 Identity History: none
 GitHub Issue: none
-Status: Not started
+Status: In progress
 
 ##### Summary
 
@@ -297,7 +297,7 @@ Out of scope: Simulator-only Bash/`socat` lessons without an IOC or EPICS client
 
 Plan Status: accepted
 Plan Acceptance: 2026-11-11
-Implementation Authorization: none
+Implementation Authorization: 2026-11-11
 Superseded Plan Artifacts: none
 
 1. In a scratch workspace using `/data/gitsrc/tools/generate_ioc_structure.bash` and the simulator scripts extracted verbatim from `03.02`, `04.02`, and `04.04`, run `01.02`, `03.03` (including simulator stop/restart), `04.03`, and `04.05` against `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` to capture verbatim `caget`, `pvxget`, and `iocsh` outputs (`M4 / T1`).
@@ -315,8 +315,8 @@ Superseded Plan Artifacts: none
 
 | Label | Observed At | Environment | Result | Evidence |
 | --- | --- | --- | --- | --- |
-| T1 | Not run | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` and `/data/gitsrc/tools` | Pending | none |
-| T2 | Not run | Local host Docker (`jeonghanlee/mdbook`) | Pending | none |
+| T1 | 2026-11-11T14:58-08:00 | `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` and `/data/gitsrc/tools` on local Debian 13 host | Pass | Executed `01.02` (`softIocPVX -d water.db` `dbl`, `caget`/`pvxget` initial `UDF` -> `24` -> `44`, and `127.0.0.1:59999` timeout), `03.03` (`DEVICE_ID?`, `STATUS?` `caget`/`pvxget`, post-stop `Cmd.STAT=COMM` / `Cmd.SEVR=INVALID` + stale `Cmd-RB=STATUS?` + `device LocalTCPServer 0 disconnected`, and post-reconnect `RECOVERED` + `NO_ALARM`), `04.01` (`st2.cmd` + loopback `export` + `STATUS?`), `04.03` (`9399`-`9401` distinct PIDs `2320743`, `2320746`, `2320755`, temperatures `71`, `98`, `68`, and `TCP3`-only asyn trace), `04.05` (`st.cmd`, `st2.cmd`, `st3.cmd` 32 channels `10..90` `Celsius` `NO_ALARM`, `pvxget MYDEMO:TC32:CH01`, and `camonitor -t sI` incremental updates), and `05.01` (`st4.cmd` + `st2.cmd` emulator-first stop and restart, `0.11` s exit) verbatim from Markdown in a clean workspace |
+| T2 | 2026-11-11T14:59-08:00 | Local host Docker (`jeonghanlee/mdbook`, `mdbook v0.5.4`) + Python 3 + Git | Pass | `mdbook build` exited `0` with identical `git status --porcelain` before and after build; `public/CH1/index.html`..`public/CH6/index.html` rendered `23` `Before moving on` task-list checkboxes (`4`/`3`/`4`/`4`/`4`/`4`); all 10 multi-terminal lesson HTML pages (`01.02`, `03.03`, `04.01`, `04.03`, `04.05`, `05.01`, `06.01`-`06.04`) rendered uniform `<table>` terminal-role summaries with `setEpicsEnv.bash` and `export EPICS_CA_*`/`EPICS_PVA_*` before step 1; `41` HTML pages, `695` internal links/anchors, `258` code fences, pure ASCII, and `git diff --check` verified |
 
 ##### Closure Evidence
 

@@ -14,3 +14,10 @@ Follow the lessons in order; keep the application source for later exercises.
 2. Print `EPICS_HOST_ARCH` and explain why `linux-x86_64` does not identify
    a compatible Debian, Ubuntu, or Rocky binary tree.
 3. Stop the IOC with `exit` before starting Chapter 2.
+
+## Before moving on
+
+- [ ] `EPICS_BASE` and `EPICS_HOST_ARCH` come from the `setEpicsEnv.bash` script matching your operating system.
+- [ ] `EPICS_CA_ADDR_LIST` is restored to `127.0.0.1` after the failed-search check in lesson 1.2.
+- [ ] Every `softIocPVX` session from lesson 1.2 is stopped with `exit`.
+- [ ] `~/ioc-training/first/water.db` stays outside the EPICS distribution directory.
