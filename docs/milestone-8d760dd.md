@@ -7,7 +7,7 @@ Canonical branch or ref: master
 Git upstream: origin/master
 Remote tracker: none
 
-Next session entry point: `docs/milestone-8d760dd.md` -- commit and push completed `M5` deliverables and `M3`-`M5` register updates to `origin/master` under separate `git-workflow` authority, then record `M5` `Closure Evidence` and mark `M5` `Complete`.
+Next session entry point: `docs/milestone-8d760dd.md` -- all `M1`-`M5` milestones and `G1` complete; reset the register when opening the next generation of training work.
 
 ## Milestone
 
@@ -20,7 +20,7 @@ Next session entry point: `docs/milestone-8d760dd.md` -- commit and push complet
 | Loader | G1 | Owner decision on `QSRV2` `dbLoadGroup` scope in Chapter 6 | External gate | Complete | No | | Resolved on `2026-11-10` by `D5` (`5-b`: include `QSRV2` `dbLoadGroup` example in `06.03.tc32_loader.md`); [detail](#g1---owner-decision-on-qsrv2-dbloadgroup-scope-in-chapter-6) |
 | Loader | M3 | Chapter 6 `iocsh.bash` loader expansion and live service exercises | Milestone | Complete | No | M1, G1, D5 | Landed on `origin/master` in `212c2b2ae157c1501da0402e3dd2b47d943b9962` (`2026-11-11`); [detail](#m3---chapter-6-iocsh-loader-expansion-and-live-service-exercises) |
 | Pedagogy | M4 | Multi-terminal context blocks, observed outputs, and chapter checklists | Milestone | Complete | No | M2, M3 | Landed on `origin/master` in `212c2b2ae157c1501da0402e3dd2b47d943b9962` (`2026-11-11`); [detail](#m4---multi-terminal-context-blocks-observed-outputs-and-chapter-checklists) |
-| Reference | M5 | Printable quick reference card and full-book reader verification | Milestone | In progress | No | M1, M3, M4, D4 | Single-page PDF quick reference generated and linked from `docs/README.md`, container `mdbook build` clean, and 2nd-person reader review converged; [detail](#m5---printable-quick-reference-card-and-full-book-reader-verification) |
+| Reference | M5 | Printable quick reference card and full-book reader verification | Milestone | Complete | No | M1, M3, M4, D4 | Landed on `origin/master` in `5215598da30950754b3103c368f6dde5371fad4c` (`2026-11-11`); [detail](#m5---printable-quick-reference-card-and-full-book-reader-verification) |
 
 ### Decisions
 
@@ -327,7 +327,7 @@ Superseded Plan Artifacts: none
 Origin: 8d760dd / M5
 Identity History: none
 GitHub Issue: none
-Status: In progress
+Status: Complete
 
 ##### Summary
 
@@ -384,7 +384,7 @@ Superseded Plan Artifacts: none
 
 ##### Closure Evidence
 
-- none
+- Observed `2026-11-11T16:32-08:00`: pushed commit `5215598da30950754b3103c368f6dde5371fad4c` to `origin/master`, ran `git fetch`, and verified `git rev-parse origin/master` equals `5215598da30950754b3103c368f6dde5371fad4c` with `git diff --name-only origin/master 5215598da30950754b3103c368f6dde5371fad4c` empty across all `M5` paths.
 
 ## Backlog
 
