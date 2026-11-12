@@ -35,8 +35,10 @@ result to check. Commands for Bash and the IOC prompt are labeled
 separately. Stop the preceding IOC before starting another with the same
 PV names. Save your source files for the later lessons.
 
-Use the [glossary](glossary.md) to check terminology and the
-[environment variable reference](misc/EPICSEnv.md) for local discovery.
-The [online book](https://jeonghanlee.github.io/epics-trainings/)
+Use the [glossary](glossary.md) to check terminology, the
+[environment variable reference](misc/EPICSEnv.md) for local discovery,
+and the [printable quick reference card (PDF)](assets/epics-training-quick-ref.pdf)
+for single-page command lookup during exercises. The
+[online book](https://jeonghanlee.github.io/epics-trainings/)
 contains the published training, and `SUMMARY.md` defines the book's
 complete navigation.

@@ -7,7 +7,7 @@ Canonical branch or ref: master
 Git upstream: origin/master
 Remote tracker: none
 
-Next session entry point: `docs/milestone-8d760dd.md` -- commit and push verified `M3` and `M4` changes (under separate `git-workflow` authority) to close `M3` and `M4` and unblock `M5`, or authorize `M5` implementation on the current checkout.
+Next session entry point: `docs/milestone-8d760dd.md` -- commit and push completed `M5` deliverables and `M3`-`M5` register updates to `origin/master` under separate `git-workflow` authority, then record `M5` `Closure Evidence` and mark `M5` `Complete`.
 
 ## Milestone
 
@@ -18,9 +18,9 @@ Next session entry point: `docs/milestone-8d760dd.md` -- commit and push verifie
 | Structure | M1 | Repository cleanup, landing page merge, `SUMMARY.md` alignment, and CI guard | Milestone | Complete | No | D1, D2 | Landed on `origin/master` in `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` (`2026-11-11`); [detail](#m1---repository-cleanup-landing-page-merge-summary-alignment-and-ci-guard) |
 | Conventions | M2 | Chapter 1 to 5 EPICS conventions, async put fix, naming guidance, and code fences | Milestone | Complete | No | D3 | Landed on `origin/master` in `c8d9f3ff1aedd2e5e17f0e05e6f5d062a1bc2130` (`2026-11-11`); [detail](#m2---chapter-1-to-5-epics-conventions-async-put-fix-naming-guidance-and-code-fences) |
 | Loader | G1 | Owner decision on `QSRV2` `dbLoadGroup` scope in Chapter 6 | External gate | Complete | No | | Resolved on `2026-11-10` by `D5` (`5-b`: include `QSRV2` `dbLoadGroup` example in `06.03.tc32_loader.md`); [detail](#g1---owner-decision-on-qsrv2-dbloadgroup-scope-in-chapter-6) |
-| Loader | M3 | Chapter 6 `iocsh.bash` loader expansion and live service exercises | Milestone | In progress | No | M1, G1, D5 | `06.01`-`06.05` expanded with `-n` anatomy, 3-device `iocshLoad` reuse, `dbLoadGroup` group PV, `linStat` + `autosave` + `retools` lesson, 4 failure checks, and `CH6` exercises verified on `EPICS-env 1.5.0`; [detail](#m3---chapter-6-iocsh-loader-expansion-and-live-service-exercises) |
-| Pedagogy | M4 | Multi-terminal context blocks, observed outputs, and chapter checklists | Milestone | In progress | No | M2, M3 | Multi-terminal IOC lessons state terminal setup, `CH1`-`CH5` runtime lessons include live `1.5.0` observed outputs, and `CH1`-`CH6` include readiness checklists; [detail](#m4---multi-terminal-context-blocks-observed-outputs-and-chapter-checklists) |
-| Reference | M5 | Printable quick reference card and full-book reader verification | Milestone | Not started | No | M1, M3, M4, D4 | Single-page PDF quick reference generated and linked from `docs/README.md`, container `mdbook build` clean, and 2nd-person reader review converged; [detail](#m5---printable-quick-reference-card-and-full-book-reader-verification) |
+| Loader | M3 | Chapter 6 `iocsh.bash` loader expansion and live service exercises | Milestone | Complete | No | M1, G1, D5 | Landed on `origin/master` in `212c2b2ae157c1501da0402e3dd2b47d943b9962` (`2026-11-11`); [detail](#m3---chapter-6-iocsh-loader-expansion-and-live-service-exercises) |
+| Pedagogy | M4 | Multi-terminal context blocks, observed outputs, and chapter checklists | Milestone | Complete | No | M2, M3 | Landed on `origin/master` in `212c2b2ae157c1501da0402e3dd2b47d943b9962` (`2026-11-11`); [detail](#m4---multi-terminal-context-blocks-observed-outputs-and-chapter-checklists) |
+| Reference | M5 | Printable quick reference card and full-book reader verification | Milestone | In progress | No | M1, M3, M4, D4 | Single-page PDF quick reference generated and linked from `docs/README.md`, container `mdbook build` clean, and 2nd-person reader review converged; [detail](#m5---printable-quick-reference-card-and-full-book-reader-verification) |
 
 ### Decisions
 
@@ -193,7 +193,7 @@ Owner choice deciding whether `docs/CH6/06.03.tc32_loader.md` stays focused on s
 Origin: 8d760dd / M3
 Identity History: none
 GitHub Issue: none
-Status: In progress
+Status: Complete
 
 ##### Summary
 
@@ -261,14 +261,14 @@ Superseded Plan Artifacts: none
 
 ##### Closure Evidence
 
-- none
+- Observed `2026-11-11T15:34-08:00`: pushed commit `212c2b2ae157c1501da0402e3dd2b47d943b9962` to `origin/master`, ran `git fetch`, and verified `git rev-parse origin/master` equals `212c2b2ae157c1501da0402e3dd2b47d943b9962` with `git diff --name-only origin/master 212c2b2ae157c1501da0402e3dd2b47d943b9962` empty across all `M3` paths.
 
 #### M4 - Multi-Terminal Context Blocks, Observed Outputs, And Chapter Checklists
 
 Origin: 8d760dd / M4
 Identity History: none
 GitHub Issue: none
-Status: In progress
+Status: Complete
 
 ##### Summary
 
@@ -320,14 +320,14 @@ Superseded Plan Artifacts: none
 
 ##### Closure Evidence
 
-- none
+- Observed `2026-11-11T15:34-08:00`: pushed commit `212c2b2ae157c1501da0402e3dd2b47d943b9962` to `origin/master`, ran `git fetch`, and verified `git rev-parse origin/master` equals `212c2b2ae157c1501da0402e3dd2b47d943b9962` with `git diff --name-only origin/master 212c2b2ae157c1501da0402e3dd2b47d943b9962` empty across all `M4` paths.
 
 #### M5 - Printable Quick Reference Card And Full-Book Reader Verification
 
 Origin: 8d760dd / M5
 Identity History: none
 GitHub Issue: none
-Status: Not started
+Status: In progress
 
 ##### Summary
 
@@ -359,7 +359,7 @@ Out of scope: Modifying `presentation/alsu-epics-env-training-2025-04-09-revisio
 
 Plan Status: accepted
 Plan Acceptance: 2026-11-11
-Implementation Authorization: none
+Implementation Authorization: 2026-11-11
 Superseded Plan Artifacts: none
 
 1. Following `one-page-ref` layout and typography rules, implement self-contained `scripts/generate_quick_ref.py` (`Python 3 + reportlab`), generate `docs/assets/epics-training-quick-ref.pdf`, and verify single-page fit via `pdfinfo`, `pdftotext -layout`, and `pdftoppm -png -r 150` rendered page inspection (`M5 / T1`).
@@ -378,9 +378,9 @@ Superseded Plan Artifacts: none
 
 | Label | Observed At | Environment | Result | Evidence |
 | --- | --- | --- | --- | --- |
-| T1 | Not run | Local Debian 13 host | Pending | none |
-| T2 | Not run | Local host Docker (`jeonghanlee/mdbook`) + Python 3 + Git | Pending | none |
-| T3 | Not run | Repository Markdown + rendered `public/` output | Pending | none |
+| T1 | 2026-11-11T16:18-08:00 | Local Debian 13 host (`python3`, `python3-reportlab`, `pdfinfo`, `pdftotext`, `pdftoppm`) | Pass | `python3 scripts/generate_quick_ref.py` exited `0` standalone (`docs/assets/epics-training-quick-ref.pdf`, `6805` bytes, `check_fit` passed on every cell); `pdfinfo` reported `Pages: 1` (`612 x 792 pts (letter)`); `pdftotext -layout` verified pure ASCII and wide column separation across all 4 tables without overlap or clipping; `pdftoppm -png -r 150` visual inspection confirmed balanced single-page layout |
+| T2 | 2026-11-11T16:18-08:00 | Local host Docker (`jeonghanlee/mdbook`, `mdbook v0.5.4`) + Python 3 + Git | Pass | `mdbook build` exited `0` with identical `git status --porcelain` before and after build; `public/assets/epics-training-quick-ref.pdf` matched source bytes (`6805` bytes) and `public/index.html` linked `assets/epics-training-quick-ref.pdf`; `public/scripts` and `public/milestone-8d760dd.*` absent; Python HTML checker verified `41` HTML pages, `1104` internal links, and `370` `#anchor` fragments with `0` broken targets |
+| T3 | 2026-11-11T16:16-08:00 | Repository Markdown + `scripts/generate_quick_ref.py` + rendered `public/` + `/home/jeonglee/epics/1.5.0/debian-13/7.0.10` | Pass | 2nd-person `agent-review` loop (`references/pass-definitions.md`) over `docs/README.md`, `docs/SUMMARY.md`, `docs/CH1`-`docs/CH6`, and quick reference PDF: Pass 1 (cold-learner sequential seat + live command checks) fixed `3` must-fix (`caget -d CLASS_NAME <pv>`, `iocsh.bash -v` echoing startup commands in `softIocPVX`, `pvxput -r "record[block=true]"` for confirmed async put) and `1` minor (`01.01` -> `01.03` navigation link); Pass 2 (bench-operator lookup seat + self-derivable counts check) converged with `0` findings above the severity floor (`2nd [c]`) |
 
 ##### Closure Evidence
 
