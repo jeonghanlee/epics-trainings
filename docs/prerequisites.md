@@ -10,7 +10,7 @@ manager for the operating system you selected in
    ```bash
    sudo apt update
    sudo apt install -y build-essential perl git libevent-dev libreadline-dev libtirpc-dev binutils
-   sudo apt install -y socat bc procps iproute2 netcat-openbsd
+   sudo apt install -y socat bc procps iproute2
    ```
 
    On Rocky Linux 8.10/10.2, use these commands instead:
